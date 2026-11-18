@@ -159,7 +159,7 @@ if (!voice && !music) {
   if (voice) { inputs.push("-ss", String(from), "-i", voice); parts.push(`[${n}:a]aresample=48000,apad,atrim=0:${seconds},asetpts=N/SR/TB[a${n}]`); names.push(`[a${n}]`); n++; }
   if (music) {
     inputs.push("-stream_loop", "-1", "-i", music);
-    parts.push(`[${n}:a]aresample=48000,atrim=0:${seconds},asetpts=N/SR/TB,volume=${opt("music-db", -18)}dB,afade=t=out:st=${Math.max(0, to - from - .8)}:d=.8[a${n}]`);
+    parts.push(`[${n}:a]aresample=48000,atrim=0:${seconds},asetpts=N/SR/TB,volume=${opt("music-db", -18)}dB,afade=t=out:st=${Math.max(0, to - from - .8).toFixed(2)}:d=0.8[a${n}]`);
     names.push(`[a${n}]`); n++;
   }
   const join = names.length > 1 ? `${parts.join(";")};${names.join("")}amix=inputs=${names.length}:duration=first:normalize=0,aformat=channel_layouts=stereo[mix]` : `${parts[0]};${names[0]}aformat=channel_layouts=stereo[mix]`;

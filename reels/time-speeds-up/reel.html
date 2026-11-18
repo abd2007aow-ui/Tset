@@ -16,7 +16,6 @@
 <script>
 /* ---- edit these two lines with your channel ---- */
 const CREDIT_1 = "عبدالرحمن فؤاد";
-const CREDIT_2 = "تابعنا لمزيد من الأسئلة";
 
 /* 1. The script, one subtitle phrase per line */
 const SCRIPT = [
@@ -163,8 +162,7 @@ reel.on(t => {
   });
 });
 for (const [i, ns] of Object.entries(EMPH)) punch(W(+i, ns[0]), .018, .3);
-txt(S, 0, 1552, 1080, CREDIT_1, { font: `600 32px ${SANS}`, color: C.grey });
-txt(S, 0, 1598, 1080, CREDIT_2, { font: `600 32px ${SANS}`, color: C.red });
+txt(S, 0, 1560, 1080, CREDIT_1, { font: `700 36px ${SANS}`, color: C.red });
 
 /* ---- small drawing helpers ---- */
 const P = (node, t, o = {}) => R.popIn(reel, node, t, { origin: "50% 50%", ...o });
