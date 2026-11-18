@@ -1,0 +1,362 @@
+[
+ {
+  "t": 0.05,
+  "kind": "hit",
+  "note": "title"
+ },
+ {
+  "t": 0.3,
+  "kind": "pop",
+  "note": "card"
+ },
+ {
+  "t": 1.304,
+  "kind": "pop",
+  "note": "sticker"
+ },
+ {
+  "t": 4.412,
+  "kind": "whoosh",
+  "note": "scene"
+ },
+ {
+  "t": 4.796,
+  "kind": "pop",
+  "note": "child"
+ },
+ {
+  "t": 5.965,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 9.538,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 10.708,
+  "kind": "pop",
+  "note": "adult"
+ },
+ {
+  "t": 11.092,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 12.846,
+  "kind": "hit",
+  "note": "دقيقة!"
+ },
+ {
+  "t": 13.815,
+  "kind": "whoosh",
+  "note": "scene"
+ },
+ {
+  "t": 13.915,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 14.969,
+  "kind": "pop",
+  "note": "tag"
+ },
+ {
+  "t": 16.523,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 17.292,
+  "kind": "pop",
+  "note": "tag"
+ },
+ {
+  "t": 18.173,
+  "kind": "whoosh",
+  "note": "scene"
+ },
+ {
+  "t": 18.558,
+  "kind": "pop",
+  "note": "child"
+ },
+ {
+  "t": 19.808,
+  "kind": "pop",
+  "note": "memory"
+ },
+ {
+  "t": 21.746,
+  "kind": "pop",
+  "note": "first"
+ },
+ {
+  "t": 21.746,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 22.515,
+  "kind": "pop",
+  "note": "first"
+ },
+ {
+  "t": 23.071,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 23.285,
+  "kind": "pop",
+  "note": "first"
+ },
+ {
+  "t": 24.395,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 25.719,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 26.23,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 26.74,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 27.251,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 27.761,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 28.271,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 28.782,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 29.292,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 33.554,
+  "kind": "pop",
+  "note": "tag"
+ },
+ {
+  "t": 34.435,
+  "kind": "whoosh",
+  "note": "scene"
+ },
+ {
+  "t": 35.588,
+  "kind": "pop",
+  "note": "frames"
+ },
+ {
+  "t": 36.95,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 36.95,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 37.431,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 37.431,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 37.815,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 37.815,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 38.2,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 38.2,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 38.585,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 38.585,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 39.369,
+  "kind": "pop",
+  "note": "repeat"
+ },
+ {
+  "t": 42.077,
+  "kind": "pop",
+  "note": "squeeze"
+ },
+ {
+  "t": 42.958,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 43.927,
+  "kind": "hit",
+  "note": "الزمن يركض!"
+ },
+ {
+  "t": 44.896,
+  "kind": "whoosh",
+  "note": "scene"
+ },
+ {
+  "t": 46.146,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 47.315,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 48.181,
+  "kind": "pop",
+  "note": "tag"
+ },
+ {
+  "t": 49.735,
+  "kind": "pop",
+  "note": "bars"
+ },
+ {
+  "t": 50.6,
+  "kind": "pop",
+  "note": "check"
+ },
+ {
+  "t": 51.865,
+  "kind": "whoosh",
+  "note": "scene"
+ },
+ {
+  "t": 52.015,
+  "kind": "pop",
+  "note": "hourglass"
+ },
+ {
+  "t": 56.215,
+  "kind": "hit",
+  "note": "لا يعود"
+ },
+ {
+  "t": 57.954,
+  "kind": "pop",
+  "note": "sun"
+ },
+ {
+  "t": 59.108,
+  "kind": "pop",
+  "note": "tag"
+ },
+ {
+  "t": 59.492,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 60.373,
+  "kind": "whoosh",
+  "note": "scene"
+ },
+ {
+  "t": 60.373,
+  "kind": "pop",
+  "note": "grid"
+ },
+ {
+  "t": 63.465,
+  "kind": "tick",
+  "note": "colour"
+ },
+ {
+  "t": 63.74,
+  "kind": "tick",
+  "note": "colour"
+ },
+ {
+  "t": 64.015,
+  "kind": "tick",
+  "note": "colour"
+ },
+ {
+  "t": 64.29,
+  "kind": "tick",
+  "note": "colour"
+ },
+ {
+  "t": 64.564,
+  "kind": "tick",
+  "note": "colour"
+ },
+ {
+  "t": 64.839,
+  "kind": "tick",
+  "note": "colour"
+ },
+ {
+  "t": 65.114,
+  "kind": "tick",
+  "note": "colour"
+ },
+ {
+  "t": 65.588,
+  "kind": "hit",
+  "note": "عِشها"
+ },
+ {
+  "t": 66.819,
+  "kind": "land",
+  "note": "stamp"
+ }
+]

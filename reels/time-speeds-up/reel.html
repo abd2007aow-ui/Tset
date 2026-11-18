@@ -64,7 +64,18 @@ const SANS = "'IBM Plex Sans Arabic'";
 const reel = R.reel({ w: 1080, h: 1920, fps: 30, lang: "ar", duration: END, bg: C.paper });
 reel.ready = () => Promise.all([document.fonts.load("700 90px Amiri"), document.fonts.load("400 60px Amiri"),
   document.fonts.load("600 40px 'IBM Plex Sans Arabic'"), document.fonts.ready]);
-const S = reel.stage;
+const S = R.box(reel.stage, 0, 0, 1080, 1920);
+const PUNCH = [], SHAKE = [];
+const punch = (t, a = .04, d = .35) => PUNCH.push([t, a, d]);
+const shake = (t, a = 10, d = .3) => SHAKE.push([t, a, d]);
+reel.on(t => {
+  let z = 1 + .03 * R.clamp(t / END);                       // slow push-in over the whole reel
+  for (const [t0, a, d] of PUNCH) if (t >= t0 && t < t0 + d) z *= 1 + a * Math.sin(Math.PI * (t - t0) / d);
+  let sx = 0, sy = 0;
+  for (const [t0, a, d] of SHAKE) if (t >= t0 && t < t0 + d) { const f = (1 - (t - t0) / d) * a; sx += Math.sin(t * 95) * f; sy += Math.cos(t * 71) * f; }
+  S.style.transformOrigin = "50% 48%";
+  S.style.transform = `translate(${sx}px,${sy}px) scale(${z})`;
+});
 
 // paper grain + vignette
 R.svg(S, 1080, 1920, `<filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" seed="4"/><feColorMatrix values="0 0 0 0 .45  0 0 0 0 .38  0 0 0 0 .28  0 0 0 .22 0"/></filter>
@@ -72,6 +83,14 @@ R.svg(S, 1080, 1920, `<filter id="grain"><feTurbulence type="fractalNoise" baseF
   <radialGradient id="vig" cx="50%" cy="50%" r="75%"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#3a2e1c" stop-opacity=".28"/></radialGradient>
   <rect width="1080" height="1920" filter="url(#blot)"/><rect width="1080" height="1920" filter="url(#grain)"/><rect width="1080" height="1920" fill="url(#vig)"/>`);
 
+/* floating dust in the light: slow, repeatable */
+for (let i = 0; i < 28; i++) {
+  const r = 3 + (i * 7) % 6, d = R.box(S, 0, 0, r * 2, r * 2, { borderRadius: "50%", background: "#fff8e6", zIndex: 30,
+    boxShadow: "0 0 8px rgba(255,248,230,.8)" });
+  const x0 = (i * 397) % 1080, y0 = (i * 613) % 1920, sp = 14 + (i * 5) % 18;
+  reel.on(t => { d.style.transform = `translate(${x0 + 30 * R.wob(t, .05, i)}px, ${((y0 - sp * t) % 1920 + 1920) % 1920}px)`;
+    d.style.opacity = .18 + .2 * (R.wob(t, .15, i + 3) * .5 + .5); });
+}
 const txt = (parent, x, y, w, html, style = {}) => {
   const b = R.box(parent, x, y, w, null, { textAlign: "center", ...style });
   b.style.height = "auto"; b.innerHTML = html; return b;
@@ -79,24 +98,71 @@ const txt = (parent, x, y, w, html, style = {}) => {
 
 /* top band: the fixed question */
 txt(S, 0, 205, 1080, "سؤال اليوم", { font: `700 42px Amiri`, color: C.red });
-txt(S, 0, 262, 1080, "لماذا يتسارع عمرنا؟", { font: `700 104px Amiri`, color: C.red, lineHeight: 1.25 });
-txt(S, 0, 392, 1080, `كلما تقدّمنا في <span style="color:${C.teal}">السن؟</span>`, { font: `700 104px Amiri`, color: C.ink, lineHeight: 1.25 });
+function kinetic(y, words, t0, step) {           // title words slam in one by one
+  const b = txt(S, 0, y, 1080, words.map(([w, c]) => `<span style="display:inline-block;color:${c}">${w}</span>`).join(" "),
+    { font: `700 104px Amiri`, lineHeight: 1.25, textShadow: "0 3px 0 rgba(80,60,30,.15)" });
+  [...b.children].forEach((sp, i) => reel.on(t => {
+    const p = R.pop(t, t0 + i * step, .3);
+    sp.style.transform = `scale(${1.8 - .8 * p})`; sp.style.opacity = R.clamp(p * 3);
+  }));
+}
+kinetic(262, [["لماذا", C.red], ["يتسارع", C.red], ["عمرنا؟", C.red]], .05, .14);
+kinetic(392, [["كلما", C.ink], ["تقدّمنا", C.ink], ["في", C.ink], ["السن؟", C.teal]], .5, .12);
+reel.cue(.05, "hit", "title"); punch(.95, .035, .3);
+
+/* signature: the "life bar" fills faster and faster through the whole reel */
+const LIFE_END = END - 2.6;
+const life = R.box(S, 90, 548, 900, 40);
+txt(life, 790, -2, 110, "عمرك", { font: `700 30px ${SANS}`, color: C.ink, textAlign: "right" });
+const lifeTrack = R.box(life, 130, 12, 660, 16, { background: "rgba(120,100,70,.18)", borderRadius: "8px", overflow: "hidden" });
+const lifeFill = R.box(lifeTrack, 0, 0, 660, 16, { borderRadius: "8px", transformOrigin: "100% 50%" });
+const age = txt(life, 0, -2, 120, "", { font: `700 30px ${SANS}`, color: C.red, textAlign: "left" });
+const AR = "٠١٢٣٤٥٦٧٨٩";
+reel.on(t => {
+  const p = Math.pow(R.clamp(t / LIFE_END), 1.7);
+  lifeFill.style.transform = `scaleX(${p})`;
+  lifeFill.style.background = `linear-gradient(to left, ${C.teal}, ${p > .5 ? C.red : C.teal})`;
+  age.textContent = String(Math.round(p * 70)).replace(/\d/g, d => AR[d]) + " سنة";
+});
+
 
 /* middle band: the diagram panel */
-const PX = 40, PY = 600, PW = 1000, PH = 760;
+const PX = 40, PY = 610, PW = 1000, PH = 750;
 const panel = R.box(S, PX, PY, PW, PH, { background: C.panel, border: `2px solid ${C.line}`, borderRadius: "10px",
   boxShadow: "inset 0 0 60px rgba(120,100,70,.12)", overflow: "hidden" });
 
 /* bottom band: subtitle + credits */
-const sub = R.box(S, 60, 1395, 960, 150, { display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center",
-  font: "400 60px Amiri", color: C.ink, lineHeight: 1.3 });
-reel.on(t => {
-  let i = -1; for (let j = 0; j <= LAST; j++) if (t >= T[j] - .05) i = j;
-  const off = t >= OUTRO;
-  if (i < 0 || off) { sub.style.opacity = 0; return; }
-  if (sub.dataset.i != i) { sub.dataset.i = i; sub.textContent = SCRIPT[i]; }
-  sub.style.opacity = R.fade(t, T[i] - .05, .15);
+const EMPH = { 0: [3, 4], 3: [4], 6: [1, 2], 7: [3], 8: [3], 9: [6], 13: [3, 4], 16: [3, 4], 19: [1], 20: [2, 3],
+  22: [1], 23: [1, 2], 24: [4, 5], 25: [3, 4], 26: [3, 4], 27: [4], 28: [7] };
+const TEALS = new Set([3, 9, 13, 23, 26, 28]);
+const sub = R.box(S, 50, 1390, 980, 160, { display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center",
+  font: "400 64px Amiri", color: C.ink, lineHeight: 1.3, flexWrap: "wrap" });
+const subLines = SCRIPT.map((l, i) => {
+  const first = SCRIPT.slice(0, i).reduce((a, x) => a + x.split(/\s+/).length, 0);
+  const box = R.box(sub, 0, 0, 980, 160, { display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap", gap: "0 16px" });
+  box.style.position = "absolute";
+  const words = l.split(/\s+/).map((w, n) => {
+    const em = (EMPH[i] || []).includes(n);
+    const sp = R.el("span", { text: w, style: { display: "inline-block", fontWeight: em ? 700 : 400,
+      color: em ? (TEALS.has(i) ? C.teal : C.red) : C.ink } }, box);
+    return [sp, TM.words[first + n][1], em];
+  });
+  return [box, words];
 });
+reel.on(t => {
+  let cur = -1; for (let j = 0; j <= LAST; j++) if (t >= T[j] - .05) cur = j;
+  if (t >= OUTRO) cur = -1;
+  subLines.forEach(([box, words], i) => {
+    box.style.visibility = i === cur ? "inherit" : "hidden";
+    if (i !== cur) return;
+    for (const [sp, at, em] of words) {
+      const p = R.pop(t, at - .06, .25);
+      sp.style.opacity = .18 + .82 * R.clamp(p * 1.6);
+      sp.style.transform = em ? `scale(${1 + .25 * Math.max(0, 1 - Math.abs(t - at - .12) / .25)})` : "";
+    }
+  });
+});
+for (const [i, ns] of Object.entries(EMPH)) punch(W(+i, ns[0]), .018, .3);
 txt(S, 0, 1552, 1080, CREDIT_1, { font: `600 32px ${SANS}`, color: C.grey });
 txt(S, 0, 1598, 1080, CREDIT_2, { font: `600 32px ${SANS}`, color: C.red });
 
@@ -105,9 +171,12 @@ const P = (node, t, o = {}) => R.popIn(reel, node, t, { origin: "50% 50%", ...o 
 function scene(t0, t1, head) {
   const s = R.box(panel, 0, 0, PW, PH);
   reel.on(t => {
-    const o = t < t0 || t >= t1 ? 0 : Math.min(R.fade(t, t0, .2), 1 - R.fade(t, t1 - .2, .2));
+    const a = R.ease.soft(R.fade(t, t0, .35)), b = R.ease.in(R.fade(t, t1 - .25, .25));
+    const o = t < t0 || t >= t1 ? 0 : Math.min(a, 1 - b);
     s.style.opacity = o; s.style.visibility = o <= 0 ? "hidden" : "inherit";
+    s.style.transform = `translateX(${-90 * (1 - a) + 120 * b}px) rotate(${(1 - a) * -1.2 + b * 1.2}deg)`;
   });
+  if (t0 > 0) reel.cue(t0, "whoosh", "scene");
   if (head) P(txt(s, 0, 34, PW, head, { font: `700 44px ${SANS}`, color: C.ink }), t0 + .05, { sound: false });
   return s;
 }
@@ -128,6 +197,21 @@ function sticker(parent, x, y, text) {
   const b = tag(parent, x, y, text, C.yellow);
   Object.assign(b.style, { color: C.ink, border: `3px solid ${C.ink}`, transform: "rotate(-4deg)", font: `700 34px ${SANS}`, borderRadius: "12px" });
   return b;
+}
+function impact(text, t0, t1, color = C.red) {   // a huge word slams onto the panel
+  const veil = R.box(S, PX, PY, PW, PH, { background: "rgba(235,228,212,.86)", borderRadius: "10px", zIndex: 20 });
+  const w = R.box(S, PX, PY, PW, PH, { display: "flex", alignItems: "center", justifyContent: "center", zIndex: 21,
+    font: `700 190px Amiri`, color, textShadow: "0 8px 0 rgba(80,60,30,.18)", whiteSpace: "nowrap" });
+  w.textContent = text;
+  reel.on(t => {
+    const on = t >= t0 && t < t1;
+    const p = R.pop(t, t0, .28), out = R.ease.in(R.fade(t, t1 - .2, .2));
+    veil.style.opacity = on ? Math.min(R.fade(t, t0, .12), 1 - out) : 0;
+    w.style.visibility = veil.style.visibility = on ? "inherit" : "hidden";
+    w.style.opacity = 1 - out;
+    w.style.transform = `rotate(-4deg) scale(${(2.6 - 1.6 * p) * (1 - .3 * out)})`;
+  });
+  reel.cue(t0 + .2, "hit", text); punch(t0 + .2, .06, .35); shake(t0 + .2, 12, .3);
 }
 function figure(parent, x, feetY, s, color) {   // a flat pictogram person, feet at (x, feetY)
   return R.svg(parent, 120 * s, 260 * s, `<g transform="scale(${s})"><rect x="22" y="96" width="76" height="160" rx="36" fill="${color}" stroke="${C.ink}" stroke-width="4"/>
@@ -191,7 +275,7 @@ reel.on(t => shade.style.opacity = .7 * (1 - R.fade(t, 0, .22)));
   const b = card(s, 60, 470, 600, 180, { badge: "٢", title: "سنة اليوم", titleColor: C.red });
   P(b, W(5, 2));
   bar(b, 40, 95, 520, 34, C.red, [[W(5, 3), 0], [W(5, 3) + .35, .08, "out"]]);
-  P(sticker(s, 300, 600, "دقيقة واحدة!"), W(6, 1), { note: "sticker" });
+  impact("دقيقة!", W(6, 1), T[7] - .15);
 }
 
 /* ===== scene 3 (7-8): what changed? ===== */
@@ -250,7 +334,7 @@ reel.on(t => shade.style.opacity = .7 * (1 - R.fade(t, 0, .22)));
   P(one, W(19, 3), { note: "squeeze" });
   const ck = clock(s, 400, 490, 200, [[T[20], 0], [T[21], 360 * 6, "in"]]);
   P(ck, T[20]);
-  P(sticker(s, 600, 600, "الزمن يركض!"), W(20, 3), { note: "sticker" });
+  impact("الزمن يركض!", W(20, 2), T[21] - .1);
 }
 
 /* ===== scene 6 (21-23): how do we measure a life? ===== */
@@ -288,7 +372,7 @@ reel.on(t => shade.style.opacity = .7 * (1 - R.fade(t, 0, .22)));
   P(g, T[24] + .15, { note: "hourglass" });
   const st = g.querySelector(`#${id}st`), sb = g.querySelector(`#${id}sb`);
   reel.on(t => { const p = R.k(t, [[W(24, 2), 0], [T[27], .85, "linear"]]); st.setAttribute("y", 30 + 160 * p); st.setAttribute("height", 170 - 160 * p); sb.setAttribute("y", 370 - 150 * p); sb.setAttribute("height", 150 * p); });
-  P(tag(s, 680, 570, "الوقت لا يعود", C.red), W(25, 4), { note: "tag" });
+  impact("لا يعود", W(25, 3), W(26, 1));
   const sun = card(s, 70, 160, 480, 330, { badge: "✓", badgeColor: C.teal, title: "يوم جديد = فرصة", titleColor: C.teal });
   txt(sun, 0, 90, 480, `<svg width="200" height="200" viewBox="0 0 200 200"><circle cx="100" cy="120" r="48" fill="${C.yellow}" stroke="${C.ink}" stroke-width="5"/>
     ${[...Array(9)].map((_, i) => `<line x1="100" y1="50" x2="100" y2="28" stroke="${C.ink}" stroke-width="6" stroke-linecap="round" transform="rotate(${-80 + i * 20} 100 120)"/>`).join("")}
@@ -311,7 +395,7 @@ reel.on(t => shade.style.opacity = .7 * (1 - R.fade(t, 0, .22)));
     reel.on(t => d.style.background = t >= at ? cols[(i * 5) % 7] : "#cfc6b4");
     if (i % 5 === 0) reel.cue(at, "tick", "colour");
   }
-  P(tag(s, 360, 690, "عِشها", C.teal), W(28, 7), { note: "end" });
+  impact("عِشها", W(28, 7), OUTRO, C.teal);
 }
 
 /* ===== outro: empty panel + a red stamp, like the reference ===== */

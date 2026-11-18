@@ -1,5 +1,10 @@
 [
  {
+  "t": 0.05,
+  "kind": "hit",
+  "note": "title"
+ },
+ {
   "t": 0.3,
   "kind": "pop",
   "note": "card"
@@ -8,6 +13,11 @@
   "t": 1.304,
   "kind": "pop",
   "note": "sticker"
+ },
+ {
+  "t": 4.412,
+  "kind": "whoosh",
+  "note": "scene"
  },
  {
   "t": 4.796,
@@ -35,9 +45,14 @@
   "note": ""
  },
  {
-  "t": 12.646,
-  "kind": "pop",
-  "note": "sticker"
+  "t": 12.846,
+  "kind": "hit",
+  "note": "دقيقة!"
+ },
+ {
+  "t": 13.815,
+  "kind": "whoosh",
+  "note": "scene"
  },
  {
   "t": 13.915,
@@ -58,6 +73,11 @@
   "t": 17.292,
   "kind": "pop",
   "note": "tag"
+ },
+ {
+  "t": 18.173,
+  "kind": "whoosh",
+  "note": "scene"
  },
  {
   "t": 18.558,
@@ -145,6 +165,11 @@
   "note": "tag"
  },
  {
+  "t": 34.435,
+  "kind": "whoosh",
+  "note": "scene"
+ },
+ {
   "t": 35.588,
   "kind": "pop",
   "note": "frames"
@@ -215,9 +240,14 @@
   "note": ""
  },
  {
-  "t": 44.112,
-  "kind": "pop",
-  "note": "sticker"
+  "t": 43.927,
+  "kind": "hit",
+  "note": "الزمن يركض!"
+ },
+ {
+  "t": 44.896,
+  "kind": "whoosh",
+  "note": "scene"
  },
  {
   "t": 46.146,
@@ -245,14 +275,19 @@
   "note": "check"
  },
  {
+  "t": 51.865,
+  "kind": "whoosh",
+  "note": "scene"
+ },
+ {
   "t": 52.015,
   "kind": "pop",
   "note": "hourglass"
  },
  {
-  "t": 56.4,
-  "kind": "pop",
-  "note": "tag"
+  "t": 56.215,
+  "kind": "hit",
+  "note": "لا يعود"
  },
  {
   "t": 57.954,
@@ -268,6 +303,11 @@
   "t": 59.492,
   "kind": "pop",
   "note": ""
+ },
+ {
+  "t": 60.373,
+  "kind": "whoosh",
+  "note": "scene"
  },
  {
   "t": 60.373,
@@ -310,9 +350,9 @@
   "note": "colour"
  },
  {
-  "t": 65.388,
-  "kind": "pop",
-  "note": "end"
+  "t": 65.588,
+  "kind": "hit",
+  "note": "عِشها"
  },
  {
   "t": 66.819,
