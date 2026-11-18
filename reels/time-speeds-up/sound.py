@@ -56,7 +56,7 @@ def sfx_land():
 
 
 # ---------------- music: calm, reflective, a clock under it ----------------
-def music(seconds, voice_on):
+def music(seconds, voice_on, k=1.0):
     n = int(seconds * SR); out = np.zeros(n)
     bpm = 76; beat = 60 / bpm; bar = beat * 4
     chords = [[57, 60, 64], [53, 57, 60], [48, 52, 55], [55, 59, 62]]       # Am F C G
@@ -86,9 +86,9 @@ def music(seconds, voice_on):
             seg = tick[s:s + len(c)]; seg += c[:len(seg)]
     T = np.arange(n) / SR
     # arrangement over the story: hook / childhood / adult routine / meaning / ending
-    keys_lvl = np.interp(T, [0, 4, 5, 34, 36, 56, 58, 65, 67, seconds], [.0, .0, 1, 1, .55, .55, .8, .8, 1.2, 1.2])
-    tick_lvl = np.interp(T, [0, 34, 35, 49, 50, 56, 58, seconds], [1, 1, 1.6, 1.6, .7, .7, .4, .4])
-    pad_lvl = np.interp(T, [0, 1.5, 56, 58, 65, 67, seconds], [.5, 1, 1, 1.25, 1.25, 1.4, 1.4])
+    keys_lvl = np.interp(T, [0, 4, 5] + [x * k for x in (34, 36, 56, 58, 65, 67)] + [seconds], [.0, .0, 1, 1, .55, .55, .8, .8, 1.2, 1.2])
+    tick_lvl = np.interp(T, [0] + [x * k for x in (34, 35, 49, 50, 56, 58)] + [seconds], [1, 1, 1.6, 1.6, .7, .7, .4, .4])
+    pad_lvl = np.interp(T, [0, 1.5] + [x * k for x in (56, 58, 65, 67)] + [seconds], [.5, 1, 1, 1.25, 1.25, 1.4, 1.4])
     out = pad * pad_lvl + keys * keys_lvl + bass + tick * tick_lvl
     out = reverb(lp_fast(out, 6000), 2.4, .3)
     out *= env(n, int(.8 * SR), int(2.2 * SR))
@@ -99,6 +99,7 @@ def main():
     ap = argparse.ArgumentParser(); ap.add_argument("cues"); ap.add_argument("voice"); ap.add_argument("out")
     ap.add_argument("--seconds", type=float, default=None); ap.add_argument("--music-db", type=float, default=-19)
     ap.add_argument("--sfx-db", type=float, default=-9)
+    ap.add_argument("--stretch", type=float, default=1.0, help="scale the arrangement times (sections were set for a 74 s reel)")
     a = ap.parse_args()
     v = load(a.voice); cues = json.load(open(a.cues))
     seconds = a.seconds or max(len(v) / SR + 2.5, cues[-1]["t"] + 1.5)
@@ -107,7 +108,7 @@ def main():
     # ducking: music dips while the voice talks
     e = np.abs(v); e = lp_fast(e, 6); e = e / (e.max() + 1e-9)
     on = np.clip(e / .12, 0, 1); duck = 1 - .45 * lp_fast(on, 2)
-    m = music(seconds, on); m *= vrms * db(a.music_db) / np.sqrt(np.mean(m ** 2) + 1e-12); m *= duck
+    m = music(seconds, on, a.stretch); m *= vrms * db(a.music_db) / np.sqrt(np.mean(m ** 2) + 1e-12); m *= duck
     # sound effects, thinned so they never pile up
     fx = np.zeros(n); last = {}; pops = 0
     for c in cues:

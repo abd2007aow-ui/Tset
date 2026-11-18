@@ -1,0 +1,417 @@
+[
+ {
+  "t": 0.47,
+  "kind": "hit",
+  "note": "title"
+ },
+ {
+  "t": 0.686,
+  "kind": "tick",
+  "note": "month"
+ },
+ {
+  "t": 1.009,
+  "kind": "tick",
+  "note": "month"
+ },
+ {
+  "t": 1.264,
+  "kind": "tick",
+  "note": "month"
+ },
+ {
+  "t": 1.483,
+  "kind": "tick",
+  "note": "month"
+ },
+ {
+  "t": 1.679,
+  "kind": "tick",
+  "note": "month"
+ },
+ {
+  "t": 1.857,
+  "kind": "tick",
+  "note": "month"
+ },
+ {
+  "t": 2.024,
+  "kind": "tick",
+  "note": "month"
+ },
+ {
+  "t": 2.179,
+  "kind": "tick",
+  "note": "month"
+ },
+ {
+  "t": 2.327,
+  "kind": "tick",
+  "note": "month"
+ },
+ {
+  "t": 2.467,
+  "kind": "tick",
+  "note": "month"
+ },
+ {
+  "t": 2.601,
+  "kind": "tick",
+  "note": "month"
+ },
+ {
+  "t": 2.93,
+  "kind": "hit",
+  "note": "شهر؟"
+ },
+ {
+  "t": 4.08,
+  "kind": "pop",
+  "note": "sticker"
+ },
+ {
+  "t": 5.35,
+  "kind": "whoosh",
+  "note": "scene"
+ },
+ {
+  "t": 5.35,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 5.45,
+  "kind": "pop",
+  "note": "child"
+ },
+ {
+  "t": 8.92,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 10.04,
+  "kind": "pop",
+  "note": "adult"
+ },
+ {
+  "t": 10.66,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 12.21,
+  "kind": "hit",
+  "note": "دقيقة!"
+ },
+ {
+  "t": 13.3,
+  "kind": "whoosh",
+  "note": "scene"
+ },
+ {
+  "t": 13.4,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 14.29,
+  "kind": "pop",
+  "note": "tag"
+ },
+ {
+  "t": 15.67,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 16.38,
+  "kind": "pop",
+  "note": "tag"
+ },
+ {
+  "t": 17.19,
+  "kind": "whoosh",
+  "note": "scene"
+ },
+ {
+  "t": 17.61,
+  "kind": "pop",
+  "note": "child"
+ },
+ {
+  "t": 18.99,
+  "kind": "pop",
+  "note": "memory"
+ },
+ {
+  "t": 20.91,
+  "kind": "pop",
+  "note": "first"
+ },
+ {
+  "t": 20.91,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 21.837,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 21.99,
+  "kind": "pop",
+  "note": "first"
+ },
+ {
+  "t": 22.763,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 23,
+  "kind": "pop",
+  "note": "first"
+ },
+ {
+  "t": 23.69,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 23.889,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 24.087,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 24.286,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 24.484,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 24.683,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 24.881,
+  "kind": "pop",
+  "note": "tile"
+ },
+ {
+  "t": 25.08,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 29.88,
+  "kind": "pop",
+  "note": "tag"
+ },
+ {
+  "t": 30.68,
+  "kind": "whoosh",
+  "note": "scene"
+ },
+ {
+  "t": 31.96,
+  "kind": "pop",
+  "note": "frames"
+ },
+ {
+  "t": 33.5,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 33.5,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 34.39,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 34.39,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 35.16,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 35.16,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 35.96,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 35.96,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 36.43,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 36.43,
+  "kind": "pop",
+  "note": "day"
+ },
+ {
+  "t": 37.32,
+  "kind": "pop",
+  "note": "repeat"
+ },
+ {
+  "t": 40.42,
+  "kind": "pop",
+  "note": "squeeze"
+ },
+ {
+  "t": 41.4,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 42.41,
+  "kind": "hit",
+  "note": "الزمن يركض!"
+ },
+ {
+  "t": 43.5,
+  "kind": "whoosh",
+  "note": "scene"
+ },
+ {
+  "t": 43.98,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 44.73,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 45.6,
+  "kind": "pop",
+  "note": "tag"
+ },
+ {
+  "t": 46.86,
+  "kind": "pop",
+  "note": "bars"
+ },
+ {
+  "t": 47.88,
+  "kind": "pop",
+  "note": "check"
+ },
+ {
+  "t": 49.29,
+  "kind": "whoosh",
+  "note": "scene"
+ },
+ {
+  "t": 49.44,
+  "kind": "pop",
+  "note": "hourglass"
+ },
+ {
+  "t": 50.65,
+  "kind": "hit",
+  "note": "لا يعود"
+ },
+ {
+  "t": 51.98,
+  "kind": "pop",
+  "note": "sun"
+ },
+ {
+  "t": 53.21,
+  "kind": "pop",
+  "note": "tag"
+ },
+ {
+  "t": 53.74,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 54.79,
+  "kind": "whoosh",
+  "note": "scene"
+ },
+ {
+  "t": 54.79,
+  "kind": "pop",
+  "note": "grid"
+ },
+ {
+  "t": 57.59,
+  "kind": "tick",
+  "note": "colour"
+ },
+ {
+  "t": 57.824,
+  "kind": "tick",
+  "note": "colour"
+ },
+ {
+  "t": 58.059,
+  "kind": "tick",
+  "note": "colour"
+ },
+ {
+  "t": 58.293,
+  "kind": "tick",
+  "note": "colour"
+ },
+ {
+  "t": 58.527,
+  "kind": "tick",
+  "note": "colour"
+ },
+ {
+  "t": 58.761,
+  "kind": "tick",
+  "note": "colour"
+ },
+ {
+  "t": 58.996,
+  "kind": "tick",
+  "note": "colour"
+ },
+ {
+  "t": 59.43,
+  "kind": "hit",
+  "note": "عِشها"
+ },
+ {
+  "t": 60.77,
+  "kind": "land",
+  "note": "stamp"
+ }
+]
