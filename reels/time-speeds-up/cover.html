@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>غلاف: عمرك يتسارع</title>
+<script src="../../.claude/skills/maven-reels/kit/reel.js"></script>
+<style>
+@font-face{font-family:'Amiri';src:url('fonts/Amiri-400.ttf');font-weight:400}
+@font-face{font-family:'Amiri';src:url('fonts/Amiri-700.ttf');font-weight:700}
+</style>
+</head>
+<body>
+<script>
+/* Cover for the reel. 1080x1920; everything that matters sits inside the 1080x1440 middle (the profile grid crop). */
+const C = { paper: "#e0d8c7", card: "#f6f0e4", line: "#c9bdaa", ink: "#2b2b2b", grey: "#868379", red: "#b5332a", teal: "#1f6f78" };
+const SANS = "'IBM Plex Sans Arabic'";
+const reel = R.reel({ w: 1080, h: 1920, fps: 30, lang: "ar", duration: 1, bg: C.paper });
+reel.ready = () => Promise.all([document.fonts.load("700 90px Amiri"), document.fonts.load("600 40px 'IBM Plex Sans Arabic'"), document.fonts.ready]);
+const S = reel.stage;
+R.svg(S, 1080, 1920, `<filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" seed="4"/><feColorMatrix values="0 0 0 0 .45  0 0 0 0 .38  0 0 0 0 .28  0 0 0 .22 0"/></filter>
+  <filter id="blot"><feTurbulence type="fractalNoise" baseFrequency=".006" numOctaves="2" seed="9"/><feColorMatrix values="0 0 0 0 .55  0 0 0 0 .48  0 0 0 0 .36  0 0 0 .35 0"/></filter>
+  <radialGradient id="vig" cx="50%" cy="50%" r="75%"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#3a2e1c" stop-opacity=".3"/></radialGradient>
+  <rect width="1080" height="1920" filter="url(#blot)"/><rect width="1080" height="1920" filter="url(#grain)"/><rect width="1080" height="1920" fill="url(#vig)"/>`);
+const txt = (p, x, y, w, html, st = {}) => { const b = R.box(p, x, y, w, null, { textAlign: "center", ...st }); b.style.height = "auto"; b.innerHTML = html; return b; };
+
+/* safe area: y 240 .. 1680 */
+txt(S, 0, 300, 1080, "عمرك", { font: "700 210px Amiri", color: C.red, lineHeight: 1.1, textShadow: "0 6px 0 rgba(80,60,30,.15)" });
+txt(S, 0, 520, 1080, "يتسارع…", { font: "700 210px Amiri", color: C.red, lineHeight: 1.1, textShadow: "0 6px 0 rgba(80,60,30,.15)" });
+
+/* the calendar, torn to December, tilted */
+const cal = R.box(S, 300, 840, 480, 470, { background: C.card, border: `3px solid ${C.line}`, borderRadius: "14px",
+  boxShadow: "0 18px 40px rgba(80,60,30,.25)", transform: "rotate(-5deg)" });
+R.box(cal, 0, 0, 480, 110, { background: C.red, borderRadius: "11px 11px 0 0" });
+txt(cal, 0, 16, 480, "٢٠٢٦", { font: "700 68px Amiri", color: "#fff" });
+for (const x of [120, 345]) R.box(cal, x, -24, 18, 56, { background: C.ink, borderRadius: "9px" });
+txt(cal, 0, 160, 480, "ديسمبر", { font: "700 128px Amiri", color: C.red });
+txt(cal, 0, 360, 480, "الشهر ١٢ من ١٢", { font: `600 36px ${SANS}`, color: C.grey });
+// the "month?" sticker
+const st = R.box(S, 680, 1255, null, null, { background: "#f2c94c", border: `5px solid ${C.ink}`, borderRadius: "16px",
+  padding: "6px 34px", font: "700 92px Amiri", color: C.ink, transform: "rotate(7deg)", boxShadow: "0 10px 24px rgba(80,60,30,.25)" });
+st.style.width = "auto"; st.style.height = "auto"; st.textContent = "شهر؟";
+
+txt(S, 0, 1420, 1080, `وهذا هو <span style="color:${C.teal}">السبب</span>`, { font: "700 110px Amiri", color: C.ink });
+txt(S, 0, 1720, 1080, "عبدالرحمن فؤاد", { font: `700 40px ${SANS}`, color: C.red });
+</script>
+</body>
+</html>
