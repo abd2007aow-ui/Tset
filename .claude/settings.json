@@ -1,0 +1,14 @@
+{
+  "extraKnownMarketplaces": {
+    "marketingskills": {
+      "source": { "source": "directory", "path": "/home/user/Tset/.claude/skills/maven-reels/extras/marketingskills" }
+    },
+    "remocn": {
+      "source": { "source": "directory", "path": "/home/user/Tset/.claude/skills/maven-reels/extras/remocn" }
+    }
+  },
+  "enabledPlugins": {
+    "marketing-skills@marketingskills": true,
+    "remocn@remocn": true
+  }
+}
