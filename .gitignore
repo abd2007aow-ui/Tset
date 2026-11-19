@@ -2,3 +2,5 @@ node_modules/
 __pycache__/
 *.mp4
 !.claude/skills/maven-reels/examples/**/*.mp4
+reels/gta6-hype/src/
+reels/gta6-hype/broll.webm

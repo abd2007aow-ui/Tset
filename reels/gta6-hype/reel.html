@@ -131,25 +131,38 @@ function strike(parent, x, y, w, t0) {
   return l;
 }
 
-/* ---------- 3. background: a dim night city that keeps moving (stands in for the reference's footage) ---------- */
+/* ---------- 3. background: gameplay b-roll from the official trailer, dimmed (the reference also runs footage under its text) ---------- */
 const bg = R.box(stage, 0, 0, 1080, 1920, { overflow: "hidden", background: `radial-gradient(120% 70% at 50% 18%, ${INK2} 0%, ${INK} 60%)` });
 {
-  let sky = "";
-  for (let i = 0; i < 26; i++) {
-    const bw = 70 + (i * 37) % 70, bh = 180 + (i * 97) % 380, bx = i * 95 - 40;
-    sky += `<rect x="${bx}" y="${600 - bh}" width="${bw}" height="${bh}" fill="${INK2}"/>`;
-    for (let r = 0; r < bh / 46 - 1; r++) for (let c = 0; c < bw / 30 - 1; c++)
-      if ((i * 7 + r * 3 + c * 5) % 9 === 0) sky += `<rect x="${bx + 12 + c * 28}" y="${600 - bh + 20 + r * 44}" width="10" height="16" fill="${ASH}" opacity=".18"/>`;
-  }
-  const city = R.svg(bg, 2600, 600, sky, { x: -200, y: 1290 });
+  /* gameplay b-roll from the official trailer (broll.webm, made by build_broll.py), dimmed under the panels */
+  const vid = document.createElement("video");
+  Object.assign(vid, { src: "broll.webm", muted: true, preload: "auto", playsInline: true });
+  Object.assign(vid.style, { position: "absolute", left: 0, top: 0, width: "1080px", height: "1920px", objectFit: "cover", filter: "saturate(.85)" });
+  bg.appendChild(vid);
+  const dim = R.box(bg, 0, 0, 1080, 1920, { background: `linear-gradient(rgba(15,20,32,.82) 0%, rgba(15,20,32,.58) 35%, rgba(15,20,32,.62) 65%, rgba(15,20,32,.9) 100%)` });
   const glowA = R.box(bg, -300, 200, 900, 900, { borderRadius: "50%", background: `radial-gradient(circle, rgba(169,155,255,.10), transparent 65%)` });
-  const glowB = R.box(bg, 500, 900, 900, 900, { borderRadius: "50%", background: `radial-gradient(circle, rgba(255,194,26,.06), transparent 65%)` });
-  R.box(bg, 0, 1500, 1080, 420, { background: `linear-gradient(transparent, ${INK} 60%)` });
   reel.on(t => {
-    city.style.transform = `translateX(${-(t * 14) % 950}px)`;
     glowA.style.transform = `translate(${Math.sin(t * .3) * 120}px, ${Math.cos(t * .23) * 80}px)`;
-    glowB.style.transform = `translate(${Math.cos(t * .27) * -140}px, ${Math.sin(t * .2) * 90}px)`;
+    /* panels that need a calm field (the cons list, the ladder) dim the footage a bit more */
+    dim.style.opacity = k(t, [[T[2] - .25, .4], [T[2], 1]]);   /* the hook shows the footage brighter */
   });
+  /* frame-exact video: every seek waits until the video shows that frame */
+  const vidReady = new Promise(res => { if (vid.readyState >= 2) res(); else vid.addEventListener("loadeddata", res, { once: true }); });
+  const kitSeek = reel.seek.bind(reel);
+  reel.seek = t => {
+    kitSeek(t);
+    const want = Math.min(t, (vid.duration || 1e9) - .02);
+    return vidReady.then(() => new Promise(res => {
+      if (Math.abs(vid.currentTime - want) < 1e-4) return res();
+      vid.addEventListener("seeked", () => requestAnimationFrame(() => requestAnimationFrame(res)), { once: true });
+      vid.currentTime = want;
+    }));
+  };
+  const prevReady = reel.ready;
+  reel.ready = () => Promise.all([prevReady(), vidReady]);
+  /* source credit (brand: 24 px, grey) */
+  const credit = txt(stage, 60, 312, 960, "لقطات: <span class=\"en\">Rockstar Games</span>", { fontSize: "24px", fontWeight: 500, color: ASH, textAlign: "left", zIndex: 41 }, "t b");
+  reel.on(t => { credit.style.opacity = t > ENDCARD ? 0 : clamp((t - .7) / .4); });
 }
 
 /* ---------- 4. persistent top bar: logo · series title · category badge ---------- */
@@ -173,22 +186,14 @@ const bar = R.box(stage, 60, 200, 960, 100, { zIndex: 40 });
   const spans = [...q.children];
   reel.on(t => spans.forEach((sp, i) => { const p = pop(t, .05 + i * .11, .3); sp.style.opacity = clamp(p * 2); sp.style.transform = `translateY(${(1 - p) * -50}px)`; }));
   const cw = 640, ch = 800, cx = 220, cy = 620;
-  const cov = R.box(s, cx, cy, cw, ch, { borderRadius: "28px", overflow: "hidden", background: `linear-gradient(${INK3}, ${INK} 75%)`, boxShadow: "0 40px 90px rgba(0,0,0,.55)" });
-  const sun = R.svg(cov, cw, ch, `<defs><clipPath id="sunc"><rect x="0" y="0" width="${cw}" height="470"/></clipPath></defs>
-    <g clip-path="url(#sunc)"><circle cx="${cw / 2}" cy="430" r="190" fill="${SIG}"/>
-    ${[0, 1, 2, 3, 4].map(i => `<rect x="0" y="${330 + i * 30}" width="${cw}" height="${6 + i * 3}" fill="${INK3}"/>`).join("")}</g>`);
-  let towers = "";
-  for (let i = 0; i < 12; i++) { const bw = 40 + (i * 23) % 40, bh = 90 + (i * 61) % 170; towers += `<rect x="${i * 56 - 10}" y="${470 - bh}" width="${bw}" height="${bh}" fill="#0b0f18"/>`; }
-  const palms = [80, 560].map(px => `<path d="M${px} 470 C${px + 6} 400 ${px - 4} 360 ${px + 6} 320" stroke="#0b0f18" stroke-width="10" fill="none"/><g fill="#0b0f18"><path d="M${px + 6} 320 c-30 -26 -64 -14 -76 6 c30 -12 52 -6 76 2z"/><path d="M${px + 6} 320 c30 -30 66 -20 76 0 c-30 -12 -52 -4 -76 4z"/><path d="M${px + 6} 320 c-6 -36 14 -58 34 -62 c-14 20 -18 40 -30 64z"/></g>`).join("");
-  R.svg(cov, cw, ch, `${towers}${palms}<rect y="470" width="${cw}" height="330" fill="#0b0f18"/>
-    ${[0, 1, 2, 3, 4, 5].map(i => `<rect x="${cw / 2 - 150 + i * 12}" y="${490 + i * 18}" width="${300 - i * 24}" height="5" rx="2" fill="${SIG}" opacity="${.5 - i * .07}"/>`).join("")}`);
+  /* the cover is a window onto the footage: no drawn art, just a dark foot for the title */
+  const cov = R.box(s, cx, cy, cw, ch, { borderRadius: "28px", overflow: "hidden", background: `linear-gradient(rgba(11,15,24,0) 45%, rgba(11,15,24,.92) 88%)`, boxShadow: "0 0 0 3px rgba(243,239,230,.18)" });
   txt(cov, 0, 560, cw, `<span class="en">GTA 6</span>`, { fontSize: "150px", lineHeight: "1" });
   const date = txt(cov, 0, 718, cw, "19 نوفمبر 2026", { fontSize: "34px", fontWeight: 500, color: ASH }, "t b");
   frame(s, cx, cy, cw, ch, .12, { len: 110, th: 16, gap: 28 });
   reel.on(t => {
     const p = ease.soft(clamp(t / .6));
     cov.style.transform = `scale(${1.22 - .22 * p})`; cov.style.opacity = 1;
-    sun.style.transform = `translateY(${(1 - ease.out(clamp(t / 1.6))) * 120}px)`;
   });
   /* "أعلى تقييم": the 99 chip lands on the cover corner */
   const chip = R.box(s, 90, 580, 330, 130, { display: "flex", alignItems: "center", justifyContent: "center", gap: "18px", background: PAPER, borderRadius: "26px", boxShadow: "0 20px 40px rgba(0,0,0,.4)", direction: "rtl" });
