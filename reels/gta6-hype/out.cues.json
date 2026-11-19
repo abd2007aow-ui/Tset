@@ -1,216 +1,216 @@
 [
  {
+  "t": -0.1,
+  "kind": "pop",
+  "note": ""
+ },
+ {
   "t": 0,
   "kind": "whoosh",
   "note": "panel"
  },
  {
-  "t": 0.05,
+  "t": 3.68,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 3.05,
-  "kind": "pop",
-  "note": ""
- },
- {
-  "t": 4.604,
+  "t": 5.23,
   "kind": "whoosh",
   "note": "panel"
  },
  {
-  "t": 7.888,
+  "t": 8.37,
   "kind": "whoosh",
   "note": "panel"
  },
  {
-  "t": 8.038,
+  "t": 8.52,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 10.596,
+  "t": 11.63,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 11.765,
+  "t": 13.94,
   "kind": "tick",
   "note": "strike"
  },
  {
-  "t": 12.15,
+  "t": 14.38,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 13.319,
+  "t": 16.55,
   "kind": "tick",
   "note": "strike"
  },
  {
-  "t": 14.858,
+  "t": 18.08,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 15.208,
+  "t": 18.43,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 16.123,
+  "t": 19.51,
   "kind": "whoosh",
   "note": "panel"
  },
  {
-  "t": 16.892,
+  "t": 21.11,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 17.277,
+  "t": 21.49,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 18.046,
+  "t": 22.32,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 18.831,
+  "t": 22.91,
   "kind": "whoosh",
   "note": "panel"
  },
  {
-  "t": 20.5,
+  "t": 25.05,
   "kind": "hit",
   "note": "99"
  },
  {
-  "t": 21.25,
+  "t": 25.88,
   "kind": "whoosh",
   "note": "panel"
  },
  {
-  "t": 21.35,
+  "t": 25.98,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 21.35,
+  "t": 25.98,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 24.227,
+  "t": 29.17,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 24.227,
+  "t": 29.17,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 25.096,
+  "t": 29.91,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 27.131,
+  "t": 32.43,
   "kind": "whoosh",
   "note": "panel"
  },
  {
-  "t": 27.131,
+  "t": 32.43,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 29.935,
+  "t": 35.57,
   "kind": "whoosh",
   "note": "panel"
  },
  {
-  "t": 30.085,
+  "t": 35.72,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 37.45,
+  "t": 43.31,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 38.715,
+  "t": 44.42,
   "kind": "whoosh",
   "note": "panel"
  },
  {
-  "t": 38.715,
+  "t": 44.42,
   "kind": "land",
   "note": "cons tag"
  },
  {
-  "t": 40.654,
+  "t": 45.67,
   "kind": "tick",
   "note": "con 1"
  },
  {
-  "t": 43.554,
+  "t": 48.68,
   "kind": "tick",
   "note": "con 2"
  },
  {
-  "t": 47.127,
+  "t": 52.58,
   "kind": "tick",
   "note": "con 3"
  },
  {
-  "t": 48.681,
+  "t": 53.88,
   "kind": "tick",
   "note": "con 4"
  },
  {
-  "t": 51.1,
+  "t": 56.28,
   "kind": "tick",
   "note": "con 5"
  },
  {
-  "t": 54.769,
+  "t": 60.19,
   "kind": "whoosh",
   "note": "panel"
  },
  {
-  "t": 57.285,
+  "t": 62.37,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 59.319,
+  "t": 64.23,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 62.604,
+  "t": 67.58,
   "kind": "whoosh",
   "note": "panel"
  },
  {
-  "t": 65.865,
+  "t": 70.66,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 66.465,
+  "t": 71.12,
   "kind": "pop",
   "note": ""
  },
  {
-  "t": 68.069,
+  "t": 72.5,
   "kind": "whoosh",
   "note": "panel"
  }
