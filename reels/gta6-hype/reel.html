@@ -24,30 +24,25 @@ const HANDLE = "@nitaq.news";
 
 /* ---------- 1. the script, one beat per line ---------- */
 const SCRIPT = [
-  "13 سنة انتظار…",                                                           // 0
-  "والليلة GTA 6 صارت بإيد الناس.",                                            // 1
+  "أعلى تقييم من 1998…",                                                      // 0  new hook (new audio)
+  "والناس تشتكي من أول يوم.",                                                  // 1  new hook (new audio)
   "بس السؤال: هل تستاهل كل هذا الضجيج؟",                                       // 2
-  "آخر جزء نزل سنة 2013.",                                                     // 3
-  "وعدونا بخريف 2025…",                                                        // 4
-  "تأجلت لمايو 2026…",                                                         // 5
-  "وتأجلت مرة ثانية لـ 19 نوفمبر.",                                             // 6
-  "ونزلت على PS5 وXbox Series بس.",                                            // 7
-  "النقاد عطوها 99 على Metacritic…",                                           // 8
-  "وهذا رقم ما وصلته أي لعبة من سنة 1998، من Zelda: Ocarina of Time.",          // 9
-  "وأكثر لعبة انطلبت حجز مسبق بالتاريخ.",                                       // 10
-  "والتقديرات غير الرسمية تقول إنها باعت حوالي 17 مليون نسخة بأول يوم،",          // 11
-  "يعني أكثر من GTA 5 بحوالي 6 ملايين.",                                        // 12
-  "بس مو كلشي وردي:",                                                          // 13
-  "سعرها 80 دولار، والنسخة الكاملة 100",                                        // 14
-  "النسخة الفيزيائية مجرد كود داخل علبة، بدون ديسك",                             // 15
-  "ماكو نسخة PC",                                                              // 16
-  "تشتغل على 30 فريم بالكونسول",                                                // 17
-  "وأول يوم بدأ اللاعبين يشتكون من باگات وكراشات",                               // 18
-  "فالسؤال الحقيقي:",                                                          // 19
-  "هل هي فعلاً أعظم لعبة بالتاريخ؟",                                            // 20
-  "لو الهايب والانتظار رفعها أكثر من حجمها الحقيقي؟",                            // 21
-  "الآن برأيك… هل أخذت أكثر من حجمها لو لا؟",                                   // 22
-  "خل نسمع آرائكم",                                                            // 23
+  "13 سنة انتظار… وتأجلت مرتين، لحد الليلة.",                                   // 3  new (new audio)
+  "ونزلت على PS5 وXbox Series بس.",                                            // 4
+  "النقاد عطوها 99 على Metacritic…",                                           // 5
+  "والتقديرات غير الرسمية تقول إنها باعت حوالي 17 مليون نسخة بأول يوم،",          // 6
+  "يعني أكثر من GTA 5 بحوالي 6 ملايين.",                                        // 7
+  "بس مو كلشي وردي:",                                                          // 8
+  "سعرها 80 دولار، والنسخة الكاملة 100",                                        // 9
+  "النسخة الفيزيائية مجرد كود داخل علبة، بدون ديسك",                             // 10
+  "ماكو نسخة PC",                                                              // 11
+  "تشتغل على 30 فريم بالكونسول",                                                // 12
+  "وأول يوم بدأ اللاعبين يشتكون من باگات وكراشات",                               // 13
+  "فالسؤال الحقيقي:",                                                          // 14
+  "هل هي فعلاً أعظم لعبة بالتاريخ؟",                                            // 15
+  "لو الهايب والانتظار رفعها أكثر من حجمها الحقيقي؟",                            // 16
+  "الآن برأيك… هل أخذت أكثر من حجمها لو لا؟",                                   // 17
+  "اكتبها بالتعليقات: إي لو لا.",                                               // 18 new CTA (new audio)
 ];
 const TM = R.timing(SCRIPT, window.VOICE, { wps: 2.6, gap: .4 });
 const T = TM.lines;
@@ -55,7 +50,7 @@ const WORDS_IN = SCRIPT.map(l => l.split(/\s+/).filter(Boolean).length);
 const W = (line, n) => TM.words[WORDS_IN.slice(0, line).reduce((a, b) => a + b, 0) + n][1];
 const LEND = i => TM.ends[WORDS_IN.slice(0, i + 1).reduce((a, b) => a + b, 0) - 1];
 const END = TM.end + 3.2;
-const ENDCARD = LEND(23) + .5;
+const ENDCARD = LEND(18) + .5;
 
 /* ---------- 2. the reel ---------- */
 const reel = R.reel({ w: 1080, h: 1920, fps: 30, lang: "ar", duration: END, bg: INK });
@@ -169,7 +164,7 @@ const bar = R.box(stage, 60, 200, 960, 100, { zIndex: 40 });
 
 /* ---------- 5. panels: one per beat ---------- */
 
-/* P0 hook: the framed cover + the question (lines 0-1) */
+/* P0 hook: the framed cover + the question; the 99 lands, then the complaints pile around it (lines 0-1) */
 {
   const s = panel(0, T[2], { from: 0 });
   const q = txt(s, 30, 380, 1020, "", { fontSize: "70px", whiteSpace: "nowrap" });
@@ -177,7 +172,6 @@ const bar = R.box(stage, 60, 200, 960, 100, { zIndex: 40 });
   q.innerHTML = qWords.map((w, i) => `<span data-i="${i}" style="display:inline-block;margin:0 8px">${w}</span>`).join("");
   const spans = [...q.children];
   reel.on(t => spans.forEach((sp, i) => { const p = pop(t, .05 + i * .11, .3); sp.style.opacity = clamp(p * 2); sp.style.transform = `translateY(${(1 - p) * -50}px)`; }));
-  /* the cover */
   const cw = 640, ch = 800, cx = 220, cy = 620;
   const cov = R.box(s, cx, cy, cw, ch, { borderRadius: "28px", overflow: "hidden", background: `linear-gradient(${INK3}, ${INK} 75%)`, boxShadow: "0 40px 90px rgba(0,0,0,.55)" });
   const sun = R.svg(cov, cw, ch, `<defs><clipPath id="sunc"><rect x="0" y="0" width="${cw}" height="470"/></clipPath></defs>
@@ -196,16 +190,19 @@ const bar = R.box(stage, 60, 200, 960, 100, { zIndex: 40 });
     cov.style.transform = `scale(${1.22 - .22 * p})`; cov.style.opacity = 1;
     sun.style.transform = `translateY(${(1 - ease.out(clamp(t / 1.6))) * 120}px)`;
   });
-  /* "13 سنة" counter chip lands on the cover corner */
-  const chip = txt(s, 90, 590, 330, "", { fontSize: "60px", background: PAPER, color: INK, borderRadius: "22px", lineHeight: "100px", boxShadow: "0 20px 40px rgba(0,0,0,.4)" });
-  chip.innerHTML = `<span class="n">0</span> سنة`;
-  R.count(reel, chip.querySelector(".n"), [[W(0, 0) - .1, 0], [W(0, 0) + .7, 13, "out"]]);
-  popAt(chip, W(0, 0) - .1, "50% 50%");
-  s.punch(W(0, 0) + .7);
-  /* "صارت بإيد الناس": a controller pops onto the cover */
-  const pad = R.box(s, 120, 1270, 200, 200, { display: "grid", placeItems: "center", background: INK3, borderRadius: "50%", boxShadow: "0 20px 40px rgba(0,0,0,.4)" });
-  pad.innerHTML = icon("pad", 120, PAPER, 1.6);
-  popAt(pad, W(1, 3));
+  /* "أعلى تقييم": the 99 chip lands on the cover corner */
+  const chip = R.box(s, 90, 580, 330, 130, { display: "flex", alignItems: "center", justifyContent: "center", gap: "18px", background: PAPER, borderRadius: "26px", boxShadow: "0 20px 40px rgba(0,0,0,.4)", direction: "rtl" });
+  chip.innerHTML = `<span class="h n" style="color:${INK};font-size:84px;direction:ltr">0</span><span class="b" style="color:${INK};font-size:28px;font-weight:700;line-height:1.15;text-align:right">من 100<br><span class="en" style="opacity:.6;font-weight:500">Metacritic</span></span>`;
+  R.count(reel, chip.querySelector(".n"), [[W(0, 0) - .05, 60], [W(0, 1) + .45, 99, "out"]]);
+  popAt(chip, Math.max(W(0, 0) - .05, .2), "50% 50%");
+  s.punch(W(0, 1) + .45);
+  /* "والناس تشتكي": complaint chips pop around the cover */
+  const gripes = [["bug", "باگات", 560, 760, W(1, 1)], ["x", "كراشات", 130, 880, W(1, 1) + .3], ["gauge", `<span class="en">30</span> فريم`, 560, 1000, W(1, 3)]];
+  for (const [ic, label, x, y, at] of gripes) {
+    const g = R.box(s, x, y, 380, 104, { display: "flex", alignItems: "center", justifyContent: "center", gap: "16px", background: INK2, border: `3px solid ${ASH}`, borderRadius: "999px", boxShadow: "0 18px 36px rgba(0,0,0,.45)", direction: "rtl" });
+    g.innerHTML = icon(ic, 48, PAPER, 2) + `<span class="b" style="font-size:44px;font-weight:700">${label}</span>`;
+    popAt(g, at);
+  }
   s.punch(W(1, 1), .03);
 }
 
@@ -221,17 +218,17 @@ const bar = R.box(stage, 60, 200, 960, 100, { zIndex: 40 });
   reel.on(t => { const on = clamp((t - W(2, 5)) / .3); bars.forEach((b, i) => { const v = .1 + on * (.3 + .7 * Math.abs(Math.sin(t * (7 + i % 5) + i * 1.7))); b.style.transform = `scaleY(${v})`; }); });
 }
 
-/* P2 timeline: 2013 → autumn 2025 ✕ → May 2026 ✕ → 19 Nov ✓ (lines 3-6) */
+/* P2 timeline, compressed into one line: 2013 → two delays struck out → tonight (line 3) */
 {
-  const s = panel(T[3], T[7]);
+  const s = panel(T[3], T[4]);
   const X = 840;   // the spine on the right (RTL reading)
   const spine = R.box(s, X - 4, 420, 8, 900, { background: INK3, borderRadius: "4px", transformOrigin: "50% 0" });
   const fill = R.box(s, X - 4, 420, 8, 900, { background: ASH, borderRadius: "4px", transformOrigin: "50% 0" });
   const stops = [
-    { y: 440, at: T[3] + .15, year: "2013", label: `آخر جزء: <span class="en">GTA 5</span>` },
-    { y: 690, at: W(4, 1), year: "خريف 2025", label: "الموعد الأول", kill: W(5, 0) },
-    { y: 940, at: W(5, 1), year: "مايو 2026", label: "التأجيل الأول", kill: W(6, 0) },
-    { y: 1190, at: W(6, 4), year: "19 نوفمبر 2026", label: "الإطلاق", yes: true },
+    { y: 440, at: T[3] + .1, year: "2013", label: `آخر جزء: <span class="en">GTA 5</span>` },
+    { y: 690, at: W(3, 3) - .1, year: "خريف 2025", label: "الموعد الأول", kill: W(3, 4) },
+    { y: 940, at: W(3, 3) + .2, year: "مايو 2026", label: "التأجيل الأول", kill: W(3, 4) + .3 },
+    { y: 1190, at: W(3, 6), year: "19 نوفمبر 2026", label: "الإطلاق", yes: true },
   ];
   reel.on(t => { fill.style.transform = `scaleY(${k(t, stops.map((st, i) => [st.at, (st.y - 420) / 900 + (i ? .02 : 0)]))})`; });
   for (const st of stops) {
@@ -248,7 +245,7 @@ const bar = R.box(stage, 60, 200, 960, 100, { zIndex: 40 });
 
 /* P3 platforms: PS5 + Xbox Series "بس" (line 7) */
 {
-  const s = panel(T[7], T[8]);
+  const s = panel(T[4], T[5]);
   txt(s, 60, 470, 960, "نزلت على", { fontSize: "44px", fontWeight: 700, color: ASH }, "t b");
   const mk = (x, name, at) => {
     const c = R.box(s, x, 600, 420, 560, { background: INK2, border: `3px solid ${INK3}`, borderRadius: "36px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "30px" });
@@ -256,70 +253,40 @@ const bar = R.box(stage, 60, 200, 960, 100, { zIndex: 40 });
     popAt(c, at);
     return c;
   };
-  mk(570, "PS5", W(7, 2));
-  mk(90, "Xbox Series", W(7, 3));
+  mk(570, "PS5", W(4, 2));
+  mk(90, "Xbox Series", W(4, 3));
   const only = txt(s, 390, 1210, 300, "بس", { fontSize: "84px", background: SIG, color: INK, borderRadius: "28px", lineHeight: "130px" });
-  popAt(only, W(7, 5));
-  s.punch(W(7, 5));
+  popAt(only, W(4, 5));
+  s.punch(W(4, 5));
 }
 
-/* P4 score ring 99 (line 8) → last time: 1998 Ocarina of Time (line 9) */
+/* P4 score ring 99 + "the highest since 1998" (line 5) */
 {
-  const s = panel(T[8], T[9]);
+  const s = panel(T[5], T[6]);
   txt(s, 60, 440, 960, `تقييم النقاد على <span class="en">Metacritic</span>`, { fontSize: "44px", fontWeight: 700, color: ASH }, "t b");
   const r = 300, C = 2 * Math.PI * r;
   const ring = R.svg(s, 760, 760, `<circle cx="380" cy="380" r="${r}" stroke="${INK3}" stroke-width="44" fill="none"/>
     <circle class="arc" cx="380" cy="380" r="${r}" stroke="${SIG}" stroke-width="44" fill="none" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}" transform="rotate(-90 380 380)"/>`, { x: 160, y: 560 });
   const arc = ring.querySelector(".arc");
   const num = txt(s, 160, 760, 760, "0", { fontSize: "300px", lineHeight: "360px", direction: "ltr" });
-  R.count(reel, num, [[W(8, 2) - .3, 0], [W(8, 2) + .9, 99, "out"]]);
-  reel.on(t => { arc.setAttribute("stroke-dashoffset", C * (1 - .99 * ease.out(clamp((t - W(8, 2) + .3) / 1.2)))); });
-  txt(s, 60, 1180 + 160, 960, "من 100", { fontSize: "40px", fontWeight: 500, color: ASH }, "t b");
-  s.punch(W(8, 2) + .9, .05);
-  reel.cue(W(8, 2) + .9, "hit", "99");
-}
-{
-  const s = panel(T[9], T[10]);
-  txt(s, 60, 440, 960, "آخر مرة لعبة وصلت 99", { fontSize: "44px", fontWeight: 700, color: ASH }, "t b");
-  /* 1998 ———— 2026 */
-  const y = 760;
-  const line = R.box(s, 180, y, 720, 8, { background: INK3, borderRadius: "4px" });
-  const lf = R.box(s, 180, y, 720, 8, { background: SIG, borderRadius: "4px", transformOrigin: "100% 50%" });
-  reel.on(t => { lf.style.transform = `scaleX(${ease.inOut(clamp((t - T[9] - .3) / Math.max(W(9, 8) - T[9], 1)))})`; });
-  const yrs = [[180, "2026", T[9] + .1], [900, "1998", W(9, 8) - .1]];
-  for (const [x, yr, at] of yrs) {
-    const d = R.box(s, x - 26, y - 22, 52, 52, { borderRadius: "50%", background: PAPER }); popAt(d, at);
-    const l = txt(s, x - 150, y - 140, 300, yr, { fontSize: "76px" }); popAt(l, at);
-  }
-  const gap = txt(s, 340, y + 50, 400, "28 سنة", { fontSize: "40px", fontWeight: 700, color: ASH }, "t b"); slideUp(gap, W(9, 8) + .3);
-  /* the game card */
-  const card = R.box(s, 140, 980, 800, 260, { background: PAPER, borderRadius: "34px", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 50px", boxSizing: "border-box" });
-  card.innerHTML = `<div class="b" style="color:${INK};text-align:right"><div style="font:900 52px Alexandria;direction:ltr;text-align:right">Ocarina of Time</div><div style="font-size:32px;font-weight:500;opacity:.7">The Legend of Zelda · 1998</div></div>
-    <div style="flex:none;width:150px;height:150px;border-radius:50%;background:${INK};color:${PAPER};display:grid;place-items:center;font:900 76px Alexandria">99</div>`;
-  card.style.direction = "rtl";
-  popAt(card, W(9, 10));
-  frame(s, 140, 980, 800, 260, W(9, 10) + .1, { len: 70, th: 12, gap: 22 });
+  R.count(reel, num, [[W(5, 2) - .3, 0], [W(5, 2) + .9, 99, "out"]]);
+  reel.on(t => { arc.setAttribute("stroke-dashoffset", C * (1 - .99 * ease.out(clamp((t - W(5, 2) + .3) / 1.2)))); });
+  const since = txt(s, 60, 1325, 960, `أعلى تقييم من 1998 · <span class="en">Ocarina of Time</span>`, { fontSize: "38px", fontWeight: 700, color: ASH }, "t b");
+  slideUp(since, W(5, 2) + 1);
+  s.punch(W(5, 2) + .9, .05);
+  reel.cue(W(5, 2) + .9, "hit", "99");
 }
 
-/* P5 records: pre-orders (line 10), 17M day one (11), vs GTA 5 (12) */
+/* P5 records: 17M day one (line 6), vs GTA 5 (line 7) */
 {
-  const s = panel(T[10], T[11]);
-  const tro = R.box(s, 340, 520, 400, 400, { display: "grid", placeItems: "center", background: INK2, borderRadius: "50%", border: `3px solid ${INK3}` });
-  tro.innerHTML = icon("trophy", 230, SIG, 1.5);
-  popAt(tro, W(10, 0));
-  const h = txt(s, 90, 1000, 900, "أكثر لعبة انطلبت حجز مسبق", { fontSize: "64px" }); slideUp(h, W(10, 2));
-  const h2 = txt(s, 90, 1190, 900, "بالتاريخ", { fontSize: "50px", fontWeight: 700, color: ASH }, "t b"); slideUp(h2, W(10, 5));
-  s.punch(W(10, 5));
-}
-{
-  const s = panel(T[11], T[13]);
+  const s = panel(T[6], T[8]);
   const tag = txt(s, 300, 420, 480, "تقديرات غير رسمية", { fontSize: "32px", fontWeight: 700, color: ASH, border: `2px solid ${ASH}`, borderRadius: "99px", lineHeight: "64px" }, "t b");
-  slideUp(tag, W(11, 0));
+  slideUp(tag, W(6, 0));
   const big = txt(s, 60, 520, 960, `<span class="n">0</span>`, { fontSize: "260px", lineHeight: "300px", direction: "ltr" });
-  R.count(reel, big.querySelector(".n"), [[T[11] + .2, 0], [W(11, 7) + .4, 17, "out"]]);
-  popAt(big, T[11] + .15);
-  const sub = txt(s, 60, 830, 960, "مليون نسخة بأول يوم", { fontSize: "62px" }); slideUp(sub, W(11, 8));
-  s.punch(W(11, 7) + .6, .045);
+  R.count(reel, big.querySelector(".n"), [[T[6] + .2, 0], [W(6, 7) + .4, 17, "out"]]);
+  popAt(big, T[6] + .15);
+  const sub = txt(s, 60, 830, 960, "مليون نسخة بأول يوم", { fontSize: "62px" }); slideUp(sub, W(6, 8));
+  s.punch(W(6, 7) + .6, .045);
   /* bars: GTA 5 vs GTA 6 */
   const base = 1360, scale = 26;
   const mkBar = (x, label, val, at, hot) => {
@@ -328,30 +295,30 @@ const bar = R.box(stage, 60, 200, 960, 100, { zIndex: 40 });
     const v = txt(s, x - 40, base - val * scale - 80, 300, "", { fontSize: "52px", color: hot ? SIG : PAPER, direction: "ltr" }); v.innerHTML = `${val}M`; slideUp(v, at + .4);
     const l = txt(s, x - 40, base + 14, 300, `<span class="en">${label}</span>`, { fontSize: "36px", fontWeight: 700, color: ASH }, "t b"); slideUp(l, at);
   };
-  mkBar(650, "GTA 5", 11, W(12, 3), false);
-  mkBar(210, "GTA 6", 17, W(12, 4), true);
+  mkBar(650, "GTA 5", 11, W(7, 3), false);
+  mkBar(210, "GTA 6", 17, W(7, 4), true);
   const diff = txt(s, 420, 1000, 240, "+6M", { fontSize: "56px", background: PAPER, color: INK, borderRadius: "22px", lineHeight: "90px", direction: "ltr" });
-  popAt(diff, W(12, 6));
-  reel.on(t => { const p = ease.soft(clamp((t - W(12, 0) + .2) / .5)); big.style.top = (520 - 140 * p) + "px"; sub.style.top = (830 - 140 * p) + "px"; tag.style.opacity = Math.min(tag.style.opacity || 1, 1 - p * .4); });
-  s.punch(W(12, 6));
+  popAt(diff, W(7, 6));
+  reel.on(t => { const p = ease.soft(clamp((t - W(7, 0) + .2) / .5)); big.style.top = (520 - 140 * p) + "px"; sub.style.top = (830 - 140 * p) + "px"; tag.style.opacity = Math.min(tag.style.opacity || 1, 1 - p * .4); });
+  s.punch(W(7, 6));
 }
 
-/* P6 the cons: tag + five lines that pile up, like the reference's list (lines 13-18) */
+/* P6 the cons: tag + five lines that pile up, like the reference's list (lines 8-13) */
 {
-  const s = panel(T[13], T[19]);
+  const s = panel(T[8], T[14]);
   const tag = txt(s, 170, 420, 740, "بس مو كلشي وردي", { fontSize: "56px", whiteSpace: "nowrap", background: PAPER, color: INK, borderRadius: "22px", lineHeight: "110px" });
-  reel.on(t => { const p = ease.back(clamp((t - T[13]) / .45)); tag.style.transform = `scale(${1.6 - .6 * p}) rotate(${(1 - p) * -6}deg)`; tag.style.opacity = clamp((t - T[13]) / .1); });
-  reel.cue(T[13], "land", "cons tag");
+  reel.on(t => { const p = ease.back(clamp((t - T[8]) / .45)); tag.style.transform = `scale(${1.6 - .6 * p}) rotate(${(1 - p) * -6}deg)`; tag.style.opacity = clamp((t - T[8]) / .1); });
+  reel.cue(T[8], "land", "cons tag");
   const items = [
-    { ic: "tag", html: `<span class="en">$80</span> · الكاملة <span class="en">$100</span>`, at: T[14] },
-    { ic: "disc", html: "كود داخل علبة، بدون ديسك", at: T[15] },
-    { ic: "monitor", html: `ماكو نسخة <span class="en">PC</span>`, at: T[16] },
-    { ic: "gauge", html: `<span class="en">30</span> فريم بالكونسول`, at: T[17] },
-    { ic: "bug", html: "باگات وكراشات بأول يوم", at: T[18] },
+    { ic: "tag", html: `<span class="en">$80</span> · الكاملة <span class="en">$100</span>`, at: T[9] },
+    { ic: "disc", html: "كود داخل علبة، بدون ديسك", at: T[10] },
+    { ic: "monitor", html: `ماكو نسخة <span class="en">PC</span>`, at: T[11] },
+    { ic: "gauge", html: `<span class="en">30</span> فريم بالكونسول`, at: T[12] },
+    { ic: "bug", html: "باگات وكراشات بأول يوم", at: T[13] },
   ];
-  const y0 = 590, step = 170;
+  const y0 = 580, step = 150;
   items.forEach((it, i) => {
-    const row = R.box(s, 90, y0 + i * step, 900, 146, { display: "flex", alignItems: "center", gap: "28px", direction: "rtl", borderBottom: `2px solid ${INK3}` });
+    const row = R.box(s, 60, y0 + i * step, 860, 130, { display: "flex", alignItems: "center", gap: "28px", direction: "rtl", borderBottom: `2px solid ${INK3}` });
     const ic = R.box(row, 0, 0, 96, 96, { position: "relative", flex: "none", display: "grid", placeItems: "center", borderRadius: "26px", background: INK2 });
     ic.innerHTML = icon(it.ic, 58, PAPER, 1.8);
     const tx = document.createElement("div"); tx.className = "b"; tx.innerHTML = it.html;
@@ -360,7 +327,7 @@ const bar = R.box(stage, 60, 200, 960, 100, { zIndex: 40 });
     Object.assign(num.style, { marginRight: "auto", fontSize: "40px", color: ASH }); row.appendChild(num);
     slideUp(row, it.at);
     reel.cue(it.at, "tick", "con " + (i + 1));
-    const next = items[i + 1] ? items[i + 1].at : T[19];
+    const next = items[i + 1] ? items[i + 1].at : T[14];
     reel.on(t => {   /* the line being said gets the one yellow mark */
       const cur = t >= it.at && t < next;
       ic.style.background = cur ? SIG : INK2;
@@ -371,11 +338,11 @@ const bar = R.box(stage, 60, 200, 960, 100, { zIndex: 40 });
   for (const it of items) s.punch(it.at + .05, .02);
 }
 
-/* P7 the real question: two sides on a balance (lines 19-21) */
+/* P7 the real question: two sides on a balance (lines 14-16) */
 {
-  const s = panel(T[19], T[22]);
-  const head = txt(s, 60, 420, 960, "السؤال الحقيقي", { fontSize: "96px" }); slideUp(head, T[19]);
-  frame(s, 170, 400, 740, 150, T[19] + .15, { len: 60, th: 11, gap: 18 });
+  const s = panel(T[14], T[17]);
+  const head = txt(s, 60, 420, 960, "السؤال الحقيقي", { fontSize: "96px" }); slideUp(head, T[14]);
+  frame(s, 170, 400, 740, 150, T[14] + .15, { len: 60, th: 11, gap: 18 });
   /* the balance */
   const bal = R.box(s, 140, 620, 800, 760);
   R.svg(bal, 800, 760, `<path d="M400 120 V640" stroke="${ASH}" stroke-width="14" stroke-linecap="round"/><path d="M300 660 h200" stroke="${ASH}" stroke-width="16" stroke-linecap="round"/><circle cx="400" cy="110" r="22" fill="${SIG}"/>`);
@@ -384,9 +351,9 @@ const bar = R.box(stage, 60, 200, 960, 100, { zIndex: 40 });
   const panR = R.box(beam, 600, 320, 220, 0); const panL = R.box(beam, -20, 320, 220, 0);
   const cardR = txt(panR, -60, 0, 340, "أعظم لعبة بالتاريخ؟", { fontSize: "46px", background: PAPER, color: INK, borderRadius: "26px", padding: "26px 10px", transformOrigin: "50% 0" });
   const cardL = txt(panL, -60, 0, 340, "الهايب رفعها أكثر من حجمها؟", { fontSize: "46px", background: INK2, border: `3px solid ${INK3}`, borderRadius: "26px", padding: "26px 10px", transformOrigin: "50% 0" });
-  popAt(cardR, W(20, 3), "50% 0"); popAt(cardL, W(21, 1), "50% 0");
+  popAt(cardR, W(15, 3), "50% 0"); popAt(cardL, W(16, 1), "50% 0");
   reel.on(t => {
-    const a = k(t, [[W(20, 2), 0], [W(20, 4), 7, "back"], [W(21, 2), 7], [W(21, 5), -7, "back"], [T[22], -2]]) + Math.sin(t * 2.2) * 1.5;
+    const a = k(t, [[W(15, 2), 0], [W(15, 4), 7, "back"], [W(16, 2), 7], [W(16, 5), -7, "back"], [T[17], -2]]) + Math.sin(t * 2.2) * 1.5;
     beam.style.transform = `rotate(${a}deg)`;
     panR.style.transform = `rotate(${-a}deg)`; panL.style.transform = `rotate(${-a}deg)`;
   });
@@ -394,20 +361,20 @@ const bar = R.box(stage, 60, 200, 960, 100, { zIndex: 40 });
   panR.style.transformOrigin = "110px 0"; panL.style.transformOrigin = "110px 0";
 }
 
-/* P8 the ladder with a moving arrow (from the reference's 1-10 scale), stops on "؟" (line 22) */
+/* P8 the ladder with a moving arrow (from the reference's 1-10 scale), stops on "؟" (line 17), then the CTA (line 18) */
 {
-  const s = panel(T[22], ENDCARD + .01);
-  const head = txt(s, 60, 400, 960, `برأيك… <span style="color:${PAPER}">أخذت أكثر من حجمها؟</span>`, { fontSize: "60px", color: ASH }); slideUp(head, T[22]);
+  const s = panel(T[17], ENDCARD + .01);
+  const head = txt(s, 60, 400, 960, `برأيك… <span style="color:${PAPER}">أخذت أكثر من حجمها؟</span>`, { fontSize: "60px", color: ASH }); slideUp(head, T[17]);
   const rungs = ["تستاهل وأكثر", "تستاهل الضجة", "بالنص", "أكبر من حجمها", "هايب بس"];
   const top = 600, rh = 128;
   rungs.forEach((r, i) => {
     const row = R.box(s, 200, top + i * rh, 680, 108, { display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 36px", boxSizing: "border-box", background: INK2, borderRadius: "24px", direction: "rtl" });
     row.innerHTML = `<span class="b" style="font-size:44px;font-weight:700">${r}</span><span class="h" style="font-size:44px;color:${ASH}">${5 - i}</span>`;
-    slideUp(row, T[22] + .15 + i * .1);
+    slideUp(row, T[17] + .15 + i * .1);
   });
   const arrow = R.svg(s, 90, 90, `<path d="M80 45 L10 8 V82 Z" fill="${SIG}"/>`, { x: 90, y: 0 });
   const q = txt(s, 60, top + 5 * rh + 30, 960, "؟", { fontSize: "150px", color: SIG, lineHeight: "1" });
-  const t0 = T[22] + .7, t1 = LEND(22) - .3;
+  const t0 = T[17] + .7, t1 = LEND(17) - .3;
   reel.on(t => {
     const ph = clamp((t - t0) / Math.max(t1 - t0, .5));
     const idx = 2 + 2 * Math.sin(ph * Math.PI * 3.2) * (1 - ph * .999);  /* swings, then settles on the middle */
@@ -415,12 +382,12 @@ const bar = R.box(stage, 60, 200, 960, 100, { zIndex: 40 });
     arrow.style.visibility = t < t0 ? "hidden" : "inherit";
   });
   popAt(q, t1 + .15);
-  /* CTA: "خل نسمع آرائكم" */
-  const cta = R.box(s, 160, top + 5 * rh + 10, 760, 170, { display: "flex", alignItems: "center", justifyContent: "center", gap: "26px", background: PAPER, borderRadius: "40px", direction: "rtl" });
-  cta.innerHTML = icon("chat", 84, INK, 2) + `<span class="h" style="color:${INK};font-size:66px">خل نسمع آرائكم</span>`;
-  popAt(cta, T[23]);
-  reel.on(t => { q.style.opacity = t >= T[23] ? 0 : 1; });
-  s.punch(T[23]);
+  /* CTA: one-word answer, so commenting is easy */
+  const cta = R.box(s, 140, top + 5 * rh + 10, 800, 150, { display: "flex", alignItems: "center", justifyContent: "center", gap: "26px", background: PAPER, borderRadius: "40px", direction: "rtl" });
+  cta.innerHTML = icon("chat", 84, INK, 2) + `<span class="h" style="color:${INK};font-size:60px">اكتب: <span style="background:${SIG};border-radius:16px;padding:0 18px">إي</span> لو <span style="border:4px solid ${INK};border-radius:16px;padding:0 18px">لا</span></span>`;
+  popAt(cta, T[18]);
+  reel.on(t => { q.style.opacity = t >= T[18] ? 0 : 1; });
+  s.punch(T[18]);
 }
 
 /* end card: the logo on ink (after the last line) */
@@ -434,7 +401,7 @@ const bar = R.box(stage, 60, 200, 960, 100, { zIndex: 40 });
 
 /* ---------- 6. karaoke subtitles (bottom band) ---------- */
 {
-  const band = R.box(stage, 70, 1440, 940, 150, { zIndex: 45, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", direction: "rtl" });
+  const band = R.box(stage, 90, 1405, 820, 150, { zIndex: 45, display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", direction: "rtl" });
   const lines = [];
   let c = 0;
   SCRIPT.forEach((l, i) => {
