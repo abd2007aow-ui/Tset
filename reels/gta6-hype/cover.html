@@ -19,20 +19,22 @@ const corners = (x, y, w, h, L, th, c = SIG) => {
   R.svg(S, L, L, `<path d="M0 ${th / 2} H${L - th / 2} V${L}" stroke="${c}" stroke-width="${th}" fill="none"/>`, { x: x + w - L, y });
   R.svg(S, L, L, `<path d="M${L} ${L - th / 2} H${th / 2} V0" stroke="${c}" stroke-width="${th}" fill="none"/>`, { x, y: y + h - L });
 };
-R.box(S, 0, 0, 1080, 1920, { background: `radial-gradient(110% 60% at 50% 45%, ${INK2} 0%, ${INK} 65%)` });
+R.box(S, 0, 0, 1080, 1920, { background: `radial-gradient(110% 60% at 50% 55%, ${INK2} 0%, ${INK} 65%)` });
 /* top: category badge + logo (inside the grid crop) */
-txt(S, 90, 300, 170, "تقنية", { fontSize: "34px", fontWeight: 700, color: INK, background: TECH, borderRadius: "99px", lineHeight: "62px" }, "t b");
-const lg = R.box(S, 760, 285, 230, 100); txt(lg, 0, 6, 230, "نطاق", { fontSize: "64px" }); corners(760, 288, 226, 92, 28, 6);
-/* the title, inside the frame */
-txt(S, 60, 470, 960, `بعد انطلاق <span class="en">GTA 6</span>`, { fontSize: "52px", fontWeight: 700, color: ASH }, "t b");
-txt(S, 80, 570, 920, `هل أخذت<br>أكثر من <span style="color:${SIG}">حجمها؟</span>`, { fontSize: "112px", lineHeight: "1.25", whiteSpace: "nowrap" });
-corners(50, 555, 980, 330, 90, 16);
+txt(S, 90, 290, 170, "تقنية", { fontSize: "34px", fontWeight: 700, color: INK, background: TECH, borderRadius: "99px", lineHeight: "62px" }, "t b");
+const lg = R.box(S, 760, 275, 230, 100); txt(lg, 0, 6, 230, "نطاق", { fontSize: "64px" }); corners(760, 278, 226, 92, 28, 6);
+/* the question */
+txt(S, 60, 410, 960, `بعد انطلاق <span class="en">GTA 6</span>`, { fontSize: "46px", fontWeight: 700, color: ASH }, "t b");
+txt(S, 40, 515, 1000, `هل أخذت<br>أكثر من <span style="color:${SIG}">حجمها؟</span>`, { fontSize: "108px", lineHeight: "1.22", whiteSpace: "nowrap" });
+/* the shot: a gameplay frame from the official trailer, framed by the brand's corners */
+const shot = R.box(S, 60, 810, 960, 540, { borderRadius: "30px", overflow: "hidden", background: `url(cover-bg.jpg) center/cover`, boxShadow: "0 40px 90px rgba(0,0,0,.6)" });
+R.box(shot, 0, 0, 960, 540, { background: "linear-gradient(rgba(15,20,32,0) 60%, rgba(15,20,32,.55))" });
+corners(32, 782, 1016, 596, 100, 16);
 /* the two sides of the story */
-const card = (x, y, w, html, st) => { const c = R.box(S, x, y, w, 170, { display: "flex", alignItems: "center", justifyContent: "center", gap: "22px", borderRadius: "34px", direction: "rtl", ...st }); c.innerHTML = html; return c; };
-card(560, 1000, 430, `<span class="h" style="color:${INK};font-size:110px">99</span><span class="b" style="color:${INK};font-size:34px;font-weight:700;line-height:1.2">من 100<br><span class="en" style="opacity:.6">Metacritic</span></span>`, { background: PAPER });
-card(90, 1000, 430, `<span class="b" style="font-size:46px;font-weight:700;line-height:1.3;text-align:center">باگات · كراشات<br><span style="color:${ASH}"><span class="en">30</span> فريم</span></span>`, { background: INK2, border: `4px solid ${ASH}` });
-txt(S, 60, 1260, 960, "شنو صار، وشنو يگولون الطرفين", { fontSize: "44px", fontWeight: 500, color: ASH }, "t b");
-txt(S, 60, 1560, 960, "@nitaq.news", { fontSize: "36px", fontWeight: 500, color: ASH, direction: "ltr" }, "t b");
+const card = (x, y, w, html, st) => { const c = R.box(S, x, y, w, 150, { display: "flex", alignItems: "center", justifyContent: "center", gap: "20px", borderRadius: "30px", direction: "rtl", ...st }); c.innerHTML = html; return c; };
+card(560, 1415, 430, `<span class="h" style="color:${INK};font-size:100px">99</span><span class="b" style="color:${INK};font-size:32px;font-weight:700;line-height:1.2">من 100<br><span class="en" style="opacity:.6">Metacritic</span></span>`, { background: PAPER });
+card(90, 1415, 430, `<span class="b" style="font-size:42px;font-weight:700;line-height:1.3;text-align:center">باگات · كراشات<br><span style="color:${ASH}"><span class="en">30</span> فريم</span></span>`, { background: INK2, border: `4px solid ${ASH}` });
+txt(S, 60, 1600, 960, `<span class="en">@nitaq.news</span> · لقطة: <span class="en">Rockstar Games</span>`, { fontSize: "28px", fontWeight: 500, color: ASH }, "t b");
 </script>
 </body>
 </html>

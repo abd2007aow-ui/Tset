@@ -1,16 +1,14 @@
 """Background b-roll for the reel: gameplay shots from the official trailer (src/trailer.mp4),
 cropped to 9:16, cut every ~2.5 s, as an all-keyframe VP9 webm so the page can seek it frame-exactly.
 usage: python build_broll.py <seconds>   -> broll.webm
-Only gameplay is used (no text cards, logos or hardware), and no shot with revealing outfits."""
+Only gameplay is used (no text cards, logos or hardware), and no women at all (the user asked for none)."""
 import subprocess, sys, os
 secs = float(sys.argv[1])
 # (start, length, crop centre 0..1 across the 1280 px width)  - order chosen for the story
-# Only shots without revealing outfits (checked frame by frame): cars, streets, police, the bar, the store.
+# Only shots with no women in them (checked frame by frame): cars, the street shoot-out, the store.
 SHOTS = [
     (8.20, 2.0, .45),   # shoot-out on the road      (hook)
     (26.45, 2.0, .50),  # race
-    (3.35, 1.6, .55),   # bar (fully clothed; crop fixed, keeps the rating badge out)
-    (31.60, 1.2, .50),  # police street (stops before the scooter riders)
     (34.45, 1.4, .45),  # car on the street
     (10.30, 2.0, .62),  # shoot-out, the truck rolls
     (40.05, 1.8, .45),  # store
