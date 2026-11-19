@@ -1,0 +1,187 @@
+[
+ {
+  "t": 0,
+  "kind": "whoosh",
+  "note": "panel"
+ },
+ {
+  "t": 0.2,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 3.94,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 4.24,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 4.47,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 5.36,
+  "kind": "whoosh",
+  "note": "panel"
+ },
+ {
+  "t": 8.53,
+  "kind": "whoosh",
+  "note": "panel"
+ },
+ {
+  "t": 8.63,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 10.45,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 10.75,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 11.1,
+  "kind": "tick",
+  "note": "strike"
+ },
+ {
+  "t": 11.4,
+  "kind": "tick",
+  "note": "strike"
+ },
+ {
+  "t": 12.27,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 12.62,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 13.15,
+  "kind": "whoosh",
+  "note": "panel"
+ },
+ {
+  "t": 14.75,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 15.12,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 15.95,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 16.57,
+  "kind": "whoosh",
+  "note": "panel"
+ },
+ {
+  "t": 18.71,
+  "kind": "hit",
+  "note": "99"
+ },
+ {
+  "t": 19.64,
+  "kind": "whoosh",
+  "note": "panel"
+ },
+ {
+  "t": 19.79,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 27.38,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 28.54,
+  "kind": "whoosh",
+  "note": "panel"
+ },
+ {
+  "t": 28.54,
+  "kind": "land",
+  "note": "cons tag"
+ },
+ {
+  "t": 29.78,
+  "kind": "tick",
+  "note": "con 1"
+ },
+ {
+  "t": 32.79,
+  "kind": "tick",
+  "note": "con 2"
+ },
+ {
+  "t": 36.69,
+  "kind": "tick",
+  "note": "con 3"
+ },
+ {
+  "t": 38,
+  "kind": "tick",
+  "note": "con 4"
+ },
+ {
+  "t": 40.4,
+  "kind": "tick",
+  "note": "con 5"
+ },
+ {
+  "t": 44.31,
+  "kind": "whoosh",
+  "note": "panel"
+ },
+ {
+  "t": 46.49,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 48.35,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 51.7,
+  "kind": "whoosh",
+  "note": "panel"
+ },
+ {
+  "t": 54.77,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 55.34,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 58.08,
+  "kind": "whoosh",
+  "note": "panel"
+ }
+]

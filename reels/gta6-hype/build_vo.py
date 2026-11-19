@@ -18,8 +18,18 @@ def speech(p, d=.18):
 old, nw = load("vo-v1.mp3"), load(new)
 # split the new take at its two longest inner pauses
 sil = [(a, b) for a, b in speech(new) if a > .3 and b < len(nw) / SR - .3]
-cuts = sorted(sorted(sil, key=lambda s: s[1] - s[0])[-2:])
-if len(cuts) < 2: sys.exit("new.mp3 needs a clear pause between each of the three lines")
+if len(sil) < 2: sys.exit("new.mp3 needs a clear pause between each of the three lines")
+# pauses inside a line can be as long as pauses between lines, so pick the two cuts whose three
+# parts best match the lines' expected lengths (chars: A 58, B 43, C 25), with longer pauses as a tie-breaker
+import itertools, math
+EXP = [58, 43, 25]
+total = len(nw) / SR
+def score(c):
+    d = [c[0][0], c[1][0] - c[0][1], total - c[1][1]]
+    if min(d) <= .3: return 1e9
+    r = [x / sum(d) for x in d]; e = [x / sum(EXP) for x in EXP]
+    return sum(math.log(a / b) ** 2 for a, b in zip(r, e)) - .3 * (c[0][1] - c[0][0] + c[1][1] - c[1][0])
+cuts = list(min(itertools.combinations(sil, 2), key=score))
 lead = speech(new)[0][1] if speech(new) and speech(new)[0][0] < .05 else 0
 tail = len(nw) / SR
 for a, b in speech(new):
