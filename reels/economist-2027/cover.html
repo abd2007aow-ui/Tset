@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>غلاف: بعد انطلاق GTA 6</title>
+<script src="../../.claude/skills/maven-reels/kit/reel.js"></script>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>.t{position:absolute;text-align:center;direction:rtl}.h{font-family:Alexandria;font-weight:900;color:#F3EFE6;line-height:1.15}.b{font-family:'IBM Plex Sans Arabic';color:#F3EFE6}.en{direction:ltr;unicode-bidi:isolate;display:inline-block}</style>
+</head>
+<body>
+<script>
+/* Reel cover, «نطاق» reel-cover template: 1080x1920, the title in the middle so the profile grid crop (y 240..1680) keeps it. */
+const INK = "#0F1420", SIG = "#FFC21A", PAPER = "#F3EFE6", ASH = "#AEB6C6", TECH = "#A99BFF", INK2 = "#171E2E", INK3 = "#222B3F";
+const reel = R.reel({ w: 1080, h: 1920, fps: 30, lang: "ar", duration: 1, bg: INK });
+reel.ready = () => Promise.all([document.fonts.load("900 100px Alexandria"), document.fonts.load("700 40px 'IBM Plex Sans Arabic'"), document.fonts.ready]);
+const S = reel.stage;
+const txt = (p, x, y, w, html, st = {}, cls = "t h") => { const d = R.box(p, x, y, w, null, st); d.style.height = "auto"; d.className = cls; d.innerHTML = html; return d; };
+const corners = (x, y, w, h, L, th, c = SIG) => {
+  R.svg(S, L, L, `<path d="M0 ${th / 2} H${L - th / 2} V${L}" stroke="${c}" stroke-width="${th}" fill="none"/>`, { x: x + w - L, y });
+  R.svg(S, L, L, `<path d="M${L} ${L - th / 2} H${th / 2} V0" stroke="${c}" stroke-width="${th}" fill="none"/>`, { x, y: y + h - L });
+};
+R.box(S, 0, 0, 1080, 1920, { background: `radial-gradient(110% 60% at 50% 55%, ${INK2} 0%, ${INK} 65%)` });
+/* top: category badge (عالم) + logo */
+txt(S, 90, 290, 170, "عالم", { fontSize: "34px", fontWeight: 700, color: INK, background: "#FF7A93", borderRadius: "99px", lineHeight: "62px" }, "t b");
+const lg = R.box(S, 760, 275, 230, 100); txt(lg, 0, 6, 230, "نطاق", { fontSize: "64px" }); corners(760, 278, 226, 92, 28, 6);
+/* the hero: the year, big; then the question with the one yellow word */
+txt(S, 60, 400, 960, "غلاف إيكونومست", { fontSize: "46px", fontWeight: 700, color: ASH }, "t b");
+txt(S, 0, 450, 1080, `<span class="en">2027</span>`, { fontSize: "250px", lineHeight: "1", letterSpacing: "-4px", textShadow: "0 14px 50px rgba(0,0,0,.55)" });
+txt(S, 40, 715, 1000, `شيفرة <span style="color:${SIG}">سرية؟</span>`, { fontSize: "104px", lineHeight: "1.2", whiteSpace: "nowrap" });
+/* the cover itself, framed by the brand's corners, with three numbered symbols as a teaser */
+const card = R.box(S, 90, 890, 900, 660, { borderRadius: "34px", overflow: "hidden", background: `#F0F0EE url(cover-circle.jpg) center/contain no-repeat`, boxShadow: "0 40px 90px rgba(0,0,0,.6)" });
+corners(62, 862, 956, 716, 100, 16);
+const dot = (x, y, n) => { const d = R.box(card, x - 34, y - 34, 68, 68, { borderRadius: "50%", background: SIG, boxShadow: "0 8px 20px rgba(0,0,0,.35)" }); txt(d, 0, 12, 68, String(n), { fontSize: "40px", color: INK, lineHeight: "1" }); };
+/* card shows the 1380x1308 crop at 660/1308 = .5046 scale, centred (x offset (900 - 1380*.5046)/2) */
+const sc = 660 / 1308, ox = (900 - 1380 * sc) / 2, P = (x, y) => [ox + (x - 560) * sc, y * sc];
+dot(...P(1440, 75), 1); dot(...P(600, 330), 3); dot(...P(1390, 560), 4);
+const chip = txt(S, 690, 1480, 300, "10 رموز", { fontSize: "44px", background: PAPER, color: INK, borderRadius: "22px", lineHeight: "88px", boxShadow: "0 18px 40px rgba(0,0,0,.4)" });
+txt(S, 60, 1610, 960, `<span class="en">@nitaq.news</span> · الغلاف: <span class="en">The Economist</span>`, { fontSize: "28px", fontWeight: 500, color: ASH }, "t b");
+</script>
+</body>
+</html>
