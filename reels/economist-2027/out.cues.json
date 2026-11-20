@@ -1,0 +1,182 @@
+[
+ {
+  "t": 4.17,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 7.95,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 11.34,
+  "kind": "tick",
+  "note": "strike"
+ },
+ {
+  "t": 18.17,
+  "kind": "whoosh",
+  "note": "أمريكا"
+ },
+ {
+  "t": 18.47,
+  "kind": "pop",
+  "note": "number"
+ },
+ {
+  "t": 18.67,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 23.72,
+  "kind": "whoosh",
+  "note": "الشرق الأوسط"
+ },
+ {
+  "t": 24.02,
+  "kind": "pop",
+  "note": "number"
+ },
+ {
+  "t": 27.96,
+  "kind": "whoosh",
+  "note": "الصين وتايوان"
+ },
+ {
+  "t": 28.26,
+  "kind": "pop",
+  "note": "number"
+ },
+ {
+  "t": 34.24,
+  "kind": "whoosh",
+  "note": "الذكاء الاصطناعي"
+ },
+ {
+  "t": 34.54,
+  "kind": "pop",
+  "note": "number"
+ },
+ {
+  "t": 39.44,
+  "kind": "whoosh",
+  "note": "الديون"
+ },
+ {
+  "t": 39.74,
+  "kind": "pop",
+  "note": "number"
+ },
+ {
+  "t": 44.28,
+  "kind": "whoosh",
+  "note": "فرنسا"
+ },
+ {
+  "t": 44.58,
+  "kind": "pop",
+  "note": "number"
+ },
+ {
+  "t": 49.98,
+  "kind": "whoosh",
+  "note": "المناخ"
+ },
+ {
+  "t": 50.28,
+  "kind": "pop",
+  "note": "number"
+ },
+ {
+  "t": 56.33,
+  "kind": "whoosh",
+  "note": "إبر التنحيف"
+ },
+ {
+  "t": 56.63,
+  "kind": "pop",
+  "note": "number"
+ },
+ {
+  "t": 57.22,
+  "kind": "whoosh",
+  "note": "الفضاء"
+ },
+ {
+  "t": 57.52,
+  "kind": "pop",
+  "note": "number"
+ },
+ {
+  "t": 58.26,
+  "kind": "whoosh",
+  "note": "السينما"
+ },
+ {
+  "t": 58.56,
+  "kind": "pop",
+  "note": "number"
+ },
+ {
+  "t": 60.97,
+  "kind": "tick",
+  "note": "dot 1"
+ },
+ {
+  "t": 61.06,
+  "kind": "tick",
+  "note": "dot 2"
+ },
+ {
+  "t": 61.15,
+  "kind": "tick",
+  "note": "dot 3"
+ },
+ {
+  "t": 61.24,
+  "kind": "tick",
+  "note": "dot 4"
+ },
+ {
+  "t": 61.33,
+  "kind": "tick",
+  "note": "dot 5"
+ },
+ {
+  "t": 61.42,
+  "kind": "tick",
+  "note": "dot 6"
+ },
+ {
+  "t": 61.51,
+  "kind": "tick",
+  "note": "dot 7"
+ },
+ {
+  "t": 61.6,
+  "kind": "tick",
+  "note": "dot 8"
+ },
+ {
+  "t": 61.69,
+  "kind": "tick",
+  "note": "dot 9"
+ },
+ {
+  "t": 61.78,
+  "kind": "tick",
+  "note": "dot 10"
+ },
+ {
+  "t": 65.51,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 68.78,
+  "kind": "whoosh",
+  "note": "panel"
+ }
+]
