@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>دللول - cover</title>
+<!-- Story reel for song-clean.ogg (song.ogg cut before the TikTok end sound at 64.95 s): a mother sings the lullaby to her son; every shot follows the line being sung.
+     Word times come from the song (whisper large-v3); the spelling is fixed by hand. -->
+<script src="../../.claude/skills/maven-reels/kit/reel.js"></script>
+</head>
+<body>
+<script>
+/* =================== 1. Lyrics and singing =================== */
+const L = (words, times, end) => ({ words, times, end });
+/* times measured on the isolated voice (demucs + per-phrase whisper + energy onsets) */
+const LYRICS = [
+  L(["دللول", "يا", "الولد", "يا", "ابني", "دللول"], [1.0, 5.28, 5.94, 7.14, 7.5, 8.18], 11.3),
+  L(["يُمّه", "عدوّك", "عليل", "وساكن", "الچول"], [15.18, 15.88, 16.54, 18.8, 20.66], 22.0),
+  L(["دللول", "يا", "الولد", "يا", "ابني", "دللول"], [25.5, 27.08, 28.92, 30.48, 31.18, 31.72], 36.5),
+  L(["يُمّه", "عدوّك", "عليل", "وساكن", "الچول"], [38.9, 40.28, 41.26, 43.24, 43.62], 45.0),
+  L(["يُمّه", "نوم", "نوم", "العوافي"], [48.44, 49.22, 52.18, 53.68], 55.7),
+  L(["يُمّه", "نوم", "الغزيّل", "بالبراري"], [58.48, 59.36, 59.9, 60.72], 64.2)];
+/* loudness of the isolated voice every 40 ms (0..1): drives the mother's mouth */
+const ENV = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.62,0.75,0.49,0.48,0.91,0.9,0.64,0.63,0.96,0.9,0.82,0.85,0.92,0.92,0.85,0.68,0.82,0.88,0.87,0.91,0.95,0.95,0.89,0.87,0.84,0.87,0.88,0.85,0.81,0.79,0.82,0.83,0.78,0.77,0.79,0.82,0.8,0.81,0.8,0.81,0.84,0.85,0.81,0.81,0.8,0.77,0.79,0.79,0.84,0.85,0.78,0.84,0.83,0.85,0.89,0.9,0.87,0.89,0.9,0.91,0.92,0.89,0.91,0.92,0.92,0.91,0.83,0.85,0.91,0.91,0.81,0.77,0.8,0.83,0.72,0.64,0.56,0.58,0.62,0.56,0.35,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.75,0.77,0.68,0.59,0.59,0.61,0.57,0.63,0.67,0.76,0.71,0.69,0.7,0.69,0.49,0.57,0.62,0.65,0.63,0.63,0.66,0.69,0.69,0.65,0.66,0.64,0.66,0.65,0.65,0.62,0.27,0.34,0.79,0.7,0.68,0.97,0.84,0.78,0.68,0.38,0.68,0.77,0.67,0.68,0.78,0.79,0.65,0.67,0.63,0.73,0.77,0.63,0.51,0.57,0.62,0.67,0.69,0.65,0.64,0.6,0.59,0.61,0.56,0.61,0.62,0.63,0.7,0.58,0.05,0.28,0.85,0.76,0.75,0.51,0.71,0.71,0.75,0.67,0.75,0.53,0.57,0.6,0.58,0.51,0.66,0.87,0.81,0.83,0.79,0.73,0.79,0.72,0.59,0.73,0.39,0.61,0.79,0.83,0.86,0.82,0.8,0.77,0.78,0.77,0.7,0.72,0.69,0.56,0.42,0.5,0.46,0.5,0.48,0.57,0.67,0.74,0.75,0.8,0.83,0.77,0.82,0.88,0.89,0.87,0.8,0.8,0.82,0.8,0.77,0.83,0.84,0.83,0.86,0.82,0.86,0.8,0.84,0.83,0.72,0.79,0.81,0.87,0.67,0.39,0.53,0.59,0.58,0.38,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.56,0.72,0.71,0.61,0.6,0.56,0.82,0.81,0.75,0.77,0.7,0.76,0.68,0.62,0.67,0.82,0.69,0.45,0.44,0.88,0.96,0.81,0.75,0.78,0.81,0.77,0.68,0.53,0.27,0.08,0.73,0.69,0.63,0.64,0.69,0.71,0.64,0.38,0.5,0.81,0.79,0.77,0.71,0.74,0.8,0.73,0.85,0.72,0.74,0.8,0.84,0.74,0.76,0.58,0.62,0.74,0.73,0.74,0.84,0.95,0.67,0.73,0.92,0.87,0.67,0.76,0.95,0.81,0.74,0.79,0.91,0.7,0.53,0.55,0.41,0.42,0.54,0.53,0.6,0.57,0.57,0.42,0.58,0.63,0.63,0.66,0.69,0.57,0.42,0.56,0.68,0.68,0.67,0.63,0.7,0.74,0.59,0.54,0.5,0.59,0.59,0.47,0.55,0.59,0.51,0.55,0.56,0.26,0.33,0.44,0.39,0.24,0.76,0.67,0.74,0.75,0.83,0.63,0.19,0.18,0.05,0.64,0.81,0.68,0.64,0.6,0.65,0.55,0.47,0.47,0.52,0.52,0.56,0.2,0,0.13,0.1,0,0.62,0.6,0.44,0.45,0.51,0.35,0.34,0.5,0.52,0.49,0.53,0.49,0.42,0.5,0.5,0.53,0.47,0.48,0.55,0.54,0.49,0.36,0.46,0.56,0.48,0.38,0.38,0.53,0.48,0.48,0.2,0.27,0.3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.25,0.68,0.56,0.83,0.84,0.78,0.7,0.84,0.97,0.91,0.85,0.96,0.94,0.8,0.85,0.81,0.91,0.94,0.97,1,1,1,0.99,1,1,0.97,0.94,0.95,0.9,0.83,0.81,0.82,0.81,0.82,0.88,0.92,0.88,0.87,0.89,0.92,0.93,0.92,0.89,0.79,0.71,0.96,0.85,0.68,0.81,0.78,0.75,0.69,0.82,0.93,0.92,0.81,0.83,0.84,0.96,0.91,0.87,0.87,0.81,0.88,0.88,0.9,0.95,0.98,1,0.93,0.83,0.77,0.8,0.82,0.85,0.88,0.89,0.97,0.96,0.85,0.92,0.89,0.8,0.82,0.96,0.84,0.78,0.74,0.76,0.79,0.77,0.79,0.77,0.83,0.85,0.88,0.92,0.9,0.88,0.9,0.9,0.75,0.37,0.64,0.65,0.47,0.13,0.07,0,0,0.04,0.01,0,0,0,0,0,0,0,0,0,0,0,0,0.16,0.88,1,1,0.97,0.99,0.89,0.53,0.63,0.78,0.79,0.81,0.89,0.88,0.83,0.84,0.9,0.91,0.86,0.88,0.76,0.84,0.88,0.92,0.89,0.8,0.8,0.93,0.81,1,0.95,0.91,0.96,0.98,0.63,0.64,0.47,1,1,0.91,0.93,0.87,0.92,0.92,0.88,0.75,0.6,0.64,0.56,0.58,0.88,0.96,1,0.95,0.84,0.93,1,0.94,0.89,0.82,0.68,0.8,0.87,0.91,0.97,0.87,0.9,0.9,0.78,0.83,0.68,0.66,0.54,0.28,0.33,0.46,0.5,0.53,0.62,0.64,0.68,0.74,0.78,0.82,0.83,0.84,0.89,0.92,0.96,0.91,0.98,1,1,0.93,0.84,0.82,0.85,0.78,0.75,0.72,0.71,0.72,0.71,0.72,0.69,0.63,0.68,0.72,0.69,0.6,0.63,0.71,0.81,0.65,0.55,0.33,0.44,0.71,0.63,0.65,0.62,0.71,0.65,0.68,0.66,0.61,0.61,0.46,0.35,0.17,0.33,0.45,0.56,0.66,0.66,0.68,0.73,0.78,0.73,0.79,0.81,0.85,0.82,0.79,0.85,0.91,0.85,0.75,0.59,0.49,0.43,0.38,0.19,0.1,0,0.04,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.31,0.81,1,1,0.91,0.8,0.84,0.85,1,0.96,0.91,0.88,0.92,0.88,0.81,0.76,0.84,0.89,0.73,0.27,1,1,0.97,0.92,0.83,0.88,0.93,0.91,0.82,0.53,0.12,0.84,0.88,0.79,0.86,0.88,0.84,0.68,0.81,0.89,0.88,0.89,0.75,0.76,0.85,0.9,0.84,0.87,0.87,0.78,0.88,0.9,0.76,0.67,0.77,0.88,0.81,0.84,0.93,0.99,0.81,0.8,0.92,0.9,0.91,1,1,0.87,0.83,1,0.93,0.89,0.69,0.65,0.57,0.56,0.65,0.65,0.62,0.57,0.55,0.53,0.23,0.73,0.72,0.71,0.73,0.71,0.59,0.63,0.59,0.53,0.48,0.5,0.6,0.64,0.61,0.61,0.64,0.58,0.56,0.28,0.22,0.26,0.26,0.29,0.23,0.27,0.13,0.59,0.54,0.53,0.56,0.54,0.11,0,0,0.03,0.54,0.68,0.68,0.6,0.68,0.65,0.56,0.48,0.5,0.44,0.45,0.42,0.35,0,0,0.05,0,0,0.59,0.6,0.46,0.51,0.49,0.32,0.43,0.44,0.31,0.21,0.27,0.4,0.47,0.47,0.32,0.08,0.14,0.15,0.32,0.34,0.31,0.27,0.18,0.17,0.1,0.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.67,0.97,1,0.91,0.72,0.71,0.65,0.83,0.98,0.98,0.86,0.84,0.93,0.98,0.9,0.83,0.85,0.93,0.92,0.93,0.96,0.96,0.96,0.97,0.94,0.94,0.94,0.96,0.96,0.92,0.93,0.94,0.93,0.92,0.77,0.72,0.89,0.88,0.74,0.78,0.83,0.77,0.77,0.75,0.83,0.93,0.84,0.79,0.77,0.83,0.83,0.85,0.84,0.87,0.88,0.85,0.81,0.84,0.83,0.88,0.88,0.88,0.93,0.92,0.97,0.97,1,1,1,1,1,1,1,0.86,0.9,0.76,0.68,0.58,0.44,0.32,0.21,0.22,0.06,0.03,0,0.01,0,0,0,0,0,0,0,0.56,0.89,1,1,0.94,0.85,0.96,0.94,0.94,0.89,0.87,0.77,0.79,0.89,0.97,0.86,0.86,0.87,0.91,0.97,0.54,0.23,0.17,0.02,0.77,1,1,0.92,1,0.94,0.88,0.71,0.66,0.72,0.69,0.73,0.84,0.77,0.85,0.84,0.87,0.88,0.87,0.71,0.76,0.69,0.09,0,0.05,0,0.52,0.92,0.87,0.72,0.59,0.56,0.58,0.5,0.42,0.58,0.64,0.64,0.44,0.54,0.69,0.65,0.46,0.59,0.72,0.68,0.39,0.51,0.67,0.82,0.71,0.55,0.54,0.54,0.44,0.44,0.51,0.7,0.56,0.5,0.52,0.5,0.34,0,0,0,0.02,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.71,0.97,1,1,0.94,0.85,0.83,0.81,1,1,0.94,0.88,0.99,1,1,1,1,1,1,0.94,1,0.93,1,1,1,1,0.86,0.36,0.81,0.87,0.56,0.65,1,0.96,0.89,0.95,1,0.98,0.94,0.93,0.89,0.76,0.64,0.62,0.53,0.6,0.53,0.57,0.43,0.52,0.49,0.4,0.56,0.63,0.66,0.55,0.45,0.47,0.59,0.64,0.63,0.66,0.68,0.57,0.53,0.66,0.49,0.35,0.61,0.75,0.7,0.5,0.71,0.75,0.63,0.64,0.62,0.54,0.45,0.47,0.75,0.84,0.74,0.46,0.69,0.9,0.71,0.59,0.79,0.74,0.7,0.68,0.38,0.7,0.96,0.79,0.7,0.63,0.25,0.16,0.07,0.65,0.66,0.69,0.57,0.62,0.69,0.73,0.73,0.58,0.68,0.69,0.54,0.7,0.69,0.64,0.63,0.54,0.62,0.3,0.06,0,0.06,0.01,0.02,0.71,0.71,0.63,0.7,0.71,0.69,0.66,0.67,0.7,0.66,0.61,0.59,0.6,0.47,0.41,0.26,0.12,0.12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+const sing = t => { const i = t / .04, a = Math.floor(i), f = i - a; const v = (ENV[a] || 0) * (1 - f) + (ENV[a + 1] || 0) * f; return v < .08 ? 0 : v; };
+const blink = (t, off = 0) => ((t * .23 + off) % 1) < .035;
+const END = 68;
+
+/* =================== 2. Stage, shared drawing =================== */
+const reel = R.reel({ w: 1080, h: 1920, fps: 30, lang: "ar", duration: END, bg: "#050510" });
+const S = reel.stage, k = R.k, W = 1080, H = 1920, clamp = R.clamp;
+let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+let uid = 0; const id = p => p + (uid++);
+R._defs.innerHTML += `
+ <radialGradient id="glowMoon"><stop offset="0" stop-color="#fff6d8" stop-opacity=".6"/><stop offset=".35" stop-color="#ffe7a8" stop-opacity=".16"/><stop offset="1" stop-color="#ffe7a8" stop-opacity="0"/></radialGradient>
+ <radialGradient id="faceMoon" cx=".4" cy=".35"><stop offset="0" stop-color="#fffbea"/><stop offset=".7" stop-color="#f6e3a6"/><stop offset="1" stop-color="#e2c171"/></radialGradient>
+ <radialGradient id="glowLamp"><stop offset="0" stop-color="#ffcf6b" stop-opacity=".7"/><stop offset=".4" stop-color="#ff9d3a" stop-opacity=".2"/><stop offset="1" stop-color="#ff9d3a" stop-opacity="0"/></radialGradient>
+ <linearGradient id="gWood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a8683a"/><stop offset="1" stop-color="#5c3218"/></linearGradient>
+ <linearGradient id="gWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1710"/><stop offset=".7" stop-color="#432818"/><stop offset="1" stop-color="#2a170d"/></linearGradient>
+ <linearGradient id="gFloor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b170c"/><stop offset="1" stop-color="#0e0704"/></linearGradient>
+ <linearGradient id="gBlanket" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5e2c8"/><stop offset="1" stop-color="#cfa984"/></linearGradient>
+ <linearGradient id="gAbaya" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0d0a12"/><stop offset=".7" stop-color="#1f1a28"/><stop offset="1" stop-color="#3a2a32"/></linearGradient>
+ <linearGradient id="gHijab" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1f1426"/><stop offset="1" stop-color="#4a2e4e"/></linearGradient>
+ <linearGradient id="gSkin" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c98e66"/><stop offset="1" stop-color="#eab98f"/></linearGradient>
+ <linearGradient id="gNight" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b0d2e"/><stop offset="1" stop-color="#3b2a63"/></linearGradient>
+ <linearGradient id="gDesertSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a0b26"/><stop offset=".75" stop-color="#4a2f5e"/><stop offset="1" stop-color="#8a5466"/></linearGradient>
+ <filter id="b3"><feGaussianBlur stdDeviation="3"/></filter><filter id="b8"><feGaussianBlur stdDeviation="8"/></filter>`;
+
+const starsMk = (n, x, y, w, h, cls = "tw") => Array.from({ length: n }, () =>
+  `<circle class="${cls}" data-s="${(rnd() * 9).toFixed(2)}" cx="${(x + rnd() * w).toFixed(0)}" cy="${(y + rnd() * h).toFixed(0)}" r="${(.8 + rnd() * rnd() * 3).toFixed(1)}" fill="#fff8e6"/>`).join("");
+const moonMk = (cx, cy, r) => { const m = id("m"); return `<circle cx="${cx}" cy="${cy}" r="${r * 2.6}" fill="url(#glowMoon)"/>
+  <mask id="${m}"><rect x="${cx - r * 2}" y="${cy - r * 2}" width="${r * 4}" height="${r * 4}" fill="#fff"/><circle cx="${cx + r * .42}" cy="${cy - r * .3}" r="${r * .88}" fill="#000"/></mask>
+  <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#faceMoon)" mask="url(#${m})"/>`; };
+const archD = (x, y, w, h) => `M${x} ${y + h} V${y + w * .5} Q${x} ${y} ${x + w / 2} ${y} Q${x + w} ${y} ${x + w} ${y + w * .5} V${y + h} Z`;
+const dune = (y, amp, s, w = 1080, x0 = 0, bottom = H) => { let d = `M${x0} ${bottom} L${x0} ${y}`;
+  for (let x = x0; x <= x0 + w; x += 40) d += ` L${x} ${(y + Math.sin(x / 300 + s) * amp + Math.sin(x / 120 + s * 2) * amp * .25).toFixed(1)}`;
+  return d + ` L${x0 + w} ${bottom} Z`; };
+const lantern = (x, y) => `<g class="lamp" transform="translate(${x},${y})">
+  <circle cx="0" cy="470" r="250" fill="url(#glowLamp)" class="lampGlow"/>
+  <line x1="0" y1="${-y - 400}" x2="0" y2="360" stroke="#1a0f06" stroke-width="4"/>
+  <path d="M-30 360 H30 L18 380 H-18 Z" fill="#b8862f"/>
+  <path d="M-26 380 H26 Q44 460 24 560 H-24 Q-44 460 -26 380 Z" fill="#ffd27a" opacity=".93"/>
+  <g stroke="#8a5a1a" stroke-width="4" fill="none"><path d="M0 380 V560"/><path d="M-26 380 Q-44 460 -24 560"/><path d="M26 380 Q44 460 24 560"/></g>
+  <path d="M-28 560 H28 L12 590 H-12 Z" fill="#b8862f"/><ellipse cx="0" cy="480" rx="11" ry="20" fill="#fff4c6" class="flame"/></g>`;
+const lattice = (x, y, w, h) => { let s = `<g opacity=".18" stroke="#d9a35c" stroke-width="3" fill="none">`;
+  for (let i = 0; i <= w; i += 60) for (let j = 0; j <= h; j += 60) s += `<path d="M${x + i} ${y + j - 30} l30 30 l-30 30 l-30 -30 Z"/>`; return s + `</g>`; };
+
+/* ---- the mother (profile facing right). pose: "hold" (standing, baby in arms) or "kneel" ---- */
+function mother(p, pose) {
+  const up = pose === "kneel" ? 260 : 0;          // kneeling: the same upper body, lower
+  const head = `<g id="${p}head">
+    <path d="M20 -722 C-40 -724 -80 -682 -78 -628 C-76 -590 -62 -560 -36 -546 C0 -532 42 -542 60 -566 L58 -604 Z" fill="url(#gHijab)"/>
+    <path d="M34 -700 C50 -698 60 -684 62 -668 C63 -660 66 -652 74 -640 C77 -636 75 -632 69 -630 C70 -626 72 -621 69 -617 C71 -614 70 -609 66 -606 C66 -598 62 -590 52 -586 C42 -583 30 -590 24 -600 Z" fill="url(#gSkin)"/>
+    <circle cx="50" cy="-626" r="10" fill="#e5806f" opacity=".35"/>
+    <path d="M46 -667 Q53 -671 61 -666" stroke="#2a1a14" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+    <g id="${p}eyeO"><path d="M46 -655 Q52 -661 59 -655 Q52 -651 46 -655 Z" fill="#20130e"/><circle cx="54" cy="-656" r="1.2" fill="#fff"/></g>
+    <path id="${p}eyeC" d="M46 -654 Q52 -650 59 -654" stroke="#20130e" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <path d="M62 -611 L69 -611" stroke="#a24f48" stroke-width="2.4" stroke-linecap="round"/>
+    <ellipse id="${p}mouth" cx="66" cy="-611" rx="4.6" ry="0" fill="#6e2622"/>
+    <path d="M34 -706 C22 -668 18 -628 28 -598 C36 -588 46 -583 56 -584" stroke="#2a1c32" stroke-width="15" fill="none" stroke-linecap="round"/>
+    <path d="M-66 -600 C-86 -556 -62 -512 2 -506 C42 -502 72 -528 62 -568 Z" fill="url(#gHijab)"/>
+  </g>`;
+  let body, arms;
+  if (pose === "kneel") {
+    body = `<path d="M-30 -315 C-96 -300 -114 -220 -120 -150 C-126 -80 -150 -30 -162 0 L205 0 C210 -42 172 -72 110 -82 C100 -150 96 -240 40 -312 Z" fill="url(#gAbaya)"/>
+      <path d="M-162 0 L205 0" stroke="#000" stroke-width="2" opacity=".4"/>`;
+    arms = `<g id="${p}armB"><path d="M20 -540 C32 -480 62 -410 104 -370 L122 -380 C84 -412 58 -482 42 -542 Z" fill="#17121e"/><circle cx="116" cy="-372" r="12" fill="url(#gSkin)"/></g>
+      <g id="${p}arm"><path d="M-6 -552 C50 -530 120 -490 172 -472 L166 -450 C110 -468 40 -500 4 -516 Z" fill="#2e2638" stroke="#6a4a3a" stroke-width="2"/><circle cx="178" cy="-461" r="13" fill="url(#gSkin)"/></g>`;
+  } else {
+    body = `<path d="M-30 -575 C-95 -560 -112 -470 -112 -380 C-112 -250 -150 -110 -175 0 L150 0 C128 -110 112 -240 105 -360 C98 -460 85 -545 40 -572 Z" fill="url(#gAbaya)"/>`;
+    arms = `<path d="M-12 -552 C-44 -500 -34 -440 8 -430 C50 -422 100 -440 132 -456 L126 -476 C96 -462 56 -456 32 -462 C16 -472 20 -520 30 -548 Z" fill="#17121e"/>
+      <circle cx="132" cy="-466" r="12" fill="url(#gSkin)"/>
+      <g id="${p}baby" transform="translate(95,-488) rotate(-16)">
+        <ellipse cx="0" cy="0" rx="80" ry="37" fill="url(#gBlanket)"/>
+        <path d="M-60 -8 Q0 14 46 -18" stroke="#b58c66" stroke-width="3" fill="none" opacity=".7"/>
+        <circle cx="62" cy="-10" r="26" fill="#f0c9a2"/>
+        <path d="M40 -24 Q60 -50 86 -22 Q64 -34 40 -24 Z" fill="#e8d4f0"/>
+        <circle cx="74" cy="-2" r="5" fill="#ef9a86" opacity=".5"/>
+        <g id="${p}bEyeO"><circle cx="71" cy="-12" r="3.2" fill="#2a1a14"/></g>
+        <path id="${p}bEyeC" d="M66 -11 Q71 -7 76 -11" stroke="#2a1a14" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      </g>
+      <path d="M30 -548 C64 -520 72 -482 62 -452 C84 -470 114 -500 144 -506 L150 -488 C118 -484 92 -460 72 -438 C50 -428 28 -452 24 -484 Z" fill="#241d2c"/>
+      <circle cx="150" cy="-497" r="12" fill="url(#gSkin)"/>`;
+  }
+  return `<g id="${p}root">${body}<g transform="translate(0,${up})">${pose === "kneel" ? arms + head : head + arms}</g></g>`;
+}
+/* animate a mother: head tilt (deg), head shift, singing, blinking, eyes shut */
+function driveMother(svg, p, st) {
+  const q = s => svg.querySelector("#" + p + s);
+  const head = q("head"), mouth = q("mouth"), eo = q("eyeO"), ec = q("eyeC"), root = q("root");
+  const be = q("bEyeO"), bc = q("bEyeC"), arm = q("arm");
+  return t => {
+    const s = st(t);
+    head.setAttribute("transform", `translate(${s.hx || 0},${s.hy || 0}) rotate(${s.tilt || 0} 20 -575)`);
+    mouth.setAttribute("ry", ((s.mute ? 0 : sing(t)) * 5.5).toFixed(2));
+    const shut = s.sleep || blink(t, .3);
+    eo.style.display = shut ? "none" : ""; ec.style.display = shut ? "" : "none";
+    if (root) root.setAttribute("transform", s.root || "");
+    if (be) { const bs = s.babySleep || (s.babyBlink && blink(t, .7)); be.style.display = bs ? "none" : ""; bc.style.display = bs ? "" : "none"; }
+    if (arm && s.arm != null) arm.setAttribute("transform", `rotate(${s.arm} 0 -545)`);
+  };
+}
+/* the cradle with the baby inside */
+const cradleMk = p => `<g id="${p}rock">
+   <path d="M40 360 Q320 440 600 360" fill="none" stroke="url(#gWood)" stroke-width="22" stroke-linecap="round"/>
+   <rect x="70" y="140" width="500" height="200" rx="40" fill="url(#gWood)"/>
+   <g fill="#3e200d" opacity=".55">${[0,1,2,3,4,5,6,7,8].map(i => `<rect x="${110 + i * 50}" y="170" width="16" height="150" rx="8"/>`).join("")}</g>
+   <path id="${p}blanket" d="M150 142 Q320 50 500 142 Z" fill="url(#gBlanket)"/>
+   <circle cx="214" cy="86" r="40" fill="#f0c9a2"/>
+   <path d="M176 76 Q214 24 254 72 Q214 54 176 76 Z" fill="#e8bfe0"/>
+   <circle cx="238" cy="98" r="7" fill="#ef9a86" opacity=".5"/>
+   <g id="${p}eyeO"><circle cx="202" cy="88" r="4.5" fill="#2a1a14"/><circle cx="228" cy="88" r="4.5" fill="#2a1a14"/></g>
+   <path id="${p}eyeC" d="M194 88 q8 6 16 0 M220 88 q8 6 16 0" stroke="#6b4226" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+   <rect x="54" y="120" width="532" height="34" rx="17" fill="#c98a4e"/>
+   <circle cx="70" cy="110" r="26" fill="#c98a4e"/><circle cx="570" cy="110" r="26" fill="#c98a4e"/>
+   <g fill="#e5b04a"><circle cx="320" cy="250" r="16"/><circle cx="240" cy="250" r="10"/><circle cx="400" cy="250" r="10"/></g></g>`;
+/* the sick enemy far away: hooded, bent, with a cane. Faces left. */
+const enemyMk = p => `<g id="${p}">
+  <g id="${p}bod"><path d="M-8 -118 C-42 -108 -46 -60 -42 0 L26 0 C30 -50 26 -94 6 -120 Z" fill="#0b0610"/>
+  <circle cx="-20" cy="-118" r="15" fill="#0b0610"/><path d="M-4 -98 L-32 -70" stroke="#0b0610" stroke-width="10" stroke-linecap="round"/></g>
+  <line id="${p}cane" x1="-32" y1="-70" x2="-48" y2="0" stroke="#0b0610" stroke-width="5" stroke-linecap="round"/></g>`;
+/* a gazelle and her fawn, curled up asleep */
+const gazelleMk = (p, s = 1) => `<g id="${p}" transform="scale(${s})">
+  <ellipse cx="0" cy="40" rx="150" ry="14" fill="#000" opacity=".35" filter="url(#b3)"/>
+  <ellipse cx="-50" cy="-8" rx="70" ry="52" fill="#b9824e"/>
+  <g id="${p}breath"><ellipse cx="0" cy="0" rx="125" ry="50" fill="#c8915a"/><ellipse cx="10" cy="22" rx="96" ry="22" fill="#f0d6ae"/>
+  <path d="M-150 10 Q-118 -6 -90 14" stroke="#7a4f2a" stroke-width="5" fill="none"/></g>
+  <path d="M70 32 Q110 44 140 36 L140 46 Q100 54 62 44 Z" fill="#a8723f"/>
+  <path d="M84 -26 Q60 -70 18 -62 Q-8 -58 -16 -40 Q8 -46 30 -40 Q60 -30 70 -6 Z" fill="#c8915a"/>
+  <path d="M-16 -40 Q-40 -38 -44 -24 Q-30 -18 -8 -28 Z" fill="#3a2414"/>
+  <path d="M8 -58 Q20 -110 60 -126 Q30 -100 22 -56 Z" fill="#3a2a1c"/><path d="M22 -60 Q40 -108 80 -118 Q46 -96 34 -58 Z" fill="#3a2a1c"/>
+  <path d="M30 -54 Q48 -74 62 -64 Q50 -56 36 -48 Z" fill="#a8723f"/>
+  <path d="M-4 -44 Q4 -40 10 -44" stroke="#2a1a10" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <g transform="translate(170,18) scale(.55)"><ellipse cx="0" cy="0" rx="110" ry="46" fill="#d9a46a"/><ellipse cx="6" cy="20" rx="84" ry="18" fill="#f5e0c0"/>
+   <path d="M-60 -20 Q-80 -60 -40 -70 Q-10 -70 0 -40 Z" fill="#d9a46a"/><path d="M-78 -50 Q-90 -40 -84 -30 Q-74 -34 -70 -46 Z" fill="#3a2414"/>
+   <path d="M-56 -50 Q-50 -46 -44 -50" stroke="#2a1a10" stroke-width="3" fill="none"/><g fill="#fff" opacity=".7"><circle cx="-20" cy="-10" r="5"/><circle cx="10" cy="-14" r="5"/><circle cx="36" cy="-6" r="5"/></g></g></g>`;
+
+/* a layer = one shot. cam keys: [t, [cx, cy, zoom], ease]. vis: [[in, out]...] */
+function shot(z, vis, w = W, h = H) {
+  const outer = R.box(S, 0, 0, W, H, { zIndex: z, overflow: "hidden" });
+  const inner = R.box(outer, 0, 0, w, h, { transformOrigin: "0 0" });
+  const svg = R.svg(inner, w, h, "");
+  const cam = [[0, [W / 2, H / 2, 1]]];
+  const o = { outer, inner, svg, cam, set(markup) { svg.innerHTML = markup; return o; }, q: s => svg.querySelector(s), qa: s => svg.querySelectorAll(s) };
+  reel.on(t => {
+    let op = 0;
+    for (const [a, b] of vis) op = Math.max(op, Math.min(R.fade(t, a, .5), 1 - R.fade(t, b - .5, .5)));
+    outer.style.opacity = op; outer.style.visibility = op <= .001 ? "hidden" : "inherit";
+    if (op <= .001) return;
+    const [cx, cy, zz] = k(t, cam);
+    inner.style.transform = `translate(${W / 2 - cx * zz}px,${H / 2 - cy * zz}px) scale(${zz})`;
+  });
+  return o;
+}
+const twinkle = (sh) => { const st = [...sh.qa(".tw")]; reel.on(t => { if (sh.outer.style.visibility === "hidden") return;
+  for (const c of st) c.setAttribute("opacity", (.4 + .6 * (.5 + .5 * Math.sin(t * 2 + +c.dataset.s))).toFixed(2)); }); };
+const lampLife = (sh) => { const g = sh.qa(".lampGlow"), f = sh.qa(".flame"); reel.on(t => {
+  const fl = (.85 + .15 * Math.sin(t * 13) * Math.sin(t * 7.3)) * k(t, [[64.3, 1], [65.8, .25]]);
+  g.forEach(x => x.setAttribute("opacity", fl.toFixed(2))); f.forEach(x => x.setAttribute("ry", (18 + 4 * Math.sin(t * 11)).toFixed(1))); }); };
+
+/* =================== 3. Shots =================== */
+
+/* --- EXT: the old Baghdadi house at night, a lit shanasheel window (0-3, and the ending) --- */
+const ext = shot(10, [[0, 3.1], [65.5, 68.5]]);
+ext.set(`<rect width="1080" height="1920" fill="url(#gNight)"/>${starsMk(120, 0, 0, 1080, 900)}${moonMk(830, 260, 80)}
+  <path d="M-20 1920 V500 H1100 V1920 Z" fill="#3a2c24"/>
+  <g stroke="#2a1e18" stroke-width="3" opacity=".7">${Array.from({ length: 24 }, (_, i) => `<line x1="0" y1="${520 + i * 60}" x2="1080" y2="${520 + i * 60}"/>`).join("")}</g>
+  <rect x="-20" y="480" width="1120" height="40" fill="#2a1e18"/>
+  <g transform="translate(260,640)">
+    <rect x="-20" y="-30" width="600" height="40" fill="#5c3218"/><rect x="0" y="0" width="560" height="460" fill="#6b3d1c"/>
+    <rect id="extLight" x="40" y="40" width="480" height="300" fill="#ffc768"/>
+    <g id="extSil" transform="translate(300,350) scale(.36)" fill="#3a1e0c" opacity=".85">${mother("x", "hold").replace(/url\(#g\w+\)/g, "#3a1e0c").replace(/fill="#[0-9a-f]{6}"/gi, 'fill="#3a1e0c"')}</g>
+    ${lattice(40, 40, 480, 300).replace('opacity=".18"', 'opacity=".55"').replace("#d9a35c", "#6b3d1c")}
+    <g stroke="#5c3218" stroke-width="12"><line x1="200" y1="40" x2="200" y2="340"/><line x1="360" y1="40" x2="360" y2="340"/></g>
+    <rect x="0" y="340" width="560" height="120" fill="#5c3218"/><path d="M0 460 L60 540 H500 L560 460 Z" fill="#4a2810"/>
+    <circle cx="280" cy="190" r="380" fill="url(#glowLamp)" id="extGlow"/></g>
+  <path d="M420 1920 V1450 Q540 1330 660 1450 V1920 Z" fill="#2a160a"/>
+  <g transform="translate(110,1920)" fill="#0d0814"><path d="M-10 0 Q-26 -320 6 -640 L18 -640 Q-4 -320 12 0 Z"/>
+   ${[-150, -115, -70, -25, 20, 60, 110, 150].map(a => `<path transform="translate(12,-640) rotate(${a})" d="M0 0 Q70 -34 190 22 Q80 -8 0 10 Z"/>`).join("")}</g>`);
+ext.cam.push([0, [540, 860, 1]], [3.1, [540, 900, 1.45], "in"], [65.5, [540, 900, 1.5]], [68, [540, 860, 1], "out"]);
+twinkle(ext);
+reel.on(t => { const lit = k(t, [[0, 1], [66.4, 1], [67.4, .08]]);
+  ext.q("#extLight").setAttribute("opacity", lit); ext.q("#extGlow").setAttribute("opacity", lit);
+  ext.q("#extSil").setAttribute("opacity", t > 60 ? 0 : .85); });
+
+/* --- ROOM: kneeling mother rocks the cradle (2.6-11.7), lays him to sleep (51-56.5), dream (56.5-64), asleep (64-66.4) --- */
+const room = shot(20, [[2.6, 12.4], [51.4, 66.0]]);
+room.set(`<rect width="1080" height="1220" fill="url(#gWall)"/>${lattice(0, 0, 1080, 1200)}
+  <clipPath id="rwin"><path d="${archD(620, 230, 360, 640)}"/></clipPath>
+  <g clip-path="url(#rwin)"><rect x="600" y="200" width="420" height="720" fill="url(#gNight)"/>${starsMk(40, 620, 230, 360, 600)}${moonMk(820, 420, 62)}</g>
+  <path d="${archD(620, 230, 360, 640)}" fill="none" stroke="#c99a4b" stroke-width="16"/>
+  <g stroke="#5a3a1c" stroke-width="9"><line x1="800" y1="230" x2="800" y2="870"/><line x1="620" y1="560" x2="980" y2="560"/></g>
+  <rect x="590" y="860" width="420" height="34" rx="10" fill="#6b4220"/>
+  <rect y="1200" width="1080" height="720" fill="url(#gFloor)"/>
+  <ellipse cx="560" cy="1260" rx="520" ry="80" fill="#6e2e1c" opacity=".7"/><ellipse cx="560" cy="1260" rx="470" ry="62" fill="none" stroke="#d6a25a" stroke-width="5" opacity=".5"/>
+  ${lantern(120, 0)}
+  <g id="cradleG" transform="translate(480,820) scale(.95)">${cradleMk("c")}</g>
+  <g transform="translate(330,1205) scale(1.35)">${mother("k", "kneel")}</g>`);
+const motherK = driveMother(room.svg, "k", t => {
+  if (t > 64.1) return { tilt: k(t, [[64.1, 14], [65.2, 30]]), sleep: true, mute: true, arm: k(t, [[64.1, 0], [65.5, 10]]) };
+  if (t > 50) return { tilt: 16, hx: 4, arm: 6 * Math.max(0, Math.sin(t * 4)) * (t < 57 ? 1 : 0) - 4 };
+  return { tilt: 8 + 2 * Math.sin(t * .8), arm: Math.sin(t * 1.9) * 4 };
+});
+reel.on(t => {
+  if (room.outer.style.visibility === "hidden") return;
+  motherK(t);
+  const amp = t > 60 ? k(t, [[60, 3], [65.5, 0]]) : t > 50 ? 3.5 : 5;
+  room.q("#crock").setAttribute("transform", `rotate(${(Math.sin(t * 1.9) * amp).toFixed(2)} 320 380)`);
+  const sl = t > 53.68 || (t > 50 && blink(t * 3, .2));
+  room.q("#ceyeO").style.display = sl ? "none" : ""; room.q("#ceyeC").style.display = sl ? "" : "none";
+  room.q(".lamp").setAttribute("transform", `translate(120,0) rotate(${Math.sin(t * .9) * 1.5})`);
+});
+twinkle(room); lampLife(room);
+room.cam.push([2.6, [540, 900, 1.05]], [12.4, [520, 880, 1.2]],
+  [51.4, [560, 880, 1.25]], [57.4, [640, 940, 1.5]], [57.41, [650, 880, 2.2]], [64.1, [650, 880, 2.4]],
+  [64.11, [540, 900, 1.15]], [66, [540, 900, 1.05]]);
+
+/* --- WIN: standing at the window with him in her arms; the far desert where the sick enemy lives --- */
+const win = shot(30, [[12.0, 22.6], [44.5, 48.0]]);
+win.set(`<rect width="1080" height="1920" fill="url(#gWall)"/>${lattice(0, 0, 1080, 1600)}
+  <clipPath id="wwin"><path d="${archD(430, 200, 580, 1000)}"/></clipPath>
+  <g clip-path="url(#wwin)"><rect x="400" y="180" width="640" height="1040" fill="url(#gDesertSky)"/>${starsMk(50, 430, 200, 580, 600)}${moonMk(880, 420, 60)}
+   <path d="${dune(860, 30, 1, 700, 380, 1220)}" fill="#5a3a62"/><path d="${dune(960, 40, 3, 700, 380, 1220)}" fill="#3a2448"/>
+   <g id="wEnemy" transform="translate(800,870) scale(.9)">${enemyMk("we")}</g>
+   <g id="wSand"></g><path d="${dune(1060, 30, 5, 700, 380, 1220)}" fill="#24163a"/></g>
+  <path d="${archD(430, 200, 580, 1000)}" fill="none" stroke="#c99a4b" stroke-width="20"/>
+  <g stroke="#5a3a1c" stroke-width="10"><line x1="720" y1="200" x2="720" y2="1200"/><line x1="430" y1="700" x2="1010" y2="700"/></g>
+  <rect x="400" y="1190" width="640" height="40" rx="10" fill="#6b4220"/><rect y="1560" width="1080" height="360" fill="url(#gFloor)"/>
+  ${lantern(90, 0)}
+  <g transform="translate(250,1580) scale(1.32)">${mother("w", "hold")}</g>`);
+const wSand = win.q("#wSand"), wGrains = [];
+for (let i = 0; i < 50; i++) wGrains.push([R.el("circle", { r: 1.2 + rnd() * 2, fill: "#f0cf9e" }, wSand), 430 + rnd() * 580, 820 + rnd() * 380, rnd() * 9, .6 + rnd()]);
+const motherW = driveMother(win.svg, "w", t => {
+  if (t > 44) return { tilt: 20 + 2 * Math.sin(t), hx: 6, hy: 6, babyBlink: true, babySleep: t > 46.5, root: `rotate(${Math.sin(t * 1.2) * 1.6} 0 0)` };
+  const look = k(t, [[14.9, 14], [15.9, -4], [20.8, -4], [22.2, 12]]);           // to the baby, then out at the desert
+  return { tilt: look, babyBlink: true, root: `rotate(${Math.sin(t * 1.2) * 1.2} 0 0)` };
+});
+reel.on(t => {
+  if (win.outer.style.visibility === "hidden") return;
+  motherW(t);
+  const gone = t > 44;                                       // second time: the desert is empty and calm
+  const cough = t > 16.54 && t < 17.9 ? Math.sin(t * 40) * 3 * (17.9 - t) : 0;
+  const x = 800 - (t - 12) * 6, en = win.q("#wEnemy");
+  en.setAttribute("transform", `translate(${x + cough},${870 + Math.abs(Math.sin(t * 2.4)) * -3}) scale(.9)`);
+  en.setAttribute("opacity", gone ? 0 : k(t, [[12, 1], [20.7, 1], [21.8, .35]]));
+  win.q("#webod").setAttribute("transform", `rotate(${-8 - (t > 16.54 && t < 17.9 ? 10 : 0)} 0 0)`);
+  win.q("#wecane").setAttribute("transform", `rotate(${Math.sin(t * 2.4) * 8} -32 -70)`);
+  const gust = gone ? .5 : t > 20.66 ? 4 : 1;
+  for (const [c, x0, y0, sd, sp] of wGrains) {
+    c.setAttribute("cx", (430 + ((x0 - 430 - t * 60 * sp * gust) % 580 + 580) % 580).toFixed(1));
+    c.setAttribute("cy", (y0 + Math.sin(t * 2 + sd) * 14).toFixed(1));
+    c.setAttribute("opacity", (gone ? .2 : .55) * (.4 + .6 * Math.sin(t + sd) ** 2));
+  }
+});
+twinkle(win); lampLife(win);
+win.cam.push([12, [540, 960, 1.02]], [18.2, [580, 940, 1.08]], [18.8, [600, 940, 1.1]], [20.7, [760, 860, 1.75], "inOut"], [22.6, [770, 860, 1.85]],
+  [44.5, [520, 980, 1.15]], [48, [420, 900, 1.45]]);
+
+/* --- HOLD: she walks with him, swaying (21.4-36), then the close-up kiss "يمّه أنا" (46.6-51.2) --- */
+const hold = shot(40, [[22.2, 37.4], [47.6, 52.0]]);
+hold.set(`<rect width="1080" height="1920" fill="url(#gWall)"/>${lattice(0, 0, 1080, 1460)}
+  <path d="${archD(640, 300, 300, 560)}" fill="#160c08"/><path d="${archD(660, 320, 260, 530)}" fill="#1f120b"/>
+  <g transform="translate(790,640)"><rect x="-80" y="0" width="160" height="12" fill="#6b4220"/><path d="M-50 0 Q-50 -90 0 -110 Q50 -90 50 0 Z" fill="#7a3f22"/><path d="M-30 -10 Q-30 -70 0 -86 Q30 -70 30 -10 Z" fill="#b06a32"/></g>
+  <rect y="1450" width="1080" height="470" fill="url(#gFloor)"/><ellipse cx="540" cy="1500" rx="520" ry="70" fill="#6e2e1c" opacity=".7"/>
+  ${lantern(150, 0)}${lantern(940, -80)}
+  <g id="hearts"></g>
+  <g id="holdM" transform="translate(300,1460) scale(1.25)">${mother("h", "hold")}</g>
+  <g id="motes"></g>`);
+const motes = []; for (let i = 0; i < 24; i++) motes.push([R.el("circle", { r: 3 + rnd() * 5, fill: "#ffe39a", filter: "url(#b3)" }, hold.q("#motes")), 100 + rnd() * 880, rnd() * 9, .5 + rnd()]);
+const heart = R.el("path", { d: "M0 10 C-26 -14 -12 -38 0 -22 C12 -38 26 -14 0 10 Z", fill: "#ff8f8f", opacity: 0 }, hold.q("#hearts"));
+const motherH = driveMother(hold.svg, "h", t => {
+  if (t > 47) {                                               // the kiss on his forehead on the first "نوم"
+    const kiss = k(t, [[48.7, 0], [49.3, 1, "out"], [50.9, 1], [51.6, .3]]);
+    return { tilt: 14 + 21 * kiss, hx: 55 * kiss, hy: 46 * kiss, mute: kiss > .9, babyBlink: true, babySleep: kiss > .7 && t < 51.2 };
+  }
+  return { tilt: 12 + 3 * Math.sin(t * .9), babyBlink: true, babySleep: t > 34.5 && ((t * .5) % 1) < .55 };
+});
+reel.on(t => {
+  if (hold.outer.style.visibility === "hidden") return;
+  motherH(t);
+  const x = t > 47 ? 470 : k(t, [[22.2, 230], [30.4, 470, "out"]]), sw = Math.sin(t * 1.6);
+  hold.q("#holdM").setAttribute("transform", `translate(${x},${1460 + Math.abs(sw) * -6}) rotate(${sw * 2.2}) scale(1.25)`);
+  for (const [c, x0, sd, sp] of motes) { const p = (t * .07 * sp + sd / 9) % 1;
+    c.setAttribute("cx", (x0 + Math.sin(t * sp + sd) * 30).toFixed(1)); c.setAttribute("cy", (1450 - p * 1300).toFixed(1)); c.setAttribute("opacity", (Math.sin(Math.PI * p) * .7).toFixed(2)); }
+  const hp = clamp((t - 49.3) / 1.8);
+  heart.setAttribute("opacity", (t > 49.3 && t < 51.2 ? Math.sin(Math.PI * hp) : 0).toFixed(2));
+  heart.setAttribute("transform", `translate(${x + 180 * 1.25},${1460 - 560 * 1.25 - hp * 90}) scale(${1.2 + hp})`);
+});
+twinkle(hold); lampLife(hold);
+hold.cam.push([22.2, [500, 960, 1.05]], [30.39, [560, 960, 1.12]], [30.4, [600, 860, 1.75]], [37.4, [610, 850, 1.85]],
+  [47.6, [610, 820, 2.5]], [52, [620, 810, 2.8]]);
+reel.on(t => { if (t > 47) reel._kissCue || (reel._kissCue = 1, reel.cue(49.3, "kiss")); });
+
+/* --- DESERT: the far wilderness, the sick enemy hobbling alone; the wind takes him (36-42.9) --- */
+const des = shot(50, [[36.9, 45.0]]);
+des.set(`<rect width="1080" height="1920" fill="url(#gDesertSky)"/>${starsMk(120, 0, 0, 1080, 1000)}${moonMk(300, 420, 90)}
+  <path d="${dune(1100, 50, 1)}" fill="#5a3a62"/><path d="${dune(1250, 60, 3)}" fill="#3a2448"/>
+  <g id="dEnemy">${enemyMk("de")}</g><g id="dSand"></g><path d="${dune(1420, 50, 5)}" fill="#1a1030"/>
+  <rect width="1080" height="1920" fill="#c89a6a" id="storm" opacity="0"/>`);
+const dGrains = []; for (let i = 0; i < 90; i++) dGrains.push([R.el("line", { stroke: "#f0cf9e", "stroke-width": 2, "stroke-linecap": "round" }, des.q("#dSand")), rnd() * 1080, 900 + rnd() * 700, rnd() * 9, .6 + rnd()]);
+reel.on(t => {
+  if (des.outer.style.visibility === "hidden") return;
+  const x = 760 - (t - 36.9) * 30, step = Math.sin(t * 3);
+  const cough = t > 41.26 && t < 42.5 ? Math.sin(t * 38) * 5 : 0;
+  const fadeAway = k(t, [[43.62, 1], [44.4, 0]]);
+  const en = des.q("#dEnemy");
+  en.setAttribute("transform", `translate(${x + cough},${1262 + Math.sin(x / 300 + 3) * 60 - Math.abs(step) * 4}) scale(1.6)`);
+  en.setAttribute("opacity", fadeAway);
+  des.q("#debod").setAttribute("transform", `rotate(${-10 - (t > 41.26 && t < 42.5 ? 12 : 0)} 0 0)`);
+  des.q("#decane").setAttribute("transform", `rotate(${step * 9} -32 -70)`);
+  const gust = t > 43.24 ? 6 : 1.2;
+  for (const [l, x0, y0, sd, sp] of dGrains) {
+    const gx = ((x0 - t * 80 * sp * gust) % 1080 + 1080) % 1080, gy = y0 + Math.sin(t * 2 + sd) * 20;
+    l.setAttribute("x1", gx.toFixed(1)); l.setAttribute("y1", gy.toFixed(1)); l.setAttribute("x2", (gx + 4 + gust * 6).toFixed(1)); l.setAttribute("y2", gy.toFixed(1));
+    l.setAttribute("opacity", (.25 + .4 * Math.sin(t + sd) ** 2).toFixed(2));
+  }
+  des.q("#storm").setAttribute("opacity", k(t, [[43.24, 0], [44.3, .35]]));
+});
+twinkle(des);
+des.cam.push([36.9, [540, 1000, 1.25]], [42.5, [520, 1050, 1.1]], [45, [500, 1050, 1.02]]);
+reel.cue(41.26, "cough"); reel.cue(43.24, "wind");
+
+/* --- DREAM: from the sleeping baby's head, a dream of a gazelle and her fawn asleep in the wilds (57-64.2) --- */
+const dream = shot(60, [[58.4, 64.4]]);
+dream.set(`<rect width="1080" height="1920" fill="url(#gDesertSky)"/>${starsMk(160, 0, 0, 1080, 1100)}${moonMk(540, 520, 130)}
+  <path d="${dune(1080, 40, 2)}" fill="#6a4a6e"/><path d="${dune(1180, 30, 4)}" fill="#4a3058"/>
+  <g id="grass" fill="#2a1a3a">${Array.from({ length: 40 }, (_, i) => `<path d="M${i * 28} 1200 q6 -50 14 -70 q-2 40 6 70 Z"/>`).join("")}</g>
+  <g transform="translate(500,1120)">${gazelleMk("gz", 1.8)}</g><g id="ffl"></g>`);
+dream.outer.style.clipPath = "circle(0px at 540px 760px)";
+const flies = []; for (let i = 0; i < 30; i++) flies.push([R.el("circle", { r: 3 + rnd() * 4, fill: "#fff0a0", filter: "url(#b3)" }, dream.q("#ffl")), rnd() * 1080, 700 + rnd() * 600, rnd() * 9]);
+/* small thought bubbles rising from the baby's head before the dream opens */
+const bubbles = R.box(S, 0, 0, W, H, { zIndex: 59 });
+const bubSvg = R.svg(bubbles, W, H, [0, 1, 2].map(i => `<circle class="bub" cx="${600 + i * 26}" cy="${930 - i * 70}" r="${14 + i * 10}" fill="#fff6e0" opacity="0"/>`).join(""));
+reel.on(t => {
+  bubSvg.querySelectorAll(".bub").forEach((b, i) => b.setAttribute("opacity", (t > 58.48 + i * .3 && t < 59.8 + i * .2 ? .75 : 0)));
+  if (dream.outer.style.visibility === "hidden") return;
+  const r = k(t, [[58.9, 0], [59.6, 230, "back"], [60.5, 260], [61.5, 1300, "inOut"]]);
+  const cy = k(t, [[58.9, 640], [60.5, 640], [61.5, 960]]), cx = k(t, [[60.5, 660], [61.5, 540]]);
+  dream.outer.style.clipPath = `circle(${r}px at ${cx}px ${cy}px)`;
+  dream.q("#gzbreath").setAttribute("transform", `scale(1,${(1 + .03 * Math.sin(t * 1.8)).toFixed(3)})`);
+  dream.q("#grass").setAttribute("transform", `skewX(${Math.sin(t * .9) * 3})`);
+  for (const [c, x0, y0, sd] of flies) { c.setAttribute("cx", (x0 + Math.sin(t * .7 + sd) * 40).toFixed(1)); c.setAttribute("cy", (y0 + Math.cos(t * .5 + sd) * 30).toFixed(1)); c.setAttribute("opacity", (.3 + .7 * Math.sin(t * 2 + sd) ** 2).toFixed(2)); }
+});
+twinkle(dream);
+dream.cam.push([58.4, [500, 1440, .95]], [60.5, [490, 1430, 1]], [61.5, [540, 1010, 1.1]], [64.4, [540, 1000, 1.04]]);
+
+/* =================== 4. Title, lyrics, finish =================== */
+R.box(S, 0, 1150, W, 770, { zIndex: 80, background: "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(4,2,10,.55) 35%, rgba(4,2,10,.7) 100%)" });
+const title = R.box(S, 0, 230, W, 300, { zIndex: 85, textAlign: "center", color: "#ffe9b5" });
+title.innerHTML = `<div style="font:170px Lalezar;text-shadow:0 0 40px rgba(255,200,110,.55),0 8px 24px rgba(0,0,0,.7)">دللول</div>
+  <div style="font:600 44px 'IBM Plex Sans Arabic';opacity:.85;margin-top:-6px;text-shadow:0 4px 14px rgba(0,0,0,.8)">أمٌّ تغنّي لابنها</div>`;
+reel.on(t => { title.style.opacity = Math.max(Math.min(R.fade(t, .3, .8), 1 - R.fade(t, 2.0, .5)), Math.min(R.fade(t, 65.8, .8), 1 - R.fade(t, 67.3, .6))); });
+
+const lyricBox = R.box(S, 50, 1300, W - 100, 290, { zIndex: 90 });
+const lines = LYRICS.map(ln => {
+  const row = R.el("div", { style: { position: "absolute", inset: "0", display: "flex", flexWrap: "wrap", justifyContent: "center", alignContent: "center",
+    gap: "0 28px", direction: "rtl", font: "112px Lalezar", lineHeight: "1.3" } }, lyricBox);
+  return { row, ln, spans: ln.words.map(w => R.el("span", { text: w, style: { display: "inline-block", transformOrigin: "50% 75%" } }, row)) };
+});
+reel.on(t => {
+  for (const { row, spans, ln } of lines) {
+    const t0 = ln.times[0] - .7, t1 = ln.end, o = Math.min(R.fade(t, t0, .6), 1 - R.fade(t, t1, .7));
+    row.style.opacity = o; row.style.visibility = o <= 0 ? "hidden" : "inherit";
+    if (o <= 0) continue;
+    row.style.transform = `translateY(${(1 - R.fade(t, t0, .8)) * 40 - R.fade(t, t1, .7) * 30}px)`;
+    spans.forEach((sp, i) => {
+      const on = t >= ln.times[i] - .05, p = R.pop(t, ln.times[i] - .05, .4);
+      sp.style.color = on ? "#ffd77a" : "rgba(255,248,232,.5)";
+      sp.style.textShadow = on ? "0 0 30px rgba(255,190,90,.7), 0 6px 18px rgba(0,0,0,.8)" : "0 6px 18px rgba(0,0,0,.8)";
+      sp.style.transform = `scale(${1 + .1 * Math.sin(Math.PI * Math.min(p, 1)) * (t < ln.times[i] + .6 ? 1 : 0)})`;
+    });
+  }
+});
+const black = R.box(S, 0, 0, W, H, { zIndex: 99, background: "#000" });
+reel.on(t => { black.style.opacity = Math.max(1 - R.fade(t, 0, .7), R.fade(t, 67.2, .8)); });
+
+/* ===== cover mode: big title, no lyrics, no black ===== */
+lyricBox.style.display = "none";
+title.style.top = "1150px";
+title.innerHTML = `<div style="font:230px Lalezar;color:#ffd77a;text-shadow:0 0 50px rgba(255,190,90,.75),0 10px 30px rgba(0,0,0,.8)">دللول</div>
+  <div style="font:600 58px 'IBM Plex Sans Arabic';color:#fff4dc;margin-top:-4px;text-shadow:0 4px 18px rgba(0,0,0,.9)">تهويدة أمهاتنا 🤍</div>`;
+reel.on(t => { title.style.opacity = 1; title.style.transform = "none"; black.style.opacity = 0; });
+</script>
+</body>
+</html>
