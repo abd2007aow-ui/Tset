@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>جلجل عليّه الرمان - ريلز</title>
+<!-- Story reel for song-cut.ogg: one chorus (49.7-77.2 s of the song) + the son's verse (125.9-151.0 s), 0.8 s crossfade.
+     The meaning follows the user's note: pomegranates = Ottoman fezzes, lemons (نومي) = the British,
+     "ردّوني لأهلي" = rule by Iraqis themselves, and the son: stop waiting for others, we do it ourselves. -->
+<script src="../../.claude/skills/maven-reels/kit/reel.js"></script>
+</head>
+<body>
+<script>
+/* =================== 1. Lyrics (times measured on the isolated voice) =================== */
+const L = (words, times, end, note) => ({ words, times, end, note });
+const LYRICS = [
+  L(["جلجل", "عليّه", "الرمّان"], [4.0, 5.24, 7.02], 9.7),
+  L(["نومي", "فزّ", "عليّه"], [10.12, 10.76, 11.52], 14.7),
+  L(["هذا", "الحلو", "ما", "ريده"], [16.2, 16.8, 17.55, 19.22], 20.1),
+  L(["ردّوني", "لأهلي"], [20.34, 22.3], 26.6),
+  L(["يا", "يمّه", "لا", "تنطرين"], [27.64, 28.16, 29.06, 29.5], 33.3),
+  L(["بطّلي", "النظّارة"], [33.84, 35.1], 38.4),
+  L(["واللي", "أريده", "يصير"], [39.86, 40.7, 42.84], 45.4),
+  L(["ماكو", "أي", "چارة"], [45.92, 46.68, 47.22], 51.4)];
+/* one short line on top that explains the picture */
+const NOTES = [
+  [0.4, 3.7, "حكاية العراق بين احتلالين"],
+  [4.3, 9.8, "🔴 الرمّان = طرابيش العثمانيين"],
+  [10.3, 15.2, "🟡 النومي = الإنگليز… نفس الظلم"],
+  [16.0, 20.2, "وعودهم الحلوة… ما نريدها"],
+  [20.4, 26.6, "الحكم لأهل البلد"],
+  [27.3, 38.5, "الابن يرد: لا تنتظرين أحد يخلّصنا"],
+  [39.6, 51.4, "الحل بإيدنا… وماكو غيره"]];
+const ENV = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.14,0.55,0.86,0.92,0.94,1,1,0.69,0.84,0.8,0.85,0.59,0.3,0.38,0.59,0.48,0.95,0.98,1,1,0.97,0.99,1,1,0.95,0.93,0.92,0.94,0.98,0.95,0.95,0.77,0.96,0.86,0.84,0.86,0.85,0.92,0.95,0.92,0.78,1,0.99,0.93,0.94,0.96,1,1,1,1,0.99,0.96,1,1,0.99,0.91,0.92,0.98,1,0.97,0.7,0.65,0.69,0.43,0.44,0.51,0.32,0.38,0.26,0,0.23,0.23,0.2,0.31,0.26,0.38,0.6,0.76,0.94,0.96,1,0.88,0.96,0.89,1,0.98,0.88,0.81,0.85,0.86,0.87,0.96,0.95,0.98,0.94,0.97,0.93,0.82,0.83,0.83,0.84,0.86,0.83,0.82,0.87,0.83,0.95,0.9,0.87,0.88,0.89,0.91,0.94,0.95,0.92,0.9,0.94,0.93,0.96,0.99,0.97,0.92,0.84,0.93,1,1,1,0.83,0.72,0.73,0.67,0.72,0.87,0.84,0.68,0.61,0.49,0.47,0.3,0.33,0.22,0.3,0.21,0.2,0.06,0.13,0.01,0.1,0.19,0.23,0.12,0.12,0.13,0.33,0.76,0.92,0.94,0.91,0.88,0.85,0.82,0.86,0.86,0.91,0.93,0.9,0.71,0.8,0.95,0.94,0.9,0.91,0.87,0.89,0.86,0.91,0.92,0.9,0.56,0.32,0.16,0.85,0.85,0.84,0.76,0.8,0.86,0.84,0.82,0.87,0.85,0.87,0.71,0.52,0.87,0.96,0.88,0.84,0.87,0.89,0.89,0.9,0.92,0.91,0.88,0.86,0.89,0.89,0.87,0.91,0.92,0.93,0.98,0.94,0.98,0.97,0.95,0.91,0.81,0.67,0.74,0.76,0.82,0.77,0.8,0.75,0.62,0.69,0.79,0.84,0.83,0.88,0.84,0.9,0.88,0.85,0.77,0.81,0.84,0.83,0.77,0.75,0.76,0.75,0.63,0.67,0.56,0.57,0.46,0.54,0.54,0.52,0.49,0.56,0.52,0.62,0.56,0.5,0.01,0,0.15,0.22,0.24,0.11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.22,0.59,0.64,0.78,0.89,0.91,0.88,0.88,0.93,0.92,0.94,0.95,0.95,0.94,0.95,0.83,0.45,0.98,0.99,0.86,0.84,0.86,0.92,0.87,0.9,0.89,0.92,0.92,0.95,0.98,0.75,0.74,0.44,0.44,0.55,0.85,0.89,0.86,0.82,0.81,0.79,0.91,0.89,0.8,0.87,0.93,0.94,0.96,0.94,1,0.91,1,0.98,0.92,0.98,0.94,0.89,0.83,0.81,0.77,0.82,0.86,0.84,0.82,0.72,0.5,0.55,0.34,0.09,0.12,0,0,0.15,0.01,0.16,0,0,0.63,0.74,0.77,1,0.93,0.96,0.92,0.91,0.91,0.92,0.94,0.86,0.84,0.99,1,0.73,0.77,0.82,0.84,0.74,0.83,0.79,0.75,0.74,0.73,0.76,0.72,0.45,0.82,0.97,0.8,0.82,0.84,0.83,0.86,0.92,0.9,0.92,0.94,0.96,0.97,1,0.97,0.93,0.89,0.93,0.94,0.93,1,1,1,1,1,0.78,0.72,0.74,0.68,0.74,0.71,0.62,0.53,0.53,0.58,0.46,0.38,0.34,0.28,0.24,0.31,0.31,0.34,0.24,0.25,0.31,0.35,0.25,0.04,0.76,0.93,0.97,0.81,0.9,0.81,0.78,0.44,0.23,0.16,0.16,0.1,0.01,0.12,0.33,0.84,0.85,0.83,0.81,0.8,0.81,0.84,0.82,0.83,0.86,0.88,0.84,0.87,0.83,0.81,0.83,0.82,0.73,0.78,0.84,0.84,0.88,0.87,0.84,0.8,0.96,0.85,0.87,0.94,0.89,0.89,0.9,0.89,0.89,0.9,0.97,0.96,0.97,0.95,1,0.96,0.96,0.68,0.45,0.88,0.88,0.76,0.78,0.83,0.81,0.81,0.72,0.65,0.66,0.66,0.64,0.64,0.72,0.77,0.77,0.74,0.79,0.78,0.77,0.81,0.79,0.79,0.83,0.82,0.78,0.78,0.77,0.8,0.78,0.78,0.75,0.82,0.82,0.79,0.85,0.88,0.85,0.83,0.75,0.72,0.67,0.72,0.65,0.67,0.78,0.81,0.68,0.65,0.61,0.7,0.7,0.66,0.69,0.72,0.55,0.42,0.44,0.44,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.97,1,1,0.96,1,0.99,1,0.98,0.96,0.98,0.95,0.94,0.91,0.99,0.81,0.84,0.83,0.86,0.88,0.84,0.8,0.72,0.71,0.76,0.8,0.76,0.79,0.83,0.82,1,1,0.95,0.92,1,1,1,1,1,1,1,0.81,0.75,0.97,0.96,0.98,0.88,0.87,0.93,0.93,0.94,0.94,0.92,0.94,0.94,0.89,0.88,0.79,0.66,0.52,0.39,0.24,0.22,0.28,0.2,0.28,0.21,0.2,0.35,0.06,0.16,0.21,0.33,0.24,0.24,0.3,0.36,0.75,0.85,0.87,0.95,0.97,0.97,0.83,0.47,0.57,0.06,0.8,0.9,0.93,0.89,0.93,0.93,0.84,0.91,0.86,0.85,0.88,0.91,0.85,0.84,0.85,0.86,0.82,0.8,0.78,0.78,0.83,0.85,0.9,0.9,0.85,0.88,0.88,0.79,0.84,0.87,0.87,0.88,0.91,0.87,0.91,0.89,0.86,0.85,0.87,0.85,0.79,0.76,0.71,0.78,0.88,0.86,0.89,0.83,0.73,0.63,0.61,0.5,0.26,0.25,0.24,0.25,0.35,0.31,0,0,0,0.05,0,0,0,0,0,0.14,0.37,0.47,0.96,0.92,0.82,0.74,0.24,0.28,0.24,0.83,0.86,0.77,0.8,0.81,0.67,0.68,0.85,0.85,0.85,0.85,0.83,0.84,0.86,0.86,0.88,0.86,0.92,0.91,0.86,0.87,0.86,0.86,0.9,0.9,0.88,0.82,0.35,0.2,0.2,0.25,0.99,0.95,0.94,0.92,0.93,0.95,0.93,0.93,0.93,0.92,0.97,1,0.94,0.99,1,1,0.94,0.96,0.98,1,1,0.97,0.94,0.93,0.93,0.82,0.8,0.85,0.76,0.76,0.78,0.79,0.78,0.8,0.8,0.86,0.87,0.89,0.9,0.93,0.93,0.94,0.97,0.93,0.93,0.94,0.94,0.83,0.84,0.86,0.88,0.88,0.8,0.78,0.78,0.84,0.72,0.73,0.66,0.66,0.54,0.6,0.55,0.3,0.23,0.31,0.1,0.31,0.31,0.04,0.06,0.12,0.07,0.16,0.18,0.14,0.02,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.7,1,0.93,0.9,0.86,0.83,0.86,0.84,0.86,0.84,0.81,0.84,0.84,0.85,0.83,0.84,0.83,0.83,0.84,0.83,0.82,0.83,0.85,0.8,0.83,1,0.86,0.94,0.94,0.91,0.92,0.9,0.89,0.91,0.96,0.97,0.96,0.98,0.96,1,0.7,0.8,0.8,0.73,0.77,0.81,0.79,0.73,0.75,0.77,0.79,0.8,0.76,0.77,0.72,0.7,0.6,0.76,0.83,0.55,0.47,0.26,0.31,0.17,0.04,0.09,0,0,0,0,0,0,0,0,0.4,0.71,0.75,0.7,0.72,1,1,0.98,0.98,0.91,0.96,0.98,0.9,0.95,0.95,0.91,0.95,0.94,0.94,1,0.65,0.72,0.68,0.71,0.71,0.76,0.53,0.41,0.5,0.51,0.5,0.73,0.75,0.69,0.72,0.69,0.77,0.73,0.78,0.84,0.84,0.76,0.86,0.86,0.83,0.82,0.86,0.86,0.87,0.92,0.89,0.93,0.84,0.85,0.85,0.73,0.75,0.75,0.73,0.77,0.79,0.73,0.67,0.76,0.72,0.72,0.42,0.48,0.48,0.02,0,0,0,0,0,0,0,0,0,0,0.77,0.91,0.91,0.89,0.9,0.9,0.83,0.87,0.86,0.87,0.88,0.84,0.69,0.35,0.47,0.68,0.86,0.74,0.75,0.76,0.8,0.83,0.88,0.85,0.85,0.35,0.34,0.34,0.82,0.74,0.83,0.77,0.77,0.68,0.72,0.76,0.36,0.24,0.43,0.9,0.93,0.85,0.82,0.88,0.88,0.89,0.88,0.88,0.93,0.92,0.95,0.98,0.98,0.95,0.99,0.95,0.92,0.87,0.96,0.99,0.99,0.97,0.95,0.87,0.91,0.85,0.79,0.77,0.83,0.84,0.84,0.71,0.75,0.76,0.75,0.8,0.81,0.81,0.84,0.86,0.82,0.83,0.81,0.87,0.88,0.84,0.74,0.77,0.81,0.85,0.8,0.81,0.84,0.81,0.85,0.89,0.91,0.88,0.81,0.81,0.8,0.83,0.86,0.87,0.83,0.75,0.78,0.74,0.7,0.76,0.76,0.89,0.92,0.92,0.81,0.73,0.81,0.79,0.68,0.72,0.88,0.9,0.8,0.84,0.92,0.89,0.74,0.89,0.72,0.5,0.45,0.54,0.43,0.43,0.24,0.25,0.27,0.51,0.51,0.19,0.06,0,0,0,0,0.06,0.27,0.14,0.08,0,0,0.41,0.62,1,0.96,0.97,1,0.7,0.77];
+const sing = t => { const i = t / .04, a = Math.floor(i), f = i - a; const v = (ENV[a] || 0) * (1 - f) + (ENV[a + 1] || 0) * f; return v < .1 ? 0 : v; };
+const blink = (t, off = 0) => ((t * .23 + off) % 1) < .035;
+const END = 53;
+
+/* =================== 2. Stage and drawing helpers =================== */
+const reel = R.reel({ w: 1080, h: 1920, fps: 30, lang: "ar", duration: END, bg: "#07050c" });
+const S = reel.stage, k = R.k, W = 1080, H = 1920, clamp = R.clamp;
+let seed = 23; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+R._defs.innerHTML += `
+ <linearGradient id="gDusk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c1236"/><stop offset=".55" stop-color="#6b2f4e"/><stop offset=".85" stop-color="#d0674a"/><stop offset="1" stop-color="#f0a060"/></linearGradient>
+ <linearGradient id="gSunset" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a1a4a"/><stop offset=".5" stop-color="#c2504a"/><stop offset=".8" stop-color="#f29a50"/><stop offset="1" stop-color="#ffd08a"/></linearGradient>
+ <linearGradient id="gNight" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b0d2e"/><stop offset="1" stop-color="#3b2a63"/></linearGradient>
+ <linearGradient id="gDawn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2c3f7a"/><stop offset=".55" stop-color="#e08a5a"/><stop offset="1" stop-color="#ffe0a0"/></linearGradient>
+ <linearGradient id="gRiver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0a060"/><stop offset="1" stop-color="#3a1f3a"/></linearGradient>
+ <linearGradient id="gWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1710"/><stop offset=".7" stop-color="#432818"/><stop offset="1" stop-color="#2a170d"/></linearGradient>
+ <linearGradient id="gFloor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b170c"/><stop offset="1" stop-color="#0e0704"/></linearGradient>
+ <linearGradient id="gRoof" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5a3a"/><stop offset=".15" stop-color="#5b3a28"/><stop offset="1" stop-color="#1e120b"/></linearGradient>
+ <linearGradient id="gAbaya" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0d0a12"/><stop offset=".7" stop-color="#1f1a28"/><stop offset="1" stop-color="#3a2a32"/></linearGradient>
+ <linearGradient id="gHijab" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1f1426"/><stop offset="1" stop-color="#4a2e4e"/></linearGradient>
+ <linearGradient id="gSkin" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c98e66"/><stop offset="1" stop-color="#eab98f"/></linearGradient>
+ <linearGradient id="gDish" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#bdb4a0"/><stop offset=".6" stop-color="#ece6d6"/><stop offset="1" stop-color="#fffaf0"/></linearGradient>
+ <pattern id="kef" width="14" height="14" patternUnits="userSpaceOnUse"><rect width="14" height="14" fill="#f4eee4"/><path d="M0 7 H14 M7 0 V14" stroke="#c0283a" stroke-width="3"/></pattern>
+ <radialGradient id="glowSun"><stop offset="0" stop-color="#fff4c0" stop-opacity=".9"/><stop offset=".3" stop-color="#ffc060" stop-opacity=".35"/><stop offset="1" stop-color="#ff9040" stop-opacity="0"/></radialGradient>
+ <radialGradient id="gPom" cx=".35" cy=".35"><stop offset="0" stop-color="#ff6b6b"/><stop offset=".6" stop-color="#c8202f"/><stop offset="1" stop-color="#7a0f1c"/></radialGradient>
+ <radialGradient id="gLem" cx=".35" cy=".35"><stop offset="0" stop-color="#fff59a"/><stop offset=".6" stop-color="#f2cf2a"/><stop offset="1" stop-color="#b08a10"/></radialGradient>
+ <filter id="b3"><feGaussianBlur stdDeviation="3"/></filter>`;
+
+const starsMk = (n, x, y, w, h) => Array.from({ length: n }, () =>
+  `<circle class="tw" data-s="${(rnd() * 9).toFixed(2)}" cx="${(x + rnd() * w).toFixed(0)}" cy="${(y + rnd() * h).toFixed(0)}" r="${(.8 + rnd() * rnd() * 3).toFixed(1)}" fill="#fff8e6"/>`).join("");
+const palm = (x, y, s, c) => `<g transform="translate(${x},${y}) scale(${s})" fill="${c}"><path d="M-8 0 Q-22 -160 6 -330 L16 -330 Q-6 -160 10 0 Z"/>
+  ${[-150, -115, -70, -25, 20, 60, 110, 150].map(a => `<path transform="translate(10,-330) rotate(${a})" d="M0 0 Q60 -30 150 18 Q70 -8 0 8 Z"/>`).join("")}</g>`;
+/* Baghdad skyline: houses with shanasheel, domes and minarets */
+function skyline(y, c, seedX = 0) {
+  let s = `<g fill="${c}">`;
+  const items = [["h", 0, 220, 160], ["m", 210, 330], ["d", 300, 170], ["h", 440, 260, 130], ["h", 620, 200, 180], ["m", 800, 380], ["d", 900, 140], ["h", 1000, 180, 150]];
+  for (const [kind, x0, a, b] of items) {
+    const x = x0 + seedX;
+    if (kind === "h") s += `<rect x="${x}" y="${y - b}" width="${a}" height="${b + 400}"/><rect x="${x + a * .25}" y="${y - b - 40}" width="${a * .5}" height="50"/>`;
+    if (kind === "m") s += `<rect x="${x - 14}" y="${y - a}" width="28" height="${a + 400}"/><rect x="${x - 26}" y="${y - a * .72}" width="52" height="14"/><path d="M${x - 16} ${y - a} L${x} ${y - a - 60} L${x + 16} ${y - a} Z"/>`;
+    if (kind === "d") s += `<rect x="${x - a * .55}" y="${y - a * .45}" width="${a * 1.1}" height="${a * .45 + 400}"/><path d="M${x - a * .5} ${y - a * .45} Q${x - a * .5} ${y - a * 1.15} ${x} ${y - a * 1.2} Q${x + a * .5} ${y - a * 1.15} ${x + a * .5} ${y - a * .45} Z"/><rect x="${x - 3}" y="${y - a * 1.2 - 40}" width="6" height="40"/>`;
+  }
+  return s + `</g>`;
+}
+
+/* ---- people in profile, facing right. ids are prefixed with p ---- */
+function face(p, male) {
+  return `<path d="M34 -700 C50 -698 60 -684 62 -668 C63 -660 66 -652 74 -640 C77 -636 75 -632 69 -630 C70 -626 72 -621 69 -617 C71 -614 70 -609 66 -606 C66 -598 ${male ? "64 -588 50 -582 C38 -580 28 -588 24 -600" : "62 -590 52 -586 C42 -583 30 -590 24 -600"} Z" fill="url(#gSkin)"/>
+    <circle cx="50" cy="-626" r="10" fill="#e5806f" opacity="${male ? .15 : .35}"/>
+    <path d="M46 -667 Q53 -671 61 -666" stroke="#2a1a14" stroke-width="${male ? 4 : 2.6}" fill="none" stroke-linecap="round"/>
+    <g id="${p}eyeO"><path d="M46 -655 Q52 -661 59 -655 Q52 -651 46 -655 Z" fill="#20130e"/><circle cx="54" cy="-656" r="1.2" fill="#fff"/></g>
+    <path id="${p}eyeC" d="M46 -654 Q52 -650 59 -654" stroke="#20130e" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    ${male ? `<path d="M56 -622 Q66 -624 72 -618 Q64 -614 54 -616 Z" fill="#2a1a12"/>` : ""}
+    <path d="M62 -611 L69 -611" stroke="#a24f48" stroke-width="2.4" stroke-linecap="round"/>
+    <ellipse id="${p}mouth" cx="66" cy="-610" rx="4.6" ry="0" fill="#6e2622"/>`;
+}
+/* the woman: abaya and hijab; her front arm can rise to say "no" */
+function woman(p) {
+  return `<g id="${p}root">
+    <path d="M-30 -575 C-95 -560 -112 -470 -112 -380 C-112 -250 -150 -110 -175 0 L150 0 C128 -110 112 -240 105 -360 C98 -460 85 -545 40 -572 Z" fill="url(#gAbaya)"/>
+    <path d="M-12 -552 C-40 -480 -40 -400 -30 -330 L-10 -330 C-14 -400 -8 -480 14 -548 Z" fill="#17121e"/><circle cx="-20" cy="-322" r="12" fill="url(#gSkin)"/>
+    <g id="${p}head"><path d="M20 -722 C-40 -724 -80 -682 -78 -628 C-76 -590 -62 -560 -36 -546 C0 -532 42 -542 60 -566 L58 -604 Z" fill="url(#gHijab)"/>
+      ${face(p, false)}
+      <path d="M34 -706 C22 -668 18 -628 28 -598 C36 -588 46 -583 56 -584" stroke="#2a1c32" stroke-width="15" fill="none" stroke-linecap="round"/>
+      <path d="M-66 -600 C-86 -556 -62 -512 2 -506 C42 -502 72 -528 62 -568 Z" fill="url(#gHijab)"/></g>
+    <g id="${p}arm"><path d="M12 -556 C40 -500 46 -420 40 -340 L18 -338 C22 -420 12 -500 -8 -548 Z" fill="#241d2c"/><path d="M30 -336 q-12 -2 -14 18 q4 18 20 16 q10 -14 6 -32 Z" fill="url(#gSkin)"/></g>
+  </g>`;
+}
+/* the son: white dishdasha, red-white keffiyeh, black agal */
+function son(p) {
+  return `<g id="${p}root">
+    <path d="M-36 -565 C-98 -545 -104 -420 -100 -300 C-98 -180 -108 -80 -112 0 L108 0 C102 -100 96 -220 92 -330 C90 -450 82 -540 36 -566 Z" fill="url(#gDish)"/>
+    <path d="M-100 -2 L108 -2" stroke="#7a6a50" stroke-width="3" opacity=".5"/>
+    <path d="M-14 -552 C-42 -480 -42 -400 -34 -330 L-12 -330 C-16 -400 -10 -480 12 -548 Z" fill="#d6cfbd"/><circle cx="-22" cy="-322" r="13" fill="url(#gSkin)"/>
+    <g id="${p}head"><path d="M24 -726 C-40 -730 -82 -686 -80 -626 C-80 -560 -92 -520 -70 -470 L40 -520 C60 -540 62 -570 58 -604 Z" fill="url(#kef)"/>
+      ${face(p, true)}
+      <path d="M34 -710 C22 -668 18 -628 28 -598" stroke="url(#kef)" stroke-width="14" fill="none" stroke-linecap="round"/>
+      <path d="M-62 -706 Q-10 -738 44 -712" stroke="#151012" stroke-width="12" fill="none" stroke-linecap="round"/>
+      <path d="M-66 -690 Q-10 -722 42 -698" stroke="#151012" stroke-width="10" fill="none" stroke-linecap="round"/></g>
+    <g id="${p}arm"><path d="M14 -556 C42 -500 48 -420 42 -340 L20 -338 C24 -420 14 -500 -6 -548 Z" fill="#e2dccb"/><path d="M32 -336 q-12 -2 -14 18 q4 18 20 16 q10 -14 6 -32 Z" fill="url(#gSkin)"/></g>
+  </g>`;
+}
+/* animate a person: head tilt, arm angle, mouth from the song, blinking */
+function drive(svg, p, st) {
+  const q = s => svg.querySelector("#" + p + s);
+  const head = q("head"), mouth = q("mouth"), eo = q("eyeO"), ec = q("eyeC"), arm = q("arm"), root = q("root");
+  return t => {
+    const s = st(t);
+    head.setAttribute("transform", `rotate(${s.tilt || 0} 20 -575)`);
+    arm.setAttribute("transform", `rotate(${s.arm || 0} 12 -550)`);
+    root.setAttribute("transform", s.root || "");
+    mouth.setAttribute("ry", ((s.sing ? sing(t) : 0) * 5.5).toFixed(2));
+    const shut = blink(t, s.bo || 0); eo.style.display = shut ? "none" : ""; ec.style.display = shut ? "" : "none";
+  };
+}
+/* an official, dark silhouette; hat "fez" (red tarboosh) or "helmet" (British pith helmet) drawn on top */
+const official = (p, col) => `<g id="${p}"><g id="${p}body" fill="${col}">
+   <path d="M-60 -470 C-90 -460 -96 -380 -92 -300 L-84 -150 L-40 -150 L-36 0 L-6 0 L0 -150 L8 0 L38 0 L42 -150 L84 -150 L92 -300 C96 -380 90 -460 60 -470 Z"/>
+   <rect x="-18" y="-500" width="36" height="40"/><ellipse cx="0" cy="-540" rx="44" ry="50"/>
+   <g id="${p}arm"><path d="M50 -460 L70 -440 L180 -400 L176 -378 L60 -410 Z"/></g></g>
+  <g id="${p}fez"><path d="M-36 -578 L-30 -630 L30 -630 L36 -578 Z" fill="#b3182a"/><path d="M-36 -578 L36 -578" stroke="#7a0f1c" stroke-width="6"/><path d="M28 -628 Q48 -610 44 -580" stroke="#111" stroke-width="5" fill="none"/></g>
+  <g id="${p}hel" opacity="0"><ellipse cx="0" cy="-574" rx="70" ry="14" fill="#c9b26a"/><path d="M-46 -576 Q-46 -640 0 -646 Q46 -640 46 -576 Z" fill="#dcc57a"/><path d="M-46 -590 H46" stroke="#8a7440" stroke-width="5"/></g></g>`;
+const pom = `<circle r="30" fill="url(#gPom)"/><path d="M-10 -26 L-6 -40 L0 -30 L6 -40 L10 -26 Z" fill="#8a1420"/><ellipse cx="-10" cy="-10" rx="8" ry="5" fill="#fff" opacity=".35"/>`;
+const lemon = `<ellipse rx="30" ry="22" fill="url(#gLem)"/><path d="M-30 0 l-8 -3 l0 6 Z M30 0 l8 -3 l0 6 Z" fill="#c9a51a"/>`;
+/* crowd silhouettes */
+const crowd = (list, c) => list.map(([x, y, s, kind], i) => `<g class="cp" data-i="${i}" transform="translate(${x},${y}) scale(${s})" fill="${c}">
+   ${kind === "m" ? `<path d="M-40 -280 C-58 -200 -60 -90 -62 0 L60 0 C58 -90 56 -200 40 -280 Z"/><path d="M-34 -330 C-34 -372 34 -372 34 -330 L40 -270 L-40 -270 Z"/><ellipse cx="0" cy="-332" rx="32" ry="8" fill="#111"/>`
+   : kind === "w" ? `<path d="M-34 -300 C-62 -200 -76 -90 -86 0 L80 0 C70 -90 58 -200 34 -300 Z"/><ellipse cx="0" cy="-318" rx="34" ry="40"/>`
+   : `<path d="M-24 -170 C-34 -110 -38 -50 -40 0 L40 0 C38 -50 34 -110 24 -170 Z"/><circle cx="0" cy="-192" r="26"/>`}</g>`).join("");
+
+/* a shot = one full-screen layer with its own camera and visibility windows */
+function shot(z, vis) {
+  const outer = R.box(S, 0, 0, W, H, { zIndex: z, overflow: "hidden" });
+  const inner = R.box(outer, 0, 0, W, H, { transformOrigin: "0 0" });
+  const svg = R.svg(inner, W, H, "");
+  const cam = [[0, [W / 2, H / 2, 1]]];
+  const o = { outer, svg, cam, set(m) { svg.innerHTML = m; return o; }, q: s => svg.querySelector(s), qa: s => svg.querySelectorAll(s), on: false };
+  reel.on(t => {
+    let op = 0;
+    for (const [a, b] of vis) op = Math.max(op, Math.min(a <= 0 ? 1 : R.fade(t, a, .5), 1 - R.fade(t, b - .5, .5)));
+    outer.style.opacity = op; o.on = op > .001; outer.style.visibility = o.on ? "inherit" : "hidden";
+    if (!o.on) return;
+    const [cx, cy, zz] = k(t, cam);
+    inner.style.transform = `translate(${W / 2 - cx * zz}px,${H / 2 - cy * zz}px) scale(${zz})`;
+  });
+  return o;
+}
+const twinkle = sh => { const st = [...sh.qa(".tw")]; reel.on(t => { if (sh.on) for (const c of st) c.setAttribute("opacity", (.4 + .6 * (.5 + .5 * Math.sin(t * 2 + +c.dataset.s))).toFixed(2)); }); };
+
+/* =================== 3. Shots =================== */
+
+/* --- ROOF (0-20.6): the woman on a Baghdad rooftop at dusk. Pomegranates -> fezzes, lemons -> British helmets, the sweets she refuses --- */
+const roof = shot(10, [[0, 20.6]]);
+roof.set(`<rect width="1080" height="1920" fill="url(#gDusk)"/>${starsMk(60, 0, 0, 1080, 500)}
+  <circle cx="300" cy="1090" r="260" fill="url(#glowSun)"/><circle cx="300" cy="1120" r="70" fill="#ffd890" opacity=".9"/>
+  ${skyline(1150, "#4a2440")}${palm(120, 1160, .8, "#3a1a30")}${palm(980, 1170, .7, "#3a1a30")}${skyline(1230, "#2a1426", -60)}
+  <rect x="0" y="1300" width="1080" height="620" fill="url(#gRoof)"/>
+  <g fill="#6b4430">${Array.from({ length: 12 }, (_, i) => `<rect x="${i * 92}" y="1262" width="70" height="40" rx="6"/>`).join("")}</g>
+  <g id="offs">${[[650, "o1"], [820, "o2"], [990, "o3"]].map(([x, p]) => `<g id="${p}w" transform="translate(${x},1320) scale(-1.02,1.02)">${official(p, "#2a1418")}</g>`).join("")}</g>
+  <g id="plate" opacity="0"><ellipse cx="0" cy="0" rx="70" ry="16" fill="#d9a63a"/><ellipse cx="0" cy="-4" rx="58" ry="11" fill="#f2c95a"/>
+    ${[[-30, -12, "#fff3d6"], [-8, -16, "#e98aa0"], [16, -13, "#fff3d6"], [36, -10, "#e0b070"], [4, -24, "#f5d08a"]].map(([x, y, c]) => `<circle cx="${x}" cy="${y}" r="11" fill="${c}"/>`).join("")}</g>
+  <g id="womanW" transform="translate(320,1320) scale(1.15)">${woman("w")}</g>
+  <g id="poms">${Array.from({ length: 9 }, (_, i) => `<g class="pom">${pom}</g>`).join("")}</g>
+  <g id="lems">${Array.from({ length: 6 }, () => `<g class="lem">${lemon}</g>`).join("")}</g>`);
+twinkle(roof);
+const offX = [650, 820, 990], hatY = 1320 - 600 * 1.02;
+const poms = [...roof.qa(".pom")], lems = [...roof.qa(".lem")];
+const pomRest = poms.map((_, i) => [120 + i * 105 + (i % 2) * 20, 1290 - (i % 3) * 6]);
+const driveW = drive(roof.svg, "w", t => {
+  const startle = k(t, [[10.7, 0], [10.95, 1, "out"], [12.2, 0]]);
+  const refuse = k(t, [[17.3, 0], [17.8, 1, "back"], [20, 1]]);
+  return { sing: true, tilt: -4 + 10 * Math.sin(t * .6) * .2 - 12 * startle - 10 * refuse + (t > 4 && t < 10 ? 6 : 0),
+    arm: -30 * startle, root: `translate(${-10 * startle},${-24 * startle})` };
+});
+reel.on(t => {
+  if (!roof.on) return;
+  driveW(t);
+  const away = t > 17.55, wx = k(t, [[2.4, -200], [4.2, 320, "out"], [17.55, 320], [18.6, 250]]);
+  roof.q("#womanW").setAttribute("transform", `translate(${wx},${1320 - Math.abs(Math.sin(t * 6)) * 6 * ((t > 2.4 && t < 4.2) || (t > 17.55 && t < 18.6) ? 1 : 0)}) scale(${away ? -1.15 : 1.15},1.15)`);
+  /* pomegranates rain down from 4.0, then on "الرمّان" three fly up and become fezzes */
+  poms.forEach((g, i) => {
+    const t0 = 4.0 + i * .28, [rx, ry] = pomRest[i];
+    let x = rx, y = k(t, [[t0, -100], [t0 + .7, ry, "in"]]), s = 1, o = t < t0 ? 0 : 1;
+    if (t0 + .7 < t && t < t0 + 1.0) y = ry - 30 * Math.sin(Math.PI * (t - t0 - .7) / .3);
+    if (i < 3) { const f = clamp((t - 7.02 - i * .12) / .7); const tx = offX[i], ty = hatY + 20;
+      x = rx + (tx - rx) * R.ease.inOut(f); y = y + (ty - y) * R.ease.inOut(f); if (f >= 1) o = 0; }
+    else o *= 1 - clamp((t - 8.6) / .6);
+    g.setAttribute("transform", `translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(${(t * 40 + i * 40) % 360}) scale(${s})`);
+    g.setAttribute("opacity", o);
+  });
+  /* officials: rise when the pomegranates reach them (fez), turn khaki with the lemons (helmet) */
+  [1, 2, 3].forEach((n, i) => {
+    const wrap = roof.q(`#o${n}w`), body = roof.q(`#o${n}body`), fez = roof.q(`#o${n}fez`), hel = roof.q(`#o${n}hel`);
+    const up = clamp((t - 7.0 - i * .12) / .7);
+    const step = n === 2 ? k(t, [[15.6, 0], [16.6, -190, "out"], [19.3, -190], [20.0, -120]]) : 0;
+    wrap.setAttribute("transform", `translate(${offX[i] + step},${1320 + (1 - R.ease.out(up)) * 300}) scale(-1.02,1.02)`);
+    wrap.setAttribute("opacity", up);
+    const swap = clamp((t - 11.52 - i * .15) / .5);
+    body.setAttribute("fill", swap > .5 ? "#2c2a18" : "#2a1418");
+    fez.setAttribute("transform", `translate(${swap * -40},${swap * 500}) rotate(${swap * -80} 0 -600)`);
+    fez.setAttribute("opacity", 1 - swap);
+    hel.setAttribute("opacity", swap);
+    if (n === 2) roof.q("#o2arm").setAttribute("transform", `rotate(${k(t, [[15.8, 30], [16.4, 0, "out"], [19.2, 0], [19.6, 40]])} 55 -460)`);
+  });
+  /* lemons roll in on "نومي", fly to the officials on "عليّه" */
+  lems.forEach((g, i) => {
+    const t0 = 10.12 + i * .12, tx = 420 + i * 100;
+    let x = k(t, [[t0, 1200], [t0 + .9, tx, "out"]]), y = 1288, o = t < t0 ? 0 : 1;
+    if (i < 3) { const f = clamp((t - 11.4 - i * .15) / .5); x = x + (offX[i] - x) * R.ease.inOut(f); y = y + (hatY + 24 - y) * R.ease.inOut(f); if (f >= 1) o = 0; }
+    else o *= 1 - clamp((t - 12.6) / .5);
+    g.setAttribute("transform", `translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(${-x * .6})`);
+    g.setAttribute("opacity", o);
+  });
+  /* the plate of sweets in the official's hand; it falls on "ريده" */
+  const pl = roof.q("#plate"), handX = 820 - 190 - 180 * 1.02, handY = 1320 - 400 * 1.02;
+  const drop = clamp((t - 19.25) / .6);
+  pl.setAttribute("opacity", t > 16.0 && t < 20.4 ? clamp((t - 16.0) / .4) * (1 - clamp((t - 19.9) / .4)) : 0);
+  pl.setAttribute("transform", `translate(${handX + 10},${handY - 20 + drop * drop * 380}) rotate(${drop * 30})`);
+});
+roof.cam.push([0, [540, 960, 1.0]], [4, [540, 960, 1.0]], [9.6, [560, 1000, 1.06]], [15.5, [540, 980, 1.04]], [16.4, [500, 980, 1.14]], [20.6, [470, 980, 1.2]]);
+[4.0, 5.24, 7.02].forEach(t => reel.cue(t, "pop")); reel.cue(10.76, "startle"); reel.cue(19.25, "drop");
+
+/* --- PEOPLE (20.1-27.6): "ردّوني لأهلي" - she walks to her people by the Tigris at sunset --- */
+const ppl = shot(20, [[20.1, 27.6]]);
+ppl.set(`<rect width="1080" height="1920" fill="url(#gSunset)"/>
+  <circle cx="700" cy="1020" r="420" fill="url(#glowSun)" id="pSun"/><circle cx="700" cy="1060" r="110" fill="#ffe0a0"/>
+  ${skyline(1100, "#5a2a3a", 40)}
+  <rect y="1100" width="1080" height="190" fill="url(#gRiver)"/>
+  <g stroke="#ffe0a0" stroke-width="5" opacity=".5" id="ripples">${Array.from({ length: 9 }, (_, i) => `<line x1="${600 + (i % 3) * 40 - 60}" y1="${1120 + i * 18}" x2="${680 + (i % 3) * 40 + 60}" y2="${1120 + i * 18}"/>`).join("")}</g>
+  ${palm(80, 1300, 1.1, "#2a1220")}${palm(250, 1300, .85, "#2a1220")}
+  <rect y="1290" width="1080" height="630" fill="#2a1220"/>
+  <g id="folk">${crowd([[560, 1300, 1.1, "m"], [650, 1305, 1.05, "w"], [720, 1300, 1.0, "k"], [790, 1300, 1.12, "m"], [880, 1302, 1.06, "w"], [950, 1300, .95, "k"], [1010, 1300, 1.1, "m"], [610, 1330, 1.15, "k"], [850, 1335, 1.2, "m"]], "#1a0a14")}</g>
+  <g id="womanP" transform="translate(150,1320) scale(1.12)">${woman("pw")}</g>`);
+const drivePW = drive(ppl.svg, "pw", t => ({ sing: true, tilt: -2, arm: k(t, [[22.2, 0], [22.8, -50, "out"], [26, -50]]),
+  root: `rotate(${Math.sin(t * 6) * 1.2 * (t < 24 ? 1 : 0)} 0 0)` }));
+const folk = [...ppl.qa(".cp")];
+reel.on(t => {
+  if (!ppl.on) return;
+  drivePW(t);
+  ppl.q("#womanP").setAttribute("transform", `translate(${k(t, [[20.3, 150], [24.2, 430, "out"]])},${1320 - Math.abs(Math.sin(t * 6)) * 6 * (t < 24 ? 1 : 0)}) scale(1.12)`);
+  folk.forEach((f, i) => { const [x, y, s] = f.getAttribute("transform").match(/-?[\d.]+/g).map(Number);
+    const wave = t > 22.3 + i * .08 ? Math.sin((t - 22.3) * 6 + i) * 3 : 0;
+    f.setAttribute("transform", `translate(${x},${y}) scale(${s}) rotate(${wave})`); });
+  ppl.q("#pSun").setAttribute("opacity", k(t, [[22.0, .7], [22.8, 1]]));
+  ppl.q("#ripples").setAttribute("transform", `translate(${Math.sin(t * 1.4) * 14},0)`);
+});
+ppl.cam.push([20.1, [490, 980, 1.12]], [24.2, [575, 990, 1.08]], [27.6, [560, 990, 1.04]]);
+
+/* --- SON (27.0-39.3): she waits at the window; her son tells her to stop waiting and closes the shutters --- */
+const room = shot(30, [[27.0, 39.3]]);
+room.set(`<rect width="1080" height="1920" fill="url(#gWall)"/>
+  <clipPath id="win"><rect x="60" y="300" width="420" height="760" rx="20"/></clipPath>
+  <g clip-path="url(#win)"><rect x="60" y="300" width="420" height="760" fill="url(#gDusk)"/>${starsMk(30, 60, 300, 420, 350)}
+    <path d="M60 1000 Q270 960 480 1000 V1060 H60 Z" fill="#3a1a30"/>
+    <g id="farShips" fill="#1a0e18">${[120, 260, 380].map(x => `<g transform="translate(${x},988)"><path d="M-30 0 L30 0 L22 12 L-22 12 Z"/><rect x="-2" y="-46" width="4" height="46"/><path d="M2 -44 L26 -36 L2 -28 Z" fill="#c9b26a"/></g>`).join("")}</g></g>
+  <rect x="60" y="300" width="420" height="760" rx="20" fill="none" stroke="#c99a4b" stroke-width="16"/>
+  <g stroke="#5a3a1c" stroke-width="9"><line x1="270" y1="300" x2="270" y2="1060"/><line x1="60" y1="640" x2="480" y2="640"/></g>
+  <g id="shL"><rect x="0" y="0" width="210" height="760" fill="#7a4520"/>${Array.from({ length: 14 }, (_, i) => `<rect x="20" y="${30 + i * 52}" width="170" height="14" rx="4" fill="#5a3015"/>`).join("")}</g>
+  <g id="shR"><rect x="0" y="0" width="210" height="760" fill="#7a4520"/>${Array.from({ length: 14 }, (_, i) => `<rect x="20" y="${30 + i * 52}" width="170" height="14" rx="4" fill="#5a3015"/>`).join("")}</g>
+  <rect x="40" y="1050" width="460" height="34" rx="10" fill="#6b4220"/>
+  <rect y="1420" width="1080" height="500" fill="url(#gFloor)"/>
+  <g transform="translate(920,0)"><line x1="0" y1="0" x2="0" y2="360" stroke="#1a0f06" stroke-width="4"/><path d="M-26 380 H26 Q44 460 24 560 H-24 Q-44 460 -26 380 Z" fill="#ffd27a"/><circle cx="0" cy="470" r="230" fill="#ffb050" opacity=".18"/></g>
+  <g id="momR" transform="translate(470,1440) scale(-1.15,1.15)">${woman("rm")}</g>
+  <g id="sonR" transform="translate(900,1440) scale(-1.18,1.18)">${son("rs")}</g>`);
+const driveRM = drive(room.svg, "rm", t => ({ tilt: t < 35.1 ? -6 : 8, arm: 0, bo: .4 }));
+const driveRS = drive(room.svg, "rs", t => ({ sing: true, tilt: 4, arm: k(t, [[27.6, 0], [28.3, -60, "out"], [32.4, -60], [33.2, -100], [33.9, -85], [35.6, -85], [36.4, 0]]) }));
+reel.on(t => {
+  if (!room.on) return;
+  driveRM(t); driveRS(t);
+  const sx = k(t, [[27.0, 1150], [28.2, 840, "out"], [33.0, 840], [33.9, 650, "inOut"], [36.6, 650], [37.4, 760]]);
+  room.q("#sonR").setAttribute("transform", `translate(${sx},${1440 - Math.abs(Math.sin(t * 6)) * 6 * ((t < 28.2 || (t > 33 && t < 33.9)) ? 1 : 0)}) scale(-1.18,1.18)`);
+  /* the mother faces the window, then turns to her son once the shutters are closed */
+  const turn = t > 35.1;
+  room.q("#momR").setAttribute("transform", `translate(${turn ? 380 : 470},1440) scale(${turn ? 1.15 : -1.15},1.15)`);
+  const close = R.ease.inOut(clamp((t - 34.0) / 1.0));
+  room.q("#shL").setAttribute("transform", `translate(${60 - 210 * (1 - close) - 10},300)`);
+  room.q("#shR").setAttribute("transform", `translate(${270 + 210 * (1 - close)},300)`);
+  room.q("#shL").setAttribute("opacity", close > 0 ? 1 : 0); room.q("#shR").setAttribute("opacity", close > 0 ? 1 : 0);
+  room.q("#farShips").setAttribute("transform", `translate(${Math.sin(t * .8) * 6},${Math.sin(t * 1.3) * 3})`);
+});
+room.cam.push([27.0, [560, 960, 1.05]], [33.0, [600, 940, 1.12]], [33.8, [440, 900, 1.25]], [36.0, [440, 900, 1.3]], [39.3, [560, 960, 1.15]]);
+reel.cue(34.0, "shutters");
+
+/* --- RISE (38.9-53): dawn over Baghdad; the son stands, the young men join him, the soldiers on the horizon leave --- */
+const rise = shot(40, [[38.9, 60]]);
+rise.set(`<rect y="-300" width="1080" height="2220" fill="#0b0d2e"/><rect width="1080" height="1920" fill="url(#gNight)"/><rect id="dawn" y="-300" width="1080" height="2220" fill="url(#gDawn)" opacity="0"/>
+  ${starsMk(80, 0, 0, 1080, 700)}
+  <g id="rays" opacity="0" transform="translate(540,1150)">${Array.from({ length: 16 }, (_, i) => `<path transform="rotate(${i * 22.5})" d="M-18 -120 L18 -120 L60 -1100 L-60 -1100 Z" fill="#fff1b0" opacity=".16"/>`).join("")}</g>
+  <g id="sunR"><circle cx="540" cy="1150" r="480" fill="url(#glowSun)"/><circle cx="540" cy="1150" r="120" fill="#ffe7a0"/></g>
+  ${skyline(1180, "#3a2238", 20)}${palm(90, 1200, .9, "#2a1426")}${palm(1000, 1200, .8, "#2a1426")}
+  <g id="soldiers" fill="#2c2a18">${[330, 400, 670, 740].map(x => `<g transform="translate(${x},1335) scale(.34)"><path d="M-60 -470 C-90 -460 -96 -380 -92 -300 L-84 0 L84 0 L92 -300 C96 -380 90 -460 60 -470 Z"/><ellipse cx="0" cy="-540" rx="44" ry="50"/><path d="M-46 -576 Q-46 -640 0 -646 Q46 -640 46 -576 Z" fill="#dcc57a"/><ellipse cx="0" cy="-574" rx="70" ry="14" fill="#c9b26a"/></g>`).join("")}</g>
+  <rect y="1330" width="1080" height="590" fill="url(#gRoof)"/>
+  <g id="youth">${crowd([[170, 1330, .82, "m"], [270, 1332, .88, "m"], [820, 1332, .86, "m"], [920, 1330, .8, "m"], [1010, 1334, .9, "m"], [70, 1335, .92, "m"]], "#1d0f18")}</g>
+  <g id="doves" fill="#fff">${Array.from({ length: 6 }, (_, i) => `<path class="dove" d="M0 0 Q-20 -18 -40 -6 Q-20 -6 0 6 Q20 -6 40 -6 Q20 -18 0 0 Z"/>`).join("")}</g>
+  <g id="sonU" transform="translate(470,1350) scale(1.05)">${son("us")}</g>`);
+twinkle(rise);
+const driveUS = drive(rise.svg, "us", t => ({ sing: true, tilt: k(t, [[39.8, 6], [40.8, -8]]), arm: k(t, [[40.5, 0], [41.2, -160, "back"], [52, -160]]), bo: .2 }));
+const youth = [...rise.qa("#youth .cp")], doves = [...rise.qa(".dove")];
+reel.on(t => {
+  if (!rise.on) return;
+  driveUS(t);
+  const day = clamp((t - 39.4) / 7);
+  rise.q("#dawn").setAttribute("opacity", day.toFixed(3));
+  rise.q("#sunR").setAttribute("transform", `translate(0,${(1 - R.ease.out(day)) * 280})`);
+  rise.q("#rays").setAttribute("opacity", (clamp((t - 47.0) / 1) * .9).toFixed(2));
+  rise.q("#rays").setAttribute("transform", `translate(540,1150) rotate(${t * 4})`);
+  rise.qa(".tw").forEach(s => s.style.opacity = 1 - day);
+  rise.q("#sonU").setAttribute("transform", `translate(${k(t, [[39.86, 470], [40.7, 530, "out"]])},1350) scale(1.05)`);
+  youth.forEach((y, i) => { const [x, yy, s] = y.getAttribute("transform").match(/-?[\d.]+/g).map(Number);
+    const p = R.pop(t, 42.84 + i * .22, .5); y._b = y._b || [x, yy, s]; const [bx, by, bs] = y._b; y.setAttribute("transform", `translate(${bx},${by + (1 - clamp(p)) * 140}) scale(${bs})`); y.setAttribute("opacity", clamp(p)); });
+  const leave = clamp((t - 45.92) / 2.2);
+  rise.q("#soldiers").setAttribute("opacity", (1 - leave).toFixed(2));
+  rise.q("#soldiers").setAttribute("transform", `translate(${leave * 40},${leave * 120})`);
+  doves.forEach((d, i) => { const p = clamp((t - 47.2 - i * .15) / 4);
+    d.setAttribute("transform", `translate(${540 + (i - 2.5) * 40 + p * (i - 2.5) * 160},${1050 - p * 900}) scale(${1 + Math.sin(t * 14 + i) * .25},1)`);
+    d.setAttribute("opacity", p > 0 && p < 1 ? 1 : 0); });
+});
+rise.cam.push([38.9, [540, 1060, 1.1]], [45.9, [540, 1000, 1.03]], [50.4, [540, 990, 1.0]], [52.4, [540, 880, 1.0]]);
+reel.cue(42.84, "crowd"); reel.cue(47.22, "rise");
+
+/* =================== 4. Title, notes, lyrics =================== */
+R.box(S, 0, 1150, W, 770, { zIndex: 80, background: "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(6,3,10,.55) 35%, rgba(6,3,10,.72) 100%)" });
+const title = R.box(S, 0, 260, W, 360, { zIndex: 85, textAlign: "center", color: "#ffe9b5" });
+reel.on(t => {
+  const intro = Math.min(R.fade(t, .2, .7), 1 - R.fade(t, 3.3, .5)), outro = R.fade(t, 50.8, .8);
+  const html = t < 25 ? `<div style="font:128px Lalezar;line-height:1.15;text-shadow:0 0 36px rgba(255,120,90,.6),0 8px 24px rgba(0,0,0,.7)">جلجل عليّه<br>الرمّان</div>`
+    : `<div style="font:128px Lalezar;line-height:1.15;text-shadow:0 0 36px rgba(255,200,110,.7),0 8px 24px rgba(0,0,0,.7)">جلجل عليّه<br>الرمّان</div><div style="font:600 42px 'IBM Plex Sans Arabic';margin-top:6px;text-shadow:0 4px 14px rgba(0,0,0,.8)">أغنية عراقية تراثية · غناء حمزة نمرة</div>`;
+  if (title._h !== html) { title.innerHTML = html; title._h = html; }
+  title.style.opacity = Math.max(intro, outro);
+});
+/* the explaining line on top */
+const note = R.box(S, 60, 210, W - 120, 120, { zIndex: 86, display: "flex", justifyContent: "center", alignItems: "center" });
+const pill = R.el("div", { style: { font: "600 46px 'IBM Plex Sans Arabic'", color: "#fff7e8", background: "rgba(10,5,16,.62)", padding: "14px 34px",
+  borderRadius: "40px", border: "2px solid rgba(255,215,122,.5)", textAlign: "center", direction: "rtl" } }, note);
+reel.on(t => {
+  let cur = null; for (const n of NOTES) if (t >= n[0] && t <= n[1]) cur = n;
+  if (!cur || (t < 3.7)) { note.style.opacity = 0; if (!cur) return; }
+  if (t < 3.7) { note.style.top = "690px"; } else note.style.top = "210px";
+  if (pill.textContent !== cur[2]) pill.textContent = cur[2];
+  const o = Math.min(R.fade(t, cur[0], .4), 1 - R.fade(t, cur[1] - .4, .4));
+  note.style.opacity = o; note.style.transform = `translateY(${(1 - R.fade(t, cur[0], .5)) * -20}px)`;
+});
+const lyricBox = R.box(S, 50, 1300, W - 100, 290, { zIndex: 90 });
+const lines = LYRICS.map(ln => {
+  const row = R.el("div", { style: { position: "absolute", inset: "0", display: "flex", flexWrap: "wrap", justifyContent: "center", alignContent: "center",
+    gap: "0 28px", direction: "rtl", font: "116px Lalezar", lineHeight: "1.3" } }, lyricBox);
+  return { row, ln, spans: ln.words.map(w => R.el("span", { text: w, style: { display: "inline-block", transformOrigin: "50% 75%" } }, row)) };
+});
+lines.forEach((l, i) => l.t0 = Math.max(l.ln.times[0] - .5, i ? lines[i - 1].ln.end + .1 : 0));
+reel.on(t => {
+  for (const { row, spans, ln, t0 } of lines) {
+    const o = Math.min(R.fade(t, t0, .35), 1 - R.fade(t, ln.end - .35, .35));
+    row.style.opacity = o; row.style.visibility = o <= 0 ? "hidden" : "inherit";
+    if (o <= 0) continue;
+    row.style.transform = `translateY(${(1 - R.fade(t, t0, .45)) * 30}px)`;
+    spans.forEach((sp, i) => {
+      const on = t >= ln.times[i] - .05, p = R.pop(t, ln.times[i] - .05, .4);
+      sp.style.color = on ? "#ffd77a" : "rgba(255,248,232,.5)";
+      sp.style.textShadow = on ? "0 0 30px rgba(255,170,90,.7), 0 6px 18px rgba(0,0,0,.8)" : "0 6px 18px rgba(0,0,0,.8)";
+      sp.style.transform = `scale(${1 + .1 * Math.sin(Math.PI * Math.min(p, 1)) * (t < ln.times[i] + .6 ? 1 : 0)})`;
+    });
+  }
+});
+const black = R.box(S, 0, 0, W, H, { zIndex: 99, background: "#000" });
+reel.on(t => { black.style.opacity = Math.max(1 - R.fade(t, 0, .5), R.fade(t, 52.2, .8)); });
+</script>
+</body>
+</html>

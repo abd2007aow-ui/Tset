@@ -1,0 +1,42 @@
+[
+ {
+  "t": 4,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 5.24,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 7.02,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 10.76,
+  "kind": "startle",
+  "note": ""
+ },
+ {
+  "t": 19.25,
+  "kind": "drop",
+  "note": ""
+ },
+ {
+  "t": 34,
+  "kind": "shutters",
+  "note": ""
+ },
+ {
+  "t": 42.84,
+  "kind": "crowd",
+  "note": ""
+ },
+ {
+  "t": 47.22,
+  "kind": "rise",
+  "note": ""
+ }
+]
