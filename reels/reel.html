@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>كلمات العمر - Maven Reels</title>
+<!-- Style: dark black-and-white, one still place, slow camera, one sung word at a time (from the reference's look).
+     Audio: song.wav = 25.0 to 37.2 s of the user's clip. Word times are placed on the sung phrases by hand. -->
+<script src="file:///home/user/Tset/.claude/skills/maven-reels/kit/reel.js"></script>
+</head>
+<body>
+<script>
+/* words placed on the sung syllables (measured from the loudness of song.wav) */
+const WORDS = [["بعض", .55], ["الكلمات", 1.2], ["تُقال", 2.6], ["مرّة", 3.5],
+               ["وتعيش", 5.5], ["معك", 6.9], ["العمر", 7.45], ["كلّه", 8.85]];
+const ENDS  = [1.15, 2.5, 3.4, 4.55, 6.85, 7.38, 8.3, 9.75];
+const CUT = 5.45, FINAL = 9.95, END = 12.2;
+
+const reel = R.reel({ w: 1080, h: 1920, fps: 30, lang: "ar", duration: END, bg: "#070708" });
+const G = 1640, WW = 1600, WH = 2600;
+const cam = R.world(reel, WW, WH);
+const world = cam.el;
+world.style.filter = "grayscale(1) contrast(1.08)";
+
+/* ---- night ---- */
+R.box(world, 0, 0, WW, WH, { background: "linear-gradient(#060607 0%, #121214 45%, #1c1c1e 62%, #0a0a0b 100%)" });
+R.svg(world, 600, 600, `<defs><radialGradient id="mg"><stop offset="0" stop-color="#e8e6d8" stop-opacity=".55"/><stop offset=".25" stop-color="#e8e6d8" stop-opacity=".12"/><stop offset="1" stop-color="#e8e6d8" stop-opacity="0"/></radialGradient></defs>
+  <circle cx="300" cy="300" r="300" fill="url(#mg)"/><circle cx="300" cy="300" r="62" fill="#dedcca"/><circle cx="326" cy="286" r="56" fill="#121214" opacity=".9"/>`, { x: 980, y: 260 });
+// far buildings, barely visible
+let bld = "";
+for (let i = 0, x = 0; x < WW; i++) { const w = 120 + (i * 71) % 110, h = 260 + (i * 137) % 380; bld += `<rect x="${x}" y="${700 - h}" width="${w}" height="${h}" fill="#151517"/>`; if (i % 3 === 1) bld += `<rect x="${x + w * .4}" y="${700 - h + 60}" width="14" height="20" fill="#8a876d" opacity=".5"/>`; x += w + 6; }
+R.svg(world, WW, 700, bld, { x: 0, y: G - 700 });
+// wet street
+R.box(world, 0, G, WW, WH - G, { background: "linear-gradient(#1a1a1c, #08080a 70%)" });
+
+/* ---- the street lamp ---- */
+const LX = 560, LHX = 760, LHY = G - 940;
+R.svg(world, 400, 1000, `<rect x="54" y="60" width="16" height="940" rx="6" fill="#0d0d0e"/><path d="M62 70 Q62 10 140 10 L210 10" stroke="#0d0d0e" stroke-width="14" fill="none"/><path d="M168 8 L252 8 L236 40 L184 40 Z" fill="#0d0d0e"/>`, { x: LX - 62, y: LHY - 10 });
+const light = R.box(world, 0, 0, WW, WH, { pointerEvents: "none" });
+R.svg(light, 900, 1100, `<defs>
+  <linearGradient id="cone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1ecc0" stop-opacity=".42"/><stop offset="1" stop-color="#f1ecc0" stop-opacity=".05"/></linearGradient>
+  <radialGradient id="bulb"><stop offset="0" stop-color="#fffbe0" stop-opacity="1"/><stop offset=".2" stop-color="#f1ecc0" stop-opacity=".5"/><stop offset="1" stop-color="#f1ecc0" stop-opacity="0"/></radialGradient>
+  <radialGradient id="pool"><stop offset="0" stop-color="#f1ecc0" stop-opacity=".38"/><stop offset="1" stop-color="#f1ecc0" stop-opacity="0"/></radialGradient></defs>
+  <path d="M410 40 L440 40 L720 1000 L130 1000 Z" fill="url(#cone)"/>
+  <ellipse cx="425" cy="1000" rx="380" ry="70" fill="url(#pool)"/>
+  <circle cx="425" cy="38" r="160" fill="url(#bulb)"/>`, { x: LHX - 425, y: LHY + 2 });
+// reflection of the lamp in the wet street
+R.svg(light, 300, 600, `<defs><linearGradient id="refl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1ecc0" stop-opacity=".22"/><stop offset="1" stop-color="#f1ecc0" stop-opacity="0"/></linearGradient></defs><rect x="120" y="0" width="60" height="600" rx="30" fill="url(#refl)"/>`, { x: LHX - 150, y: G + 70 });
+// hook: the lamp flickers on in the first half second
+reel.on(t => { light.style.opacity = R.k(t, [[0, 0], [.1, .85], [.18, .15], [.28, 1], [.38, .45], [.48, 1], [CUT - .02, 1], [CUT, .55], [CUT + .1, 1]]); });
+
+/* ---- the child, then the same person grown up, on the same spot ---- */
+const FX = 820;
+const sil = "#040405", rim = `stroke="#f1ecc0" stroke-opacity=".28" stroke-width="3"`;
+const child = R.svg(world, 130, 330, `<ellipse cx="62" cy="324" rx="58" ry="9" fill="#000" opacity=".7"/>
+  <g fill="${sil}" ${rim}><circle cx="70" cy="50" r="34"/><path d="M30 100 Q62 84 94 100 L100 200 Q98 214 88 214 L86 322 L68 322 L63 232 L58 322 L40 322 L37 214 Q25 214 24 200 Z"/></g>`, { x: FX - 65, y: G - 326 });
+const adult = R.svg(world, 210, 560, `<ellipse cx="104" cy="552" rx="96" ry="12" fill="#000" opacity=".7"/>
+  <g fill="${sil}" ${rim}><circle cx="112" cy="60" r="40"/><path d="M40 130 Q102 102 166 130 L180 330 Q180 346 166 346 L152 552 L120 552 L106 362 L96 552 L64 552 L48 346 Q32 346 32 330 Z"/></g>`, { x: FX - 104, y: G - 556 });
+reel.on(t => {
+  child.style.visibility = t < CUT ? "inherit" : "hidden";
+  adult.style.visibility = t >= CUT ? "inherit" : "hidden";
+  // breathing, so nothing is ever fully frozen
+  const b = 1 + Math.sin(t * 2.2) * .006;
+  child.style.transformOrigin = adult.style.transformOrigin = "50% 100%";
+  child.style.transform = `scaleY(${b})`;
+  adult.style.transform = `scaleY(${b}) rotate(${R.k(t, [[CUT, 0], [FINAL, -1.2, "soft"]])}deg)`;
+});
+
+/* ---- rain ---- */
+let drops = "";
+for (let i = 0; i < 150; i++) drops += `<line x1="0" y1="0" x2="-6" y2="46" stroke="#d8d8d8" stroke-width="${1.5 + (i % 3)}" opacity="${.08 + (i % 5) * .035}"/>`;
+const rain = R.svg(world, WW, WH, drops, { x: 0, y: 0 });
+const lines = rain.querySelectorAll("line");
+reel.on(t => {
+  lines.forEach((l, i) => {
+    const x = (i * 137.3) % WW, sp = 1500 + (i % 7) * 120, y = ((i * 331.7) + t * sp) % (G + 160) - 80;
+    l.setAttribute("transform", `translate(${x - t * 40} ${y})`);
+  });
+});
+
+/* ---- camera: slow push on the child, hard cut closer on the grown-up, slow push, then let go ---- */
+cam.to(0, FX - 70, G - 470, 1.02)
+   .to(CUT - .001, FX - 50, G - 420, 1.16, "linear")
+   .to(CUT, FX - 20, G - 480, 1.12)
+   .to(FINAL, FX, G - 470, 1.3, "soft")
+   .to(END, FX - 60, G - 520, 1.12, "inOut");
+
+/* ---- grain + vignette over everything ---- */
+const fx = R.box(reel.stage, 0, 0, 1080, 1920, { zIndex: 40, pointerEvents: "none",
+  background: "radial-gradient(ellipse 75% 60% at 50% 48%, rgba(0,0,0,0) 40%, rgba(0,0,0,.78) 100%)" });
+const grain = R.svg(reel.stage, 1080, 1920, `<filter id="gr"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="1"/><feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .09 0"/></filter><rect width="1080" height="1920" filter="url(#gr)"/>`, { x: 0, y: 0 });
+grain.style.zIndex = 41; grain.style.pointerEvents = "none";
+const turb = grain.querySelector("feTurbulence");
+reel.on(t => turb.setAttribute("seed", String(1 + Math.floor(t * 12) % 40)));
+
+/* ---- words: one at a time on the singing, then the whole sentence stays ---- */
+R.caption(reel, WORDS, { y: 470, size: 138, color: "#ece6b4", ends: ENDS, hold: 0, until: FINAL - .05,
+  emph: { 3: "#ffffff", 7: "#ffffff" }, shadow: "0 0 30px rgba(0,0,0,.9), 0 6px 18px rgba(0,0,0,.8)" });
+const fin = R.box(reel.stage, 80, 330, 920, 330, { zIndex: 50, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+  font: "600 88px 'IBM Plex Sans Arabic'", color: "#ece6b4", direction: "rtl", textAlign: "center", lineHeight: "1.55",
+  textShadow: "0 0 30px rgba(0,0,0,.95)" });
+fin.innerHTML = `<div>بعض الكلمات تُقال مرّة</div><div style="color:#fff">وتعيش معك العمر كلّه</div>`;
+const [f1, f2] = fin.children;
+reel.on(t => {
+  f1.style.opacity = R.fade(t, FINAL, .7); f2.style.opacity = R.fade(t, FINAL + .55, .8);
+  f1.style.transform = `translateY(${(1 - R.fade(t, FINAL, .7)) * 18}px)`;
+  f2.style.transform = `translateY(${(1 - R.fade(t, FINAL + .55, .8)) * 18}px)`;
+});
+</script>
+</body>
+</html>
