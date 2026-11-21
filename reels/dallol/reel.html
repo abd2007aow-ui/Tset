@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>دللول - ريلز تهويدة</title>
+<!-- Lyric reel for the song in song.ogg. Times come from the song itself (whisper large-v3), spelling fixed by hand. -->
+<script src="../../.claude/skills/maven-reels/kit/reel.js"></script>
+</head>
+<body>
+<script>
+/* ---------- 1. Lyrics: [line words], each word with its sung time ---------- */
+const L = (words, times, end) => ({ words, times, end });
+const A  = t => L(["دللول", "يا", "الولد", "يا", "ابني", "دللول"], [t, t + 1.4, t + 2.8, t + 3.84, t + 4.26, t + 4.68], t + 6.6);
+const B  = t => L(["يُمّه", "عدوّك", "عليل", "وساكن", "الچول"], [t, t + 1.4, t + 2.34, t + 4.58, t + 6.48], t + 7.6);
+const LYRICS = [
+  A(2.54), B(13.88), A(25.52), B(37.74),
+  L(["يُمّه", "أنا"], [47.26, 48.66], 50.6),
+  L(["نومة", "العوافي"], [51.7, 53.1], 56.2),
+  L(["يُمّه", "نوم", "الغزيّل"], [57.28, 58.68, 59.3], 61.2),
+  L(["بالبراري"], [61.8], 65.4),
+];
+const END = 69;
+
+/* ---------- 2. Stage ---------- */
+const reel = R.reel({ w: 1080, h: 1920, fps: 30, lang: "ar", duration: END, bg: "#070818" });
+const S = reel.stage, k = R.k, W = 1080, H = 1920;
+const layer = (z, style = {}) => R.box(S, 0, 0, W, H, { zIndex: z, ...style });
+R._defs.innerHTML += `
+  <radialGradient id="moonGlow"><stop offset="0" stop-color="#fff6d8" stop-opacity=".55"/><stop offset=".35" stop-color="#ffe7a8" stop-opacity=".18"/><stop offset="1" stop-color="#ffe7a8" stop-opacity="0"/></radialGradient>
+  <radialGradient id="moonFace" cx=".4" cy=".35"><stop offset="0" stop-color="#fffbea"/><stop offset=".7" stop-color="#f6e3a6"/><stop offset="1" stop-color="#e7c97a"/></radialGradient>
+  <radialGradient id="lampGlow"><stop offset="0" stop-color="#ffcf6b" stop-opacity=".75"/><stop offset=".4" stop-color="#ff9d3a" stop-opacity=".22"/><stop offset="1" stop-color="#ff9d3a" stop-opacity="0"/></radialGradient>
+  <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a8683a"/><stop offset="1" stop-color="#5c3218"/></linearGradient>
+  <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b1810"/><stop offset=".6" stop-color="#3d2416"/><stop offset="1" stop-color="#1d0f09"/></linearGradient>
+  <linearGradient id="blanket" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3dcc0"/><stop offset="1" stop-color="#c9a27c"/></linearGradient>
+  <filter id="blur8"><feGaussianBlur stdDeviation="8"/></filter>
+  <filter id="blur3"><feGaussianBlur stdDeviation="3"/></filter>`;
+
+/* sky: colour shifts with the scene */
+const sky = layer(0);
+const SKY = [[0, [12, 14, 48, 58, 36, 96]], [12, [12, 14, 48, 58, 36, 96]], [14, [8, 10, 34, 92, 46, 88]],
+  [25, [8, 10, 34, 92, 46, 88]], [37, [10, 12, 40, 70, 40, 100]], [57, [14, 12, 40, 120, 62, 80]], [66, [14, 12, 40, 120, 62, 80]], [69, [3, 3, 10, 10, 8, 20]]];
+reel.on(t => {
+  const c = k(t, SKY).map(Math.round);
+  sky.style.background = `linear-gradient(180deg, rgb(${c[0]},${c[1]},${c[2]}) 0%, rgb(${c[3]},${c[4]},${c[5]}) 100%)`;
+});
+
+/* stars: fixed seeded field, each twinkles at its own pace */
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const starSvg = R.svg(layer(1), W, H, "");
+const stars = [];
+for (let i = 0; i < 170; i++) {
+  const c = R.el("circle", { cx: rnd() * W, cy: rnd() * H * .8, r: .8 + rnd() * rnd() * 3.4, fill: "#fff8e6" }, starSvg);
+  stars.push([c, .3 + rnd() * 1.2, rnd() * 10]);
+}
+const starsWrap = starSvg.parentNode;
+reel.on(t => {
+  for (const [c, sp, sd] of stars) c.setAttribute("opacity", (.45 + .55 * (.5 + .5 * Math.sin(t * sp * 2.4 + sd))).toFixed(2));
+  starsWrap.style.transform = `translateY(${-t * 2}px)`;
+});
+
+/* shooting stars */
+const shootSvg = R.svg(layer(2), W, H, "");
+for (const [t0, x, y] of [[9.4, 900, 260], [21.5, 820, 180], [33.2, 980, 340], [45.2, 760, 220], [55.6, 960, 160], [63.4, 700, 300]]) {
+  const g = R.el("g", {}, shootSvg);
+  g.innerHTML = `<line x1="0" y1="0" x2="190" y2="-70" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".9"/><circle r="5" fill="#fff"/>`;
+  reel.on(t => {
+    const p = (t - t0) / 1.1;
+    if (p < 0 || p > 1) { g.setAttribute("opacity", 0); return; }
+    g.setAttribute("opacity", Math.sin(Math.PI * p).toFixed(2));
+    g.setAttribute("transform", `translate(${x - p * 520},${y + p * 190})`);
+  });
+  reel.cue(t0, "whoosh", "shooting star");
+}
+
+/* moon: crescent with glow, it moves per scene */
+const moonL = layer(3);
+const moon = R.svg(moonL, 900, 900, `
+  <circle cx="450" cy="450" r="440" fill="url(#moonGlow)"/>
+  <mask id="cres"><rect width="900" height="900" fill="#fff"/><circle cx="520" cy="400" r="150" fill="#000"/></mask>
+  <circle cx="450" cy="450" r="170" fill="url(#moonFace)" mask="url(#cres)"/>`, { x: -450, y: -450 });
+const MOON = [[0, [540, 620, 1.25]], [2.2, [540, 560, 1.2]], [12, [540, 500, 1.15]], [14.5, [790, 330, .62]],
+  [25, [760, 320, .6]], [26.2, [540, 520, .72]], [37, [540, 500, .75]], [38.4, [250, 340, .62]], [47, [290, 330, .6]],
+  [48.4, [540, 520, .72]], [57, [540, 520, .74]], [58.4, [540, 1050, 1.5]], [66, [540, 1000, 1.55]], [69, [540, 780, 1.2]]];
+reel.on(t => {
+  const [x, y, s] = k(t, MOON);
+  moonL.style.transform = `translate(${x}px,${y + R.wob(t, .05, 2) * 8}px) scale(${s})`;
+  moonL.style.transformOrigin = "0 0";
+  moonL.style.opacity = R.clamp(t / 1.5) * k(t, [[66, 1], [69, 0]]);
+});
+
+/* thin clouds drifting across the moon */
+const clouds = layer(4);
+const cloudSvg = R.svg(clouds, W * 2, H, `<g filter="url(#blur8)" fill="#c9c2ff" opacity=".13">
+  <ellipse cx="300" cy="520" rx="330" ry="40"/><ellipse cx="420" cy="490" rx="200" ry="34"/>
+  <ellipse cx="1300" cy="760" rx="380" ry="46"/><ellipse cx="1180" cy="730" rx="210" ry="38"/>
+  <ellipse cx="1900" cy="420" rx="300" ry="36"/></g>`);
+reel.on(t => { cloudSvg.style.transform = `translateX(${-((t * 14) % 1080)}px)`; });
+
+/* ---------- 3. Desert (الچول): dunes, palms, gazelle ---------- */
+const desert = layer(10);
+const dunePath = (y, amp, seedX, w = 2400) => {
+  let d = `M0 ${H} L0 ${y}`;
+  for (let x = 0; x <= w; x += 60) d += ` L${x} ${(y + Math.sin(x / 360 + seedX) * amp + Math.sin(x / 150 + seedX * 2) * amp * .25).toFixed(1)}`;
+  return d + ` L${w} ${H} Z`;
+};
+const duneBack = R.svg(desert, 2400, H, `<path d="${dunePath(1330, 70, 1)}" fill="#4b3468"/>`);
+const palms = R.svg(desert, 2400, H, [[260, 1290, 1], [430, 1320, .8], [1500, 1270, 1.1], [1700, 1300, .75], [2150, 1290, .9]].map(([x, y, s]) => `
+  <g transform="translate(${x},${y}) scale(${s})" fill="#231640">
+   <path d="M-8 0 Q-22 -160 6 -330 L16 -330 Q-6 -160 10 0 Z"/>
+   ${[-150, -115, -70, -25, 20, 60, 110, 150].map(a => `<path transform="translate(10,-330) rotate(${a})" d="M0 0 Q60 -30 150 18 Q70 -8 0 8 Z"/>`).join("")}
+  </g>`).join(""));
+const duneMid = R.svg(desert, 2400, H, `<path d="${dunePath(1460, 90, 3)}" fill="#33214f"/>`);
+/* gazelle on the near dune crest, in front of the low moon */
+const gazelle = R.svg(desert, 400, 400, `
+  <g fill="#0b0716">
+   <ellipse cx="200" cy="230" rx="88" ry="38"/>
+   <path d="M262 214 Q285 150 300 112 L322 120 Q300 170 290 226 Z"/>
+   <path d="M296 104 Q318 92 346 112 Q352 122 340 126 Q318 126 304 124 Z"/>
+   <path d="M304 106 Q290 50 312 18 Q300 58 316 104 Z"/><path d="M314 104 Q306 54 332 24 Q316 62 324 104 Z"/>
+   <path d="M298 112 L286 92 L300 104 Z"/>
+   <path d="M118 222 Q98 214 96 238 Q104 228 118 236 Z"/>
+   <g class="legF"><rect x="236" y="250" width="11" height="110" rx="5"/></g>
+   <g class="legF2"><rect x="256" y="250" width="11" height="108" rx="5"/></g>
+   <g class="legB"><rect x="140" y="246" width="12" height="112" rx="5"/></g>
+   <g class="legB2"><rect x="162" y="248" width="11" height="110" rx="5"/></g>
+  </g>`, { x: 330, y: 1060 });
+const duneFront = R.svg(desert, 2400, H, `<path d="${dunePath(1600, 70, 5)}" fill="#1a1030"/>`);
+/* drifting sand */
+const sand = R.svg(desert, W, H, "");
+const grains = [];
+for (let i = 0; i < 60; i++) grains.push([R.el("circle", { r: 1 + rnd() * 2.2, fill: "#e8c89a" }, sand), rnd() * W, 1250 + rnd() * 600, 40 + rnd() * 80, rnd() * 9]);
+
+const DES = [[0, 0], [12.4, 0], [14, 1], [24.4, 1], [26, 0], [36.6, 0], [38.2, 1], [46.6, 1], [48.2, 0], [56.6, 0], [58.2, 1], [69, 1]];
+reel.on(t => {
+  const o = k(t, DES);
+  desert.style.opacity = o;
+  desert.style.visibility = o < .01 ? "hidden" : "inherit";
+  const rise = k(t, [[12.4, 260], [15, 0, "soft"]]);
+  const pan = t * 9;
+  duneBack.style.transform = `translate(${-pan * .3 - 400}px,${rise * .6}px)`;
+  palms.style.transform = `translate(${-pan * .3 - 400}px,${rise * .6}px)`;
+  duneMid.style.transform = `translate(${-pan * .6 - 500}px,${rise * .8}px)`;
+  duneFront.style.transform = `translate(${-pan - 600}px,${rise}px)`;
+  /* gazelle: only in the last scene, stands on the crest then lifts its head */
+  const g = R.clamp((t - 58.6) / 1.2);
+  gazelle.style.opacity = g;
+  const walk = t < 62 ? Math.sin(t * 5) : 0;
+  gazelle.style.transform = `translate(${k(t, [[58.6, -120], [62, 40, "out"]])}px, ${k(t, [[0, 360], [58, 360], [58.6, 10]])}px)`;
+  gazelle.querySelectorAll(".legF,.legB2").forEach(l => l.setAttribute("transform", `rotate(${walk * 10} ${l.firstElementChild.getAttribute("x")} 252)`));
+  gazelle.querySelectorAll(".legF2,.legB").forEach(l => l.setAttribute("transform", `rotate(${-walk * 10} ${l.firstElementChild.getAttribute("x")} 252)`));
+  for (const [c, x0, y0, sp, sd] of grains) {
+    const x = ((x0 - t * sp * 3) % W + W) % W;
+    c.setAttribute("cx", x.toFixed(1));
+    c.setAttribute("cy", (y0 + Math.sin(t * 1.3 + sd) * 18).toFixed(1));
+    c.setAttribute("opacity", (.25 + .35 * Math.sin(t * 2 + sd) ** 2).toFixed(2));
+  }
+});
+
+/* ---------- 4. The room: arched window, lantern, rocking cradle ---------- */
+const room = layer(20);
+/* wall with an arched window cut out (the night sky shows through) */
+R.svg(room, W, H, `
+  <path fill-rule="evenodd" fill="url(#wall)" d="M0 0 H${W} V${H} H0 Z M230 960 V470 Q230 200 540 170 Q850 200 850 470 V960 Z"/>
+  <path fill="none" stroke="#c99a4b" stroke-width="16" d="M230 960 V470 Q230 200 540 170 Q850 200 850 470 V960"/>
+  <path fill="none" stroke="#7a5426" stroke-width="6" d="M258 960 V480 Q258 232 540 204 Q822 232 822 480 V960"/>
+  <g stroke="#5a3a1c" stroke-width="10" opacity=".9"><line x1="540" y1="204" x2="540" y2="960"/><line x1="238" y1="640" x2="842" y2="640"/></g>
+  <rect x="190" y="950" width="700" height="36" rx="10" fill="#6b4220"/>
+  <rect x="0" y="1620" width="${W}" height="300" fill="#140a06"/>
+  <path d="M0 1620 H${W}" stroke="#4a2c16" stroke-width="6"/>
+  <g opacity=".5" fill="#7a3b22"><rect x="40" y="1700" width="1000" height="200" rx="20"/></g>
+  <g opacity=".55" fill="none" stroke="#d6a25a" stroke-width="5"><rect x="70" y="1720" width="940" height="160" rx="14"/></g>`);
+/* lantern hanging on the left */
+const lampWrap = R.box(room, 15, 0, 200, 700);
+const lamp = R.svg(lampWrap, 200, 700, `
+  <circle cx="100" cy="520" r="260" fill="url(#lampGlow)" class="glow"/>
+  <line x1="100" y1="0" x2="100" y2="400" stroke="#2a1a0c" stroke-width="4"/>
+  <path d="M70 400 H130 L118 420 H82 Z" fill="#b8862f"/>
+  <path d="M74 420 H126 Q144 500 124 600 H76 Q56 500 74 420 Z" fill="#ffd27a" opacity=".92"/>
+  <g stroke="#8a5a1a" stroke-width="4" fill="none"><path d="M100 420 V600"/><path d="M74 420 Q56 500 76 600"/><path d="M126 420 Q144 500 124 600"/></g>
+  <path d="M72 600 H128 L112 630 H88 Z" fill="#b8862f"/>
+  <ellipse cx="100" cy="520" rx="12" ry="22" fill="#fff4c6" class="flame"/>`);
+/* cradle (كاروك) rocking */
+const cradle = R.svg(room, 640, 420, `
+  <ellipse cx="320" cy="400" rx="280" ry="18" fill="#000" opacity=".45" filter="url(#blur3)"/>
+  <g class="rock">
+   <path d="M40 360 Q320 440 600 360" fill="none" stroke="url(#wood)" stroke-width="22" stroke-linecap="round"/>
+   <rect x="70" y="140" width="500" height="200" rx="40" fill="url(#wood)"/>
+   <g fill="#3e200d" opacity=".55">${[0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => `<rect x="${110 + i * 50}" y="170" width="16" height="150" rx="8"/>`).join("")}</g>
+   <rect x="54" y="120" width="532" height="34" rx="17" fill="#c98a4e"/>
+   <circle cx="70" cy="110" r="26" fill="#c98a4e"/><circle cx="570" cy="110" r="26" fill="#c98a4e"/>
+   <path d="M150 140 Q320 40 490 140 Z" fill="url(#blanket)"/>
+   <circle cx="210" cy="112" r="40" fill="#f2cfa8"/>
+   <path d="M190 112 q8 6 16 0 M216 112 q8 6 16 0" stroke="#6b4226" stroke-width="4" fill="none" stroke-linecap="round"/>
+   <path d="M168 96 Q210 50 252 96 Q210 74 168 96 Z" fill="#e9d3f2"/>
+   <g fill="#e5b04a"><circle cx="320" cy="250" r="16"/><circle cx="240" cy="250" r="10"/><circle cx="400" cy="250" r="10"/></g>
+  </g>`, { x: 284, y: 1510 });
+cradle.style.transformOrigin = "0 0"; cradle.style.transform = "scale(.8)";
+const rock = cradle.querySelector(".rock");
+/* Zzz-like glowing motes rising from the cradle */
+const motes = R.svg(room, W, H, "");
+const moteList = [];
+for (let i = 0; i < 26; i++) moteList.push([R.el("circle", { r: 3 + rnd() * 5, fill: "#ffe39a", filter: "url(#blur3)" }, motes), 300 + rnd() * 480, rnd() * 8, .5 + rnd()]);
+
+const ROOM = [[0, 0], [24.4, 0], [26, 1], [36.6, 1], [38.2, 0], [46.6, 0], [48.2, 1], [56.6, 1], [58.2, 0]];
+reel.on(t => {
+  const o = k(t, ROOM);
+  room.style.opacity = o;
+  room.style.visibility = o < .01 ? "hidden" : "inherit";
+  const z = 1 + ((t > 46 ? t - 48 : t - 26) * .004);
+  room.style.transform = `scale(${z})`;
+  room.style.transformOrigin = "50% 70%";
+  const sw = Math.sin(t * 1.9) * 5;
+  rock.setAttribute("transform", `rotate(${sw.toFixed(2)} 320 380)`);
+  lampWrap.style.transform = `rotate(${Math.sin(t * .9) * 1.6}deg)`;
+  lampWrap.style.transformOrigin = "100px 0";
+  const fl = .85 + .15 * Math.sin(t * 13) * Math.sin(t * 7.3);
+  lamp.querySelector(".glow").setAttribute("opacity", fl.toFixed(2));
+  lamp.querySelector(".flame").setAttribute("ry", (20 + 4 * Math.sin(t * 11)).toFixed(1));
+  for (const [c, x0, sd, sp] of moteList) {
+    const p = ((t * .12 * sp + sd / 8) % 1);
+    c.setAttribute("cx", (x0 + Math.sin(t * sp + sd) * 40).toFixed(1));
+    c.setAttribute("cy", (1560 - p * 900).toFixed(1));
+    c.setAttribute("opacity", (Math.sin(Math.PI * p) * .8).toFixed(2));
+  }
+});
+
+/* ---------- 5. Soft vignette over everything ---------- */
+layer(40, { background: "radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 45%, rgba(0,0,0,.55) 100%)", pointerEvents: "none" });
+
+/* ---------- 6. Title + lyrics (karaoke: words light up gold as they are sung) ---------- */
+const title = R.box(S, 0, 1080, W, 300, { zIndex: 50, textAlign: "center", color: "#ffe9b5" });
+title.innerHTML = `<div style="font:190px Lalezar;text-shadow:0 0 40px rgba(255,200,110,.55),0 8px 24px rgba(0,0,0,.6)">دللول</div>
+  <div style="font:600 46px 'IBM Plex Sans Arabic';opacity:.8;margin-top:-10px">تهويدة عراقية</div>`;
+reel.on(t => {
+  const o = Math.min(R.fade(t, .2, 1), 1 - R.fade(t, 2.1, .5)) + Math.min(R.fade(t, 66, 1), 1);
+  title.style.opacity = o;
+  title.style.transform = `translateY(${(1 - Math.min(1, R.fade(t, .2, 1.2))) * 30}px) scale(${1 + t * .01})`;
+});
+
+const lyricBox = R.box(S, 60, 1260, W - 120, 330, {
+  zIndex: 60, display: "flex", flexWrap: "wrap", justifyContent: "center", alignContent: "center",
+  gap: "6px 30px", direction: "rtl", font: "116px Lalezar", lineHeight: "1.35",
+});
+const lines = LYRICS.map((ln, li) => {
+  const row = R.box(lyricBox, 0, 0, 0, 0, { position: "absolute", inset: "0", width: "auto", height: "auto",
+    display: "flex", flexWrap: "wrap", justifyContent: "center", alignContent: "center", gap: "0 30px", direction: "rtl" });
+  const spans = ln.words.map((w, i) => R.el("span", { text: w, style: { display: "inline-block", transformOrigin: "50% 75%" } }, row));
+  ln.times.forEach(tt => reel.cue(tt, "word"));
+  return { row, spans, ln };
+});
+reel.on(t => {
+  for (const { row, spans, ln } of lines) {
+    const t0 = ln.times[0] - .7, t1 = ln.end;
+    const o = Math.min(R.fade(t, t0, .6), 1 - R.fade(t, t1, .7));
+    row.style.opacity = o;
+    row.style.visibility = o <= 0 ? "hidden" : "inherit";
+    if (o <= 0) continue;
+    lyricBox.style.top = (1260 - 250 * k(t, ROOM)) + "px";
+    row.style.transform = `translateY(${(1 - R.fade(t, t0, .8)) * 40 - R.fade(t, t1, .7) * 30}px)`;
+    spans.forEach((sp, i) => {
+      const lit = R.fade(t, ln.times[i] - .05, .35);
+      const p = R.pop(t, ln.times[i] - .05, .4);
+      sp.style.color = lit > .5 ? "#ffd77a" : "rgba(255,248,232,.55)";
+      sp.style.textShadow = lit > .5
+        ? "0 0 34px rgba(255,190,90,.75), 0 6px 18px rgba(0,0,0,.7)"
+        : "0 6px 18px rgba(0,0,0,.7)";
+      sp.style.transform = `scale(${1 + .1 * Math.sin(Math.PI * Math.min(p, 1)) * (t < ln.times[i] + .6 ? 1 : 0)})`;
+    });
+  }
+});
+
+/* fade from and to black */
+const black = layer(90, { background: "#000" });
+reel.on(t => { black.style.opacity = Math.max(1 - R.fade(t, 0, .8), R.fade(t, 67.6, 1.4)); });
+</script>
+</body>
+</html>
