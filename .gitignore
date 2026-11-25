@@ -8,3 +8,5 @@ raw1/chk2/
 raw1/*.jpg
 !raw1/final_check.jpg
 raw1/cut_filter.txt
+raw1/*.png
+raw1/music_raw.wav
