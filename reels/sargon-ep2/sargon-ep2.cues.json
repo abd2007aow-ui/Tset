@@ -1,0 +1,97 @@
+[
+ {
+  "t": 1.35,
+  "kind": "land",
+  "note": "crown"
+ },
+ {
+  "t": 1.35,
+  "kind": "boom",
+  "note": ""
+ },
+ {
+  "t": 2.1,
+  "kind": "whoosh",
+  "note": ""
+ },
+ {
+  "t": 7,
+  "kind": "whoosh",
+  "note": ""
+ },
+ {
+  "t": 7.4,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 12,
+  "kind": "whoosh",
+  "note": ""
+ },
+ {
+  "t": 13.4,
+  "kind": "pop",
+  "note": ""
+ },
+ {
+  "t": 17,
+  "kind": "whoosh",
+  "note": ""
+ },
+ {
+  "t": 21.2,
+  "kind": "hit",
+  "note": ""
+ },
+ {
+  "t": 23,
+  "kind": "whoosh",
+  "note": ""
+ },
+ {
+  "t": 24.35,
+  "kind": "land",
+  "note": "chain"
+ },
+ {
+  "t": 24.6,
+  "kind": "pop",
+  "note": "sargon"
+ },
+ {
+  "t": 29,
+  "kind": "whoosh",
+  "note": ""
+ },
+ {
+  "t": 30.6,
+  "kind": "pop",
+  "note": "splash"
+ },
+ {
+  "t": 34,
+  "kind": "whoosh",
+  "note": ""
+ },
+ {
+  "t": 38,
+  "kind": "hit",
+  "note": ""
+ },
+ {
+  "t": 39,
+  "kind": "whoosh",
+  "note": ""
+ },
+ {
+  "t": 39.3,
+  "kind": "pop",
+  "note": "king"
+ },
+ {
+  "t": 42.6,
+  "kind": "hit",
+  "note": ""
+ }
+]

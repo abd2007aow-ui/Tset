@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>من ساقي إلى ملك العالم - حكايات من أرض الرافدين ج2</title>
+<!-- Maven Reels kit. On-screen-text reel, no voiceover: times follow the script table (0-45 s). -->
+<script src="../../.claude/skills/maven-reels/kit/reel.js"></script>
+</head>
+<body>
+<script>
+const END = 45;
+const reel = R.reel({ w: 1080, h: 1920, fps: 30, lang: "ar", duration: END, bg: "#120c08" });
+const S = reel.stage, k = R.k, clamp = R.clamp;
+const GOLD = "#f2c14e", CREAM = "#fff3dc";
+const FONT = "Lalezar, 'Noto Color Emoji'";
+
+/* ---------- helpers ---------- */
+/* a full-screen scene layer: fades in at t0, gone after t1, slow push-in (ken burns) */
+function scene(t0, t1, bg, push = [1, 1.08], origin = "50% 60%") {
+  const L = R.box(S, 0, 0, 1080, 1920, { background: bg, overflow: "hidden", transformOrigin: origin });
+  reel.on(t => {
+    const vis = t >= t0 - .001 && t < t1 + .35;
+    L.style.visibility = vis ? "inherit" : "hidden";
+    if (!vis) return;
+    L.style.opacity = t0 === 0 ? 1 : R.fade(t, t0, .3);
+    const z = k(t, [[t0, push[0]], [t1 + .35, push[1], "linear"]]);
+    L.style.transform = `scale(${z})`;
+  });
+  if (t0 > 0) reel.cue(t0, "whoosh");
+  return L;
+}
+/* on-screen line: words pop in one after another and stay for the whole scene */
+function line(t0, t1, text, opt = {}) {
+  const y = opt.y ?? 250, size = opt.size || 76;
+  const node = R.box(S, 60, y, 960, 600, { zIndex: 60, textAlign: "center", font: `${size}px ${FONT}`, lineHeight: 1.42, color: CREAM, direction: "rtl",
+    textShadow: "0 5px 0 rgba(0,0,0,.35), 0 10px 30px rgba(0,0,0,.75)" });
+  const words = text.split(/\s+/).filter(Boolean);
+  const step = Math.min(.13, (opt.within || (t1 - t0) * .45) / words.length);
+  const spans = words.map((w, i) => {
+    const s = R.el("span", { text: w, style: { display: "inline-block", transformOrigin: "50% 70%", margin: "0 .14em" } }, node);
+    if (opt.emph && opt.emph.includes(w.replace(/[…،:.«»]/g, ""))) s.style.color = GOLD;
+    return [s, t0 + .08 + i * step];
+  });
+  reel.on(t => {
+    const out = 1 - R.fade(t, t1 - .05, .25);
+    node.style.visibility = t < t0 || out <= 0 ? "hidden" : "inherit";
+    for (const [s, at] of spans) {
+      const p = R.pop(t, at, .26);
+      s.style.opacity = clamp(p * 2) * out;
+      s.style.transform = `translateY(${(1 - p) * 26}px) scale(${.7 + .3 * p})`;
+    }
+  });
+  return node;
+}
+const sv = (parent, w, h, inner, x = 0, y = 0) => R.svg(parent, w, h, inner, { x, y });
+function glow(parent, x, y, r, col, t0, t1, pulse = .15) {
+  const g = R.box(parent, x - r, y - r, r * 2, r * 2, { borderRadius: "50%", background: `radial-gradient(${col}, transparent 68%)` });
+  reel.on(t => { g.style.opacity = (t < t0 ? 0 : R.fade(t, t0, .5)) * (1 - pulse + pulse * Math.sin(t * 3)); });
+  return g;
+}
+/* people, dressed for Sumer */
+const CROWN = `<g filter="url(#soft)"><path d="M28 36 L30 4 L45 22 L60 -4 L75 22 L90 4 L92 36Z" fill="#f2c14e" stroke="#b8862a" stroke-width="3"/><circle cx="60" cy="18" r="6" fill="#c0392b"/></g>`;
+function sumer(parent, x, y, s, o = {}) {
+  const p = R.person(reel, parent, x, y, { shirt: o.shirt || "#e9dcbf", skin: o.skin || R.SKIN[2], hair: o.hair || "#1d130c", beard: o.beard, face: o.face, pants: o.pants || "#7a5a3a", s });
+  if (o.robe) sv(p.root, 120, 300, `<path d="M28 150 Q60 140 92 150 L104 286 Q60 296 16 286Z" fill="${R.clay(o.robe)}"/><path d="M28 150 L92 250" stroke="#f2c14e" stroke-width="6" opacity=".8"/>`);
+  if (o.band) sv(p.root, 120, 300, `<rect x="16" y="44" width="88" height="11" rx="5" fill="${o.band}"/>`);
+  if (o.crown) sv(p.root, 120, 300, CROWN);
+  return p;
+}
+/* gold dust floating in every scene */
+function dust(parent, n, col = "#ffd98a", seed = 1) {
+  let s = "";
+  for (let i = 0; i < n; i++) s += `<circle cx="${(i * 197 + seed * 61) % 1080}" cy="${(i * 331 + seed * 17) % 1920}" r="${1.5 + (i % 4)}" fill="${col}" opacity="${.25 + (i % 5) * .1}"/>`;
+  const d = sv(parent, 1080, 1920, s);
+  reel.on(t => { d.style.transform = `translateY(${-(t * 18) % 60}px)`; });
+  return d;
+}
+const vignette = R.box(S, 0, 0, 1080, 1920, { zIndex: 40, pointerEvents: "none",
+  background: "linear-gradient(rgba(0,0,0,.78) 0%, rgba(0,0,0,.35) 30%, transparent 44%, transparent 78%, rgba(0,0,0,.55) 100%)" });
+
+/* ======== 1. 0-2 s  HOOK: poor cupbearer in a palace, a crown drops on him ======== */
+{
+  const L = scene(0, 2.1, "linear-gradient(#1c120b, #4a2c16 60%, #2a1a0e)", [1.06, 1.16]);
+  for (let i = 0; i < 4; i++) sv(L, 140, 1300, `<rect x="20" y="0" width="100" height="1300" fill="${R.clay("#8a5a2e", "h")}"/><rect x="0" y="0" width="140" height="60" fill="#a8743c"/><rect x="0" y="1240" width="140" height="60" fill="#a8743c"/>`, -30 + i * 330, 380);
+  for (let i = 0; i < 3; i++) glow(L, 200 + i * 340, 700, 160, "rgba(255,180,80,.55)", 0, 3);
+  sv(L, 1080, 350, `<rect width="1080" height="350" fill="#2b1a0d"/><rect width="1080" height="14" fill="#a8743c"/>`, 0, 1570);
+  const p = sumer(L, 540, 1640, 2.3, { shirt: "#cbb894", band: "#8b2d1f" });
+  const jug = sv(p.root, 120, 300, `<g filter="url(#soft)"><path d="M88 150 q-14 0 -14 22 q0 26 18 30 h16 q18 -4 18 -30 q0 -22 -14 -22z" fill="${R.clay("#b5652e")}"/><path d="M118 168 q22 4 18 -12" stroke="#8a4a1e" stroke-width="5" fill="none"/></g>`);
+  const pour = sv(p.root, 120, 300, `<path d="M90 200 q-6 30 -4 80" stroke="#7fc8e8" stroke-width="5" fill="none" stroke-linecap="round" opacity=".85"/>`);
+  reel.on(t => { pour.style.opacity = .6 + .4 * Math.sin(t * 20); });
+  const crown = sv(L, 300, 220, `<g transform="scale(2.4)">${CROWN}</g>`, 396, 820);
+  glow(L, 540, 860, 260, "rgba(255,210,90,.6)", .9, 3, .25);
+  R.drop(reel, crown, .9, { height: 420, note: "crown" });
+  reel.cue(1.35, "boom");
+  line(0, 2.1, "جان يصبّ الماي للملك… وصار ملك العالم 👑", { emph: ["ملك", "العالم"], within: .9, size: 80 });
+}
+
+/* ======== 2. 2-7 s  reed basket on the Euphrates ======== */
+{
+  const L = scene(2.1, 7, "linear-gradient(#2c2a55 0%, #a2577a 38%, #f2a46b 55%, #f6c48a 60%)", [1, 1.1]);
+  glow(L, 540, 1060, 240, "rgba(255,200,120,.9)", 2.1, 8, .05);
+  sv(L, 1080, 900, `<rect y="0" width="1080" height="900" fill="#2f6f7a"/>`, 0, 1080);
+  const waves = [];
+  for (let r = 0; r < 9; r++) {
+    let d = ""; for (let x = -200; x < 1400; x += 80) d += `M${x} 10 q20 -10 40 0 q20 10 40 0 `;
+    const w = sv(L, 1400, 20, `<path d="${d}" stroke="${r % 2 ? "#8fd1d6" : "#f6c48a"}" stroke-width="4" fill="none" opacity="${.25 + r * .05}"/>`, 0, 1110 + r * 85);
+    waves.push([w, r]);
+  }
+  reel.on(t => { for (const [w, r] of waves) w.style.transform = `translateX(${((t * (20 + r * 8)) % 80) - 80}px)`; });
+  const reeds = (x, flip) => {
+    let s = ""; for (let i = 0; i < 9; i++) s += `<path d="M${20 + i * 18} 600 Q${10 + i * 18} 300 ${30 + i * 20} ${40 + (i % 3) * 50}" stroke="${i % 2 ? "#2d4a22" : "#3e5f2c"}" stroke-width="9" fill="none"/><ellipse cx="${30 + i * 20}" cy="${60 + (i % 3) * 50}" rx="9" ry="30" fill="#5a3a1c"/>`;
+    const n = sv(L, 220, 600, s, x, 1000); n.style.transformOrigin = "50% 100%"; if (flip) n.style.scale = "-1 1";
+    reel.on(t => { n.style.transform = `rotate(${Math.sin(t * 1.6 + x) * 3}deg)`; });
+  };
+  reeds(-40); reeds(900, true); reeds(-10, false);
+  const basket = sv(L, 300, 200, `<g filter="url(#soft)"><path d="M20 70 Q150 200 280 70 Z" fill="${R.clay("#c89a52")}"/>${[0, 1, 2, 3, 4, 5].map(i => `<path d="M${40 + i * 40} 76 Q${50 + i * 40} 130 ${44 + i * 40} 150" stroke="#8a6230" stroke-width="5" fill="none"/>`).join("")}<ellipse cx="150" cy="72" rx="132" ry="26" fill="#a87a3c"/><ellipse cx="150" cy="66" rx="110" ry="18" fill="#efe2c4"/><circle cx="150" cy="44" r="30" fill="${R.clay(R.SKIN[1])}"/><path d="M130 40 q20 -24 40 0" fill="#2b1d14"/><circle cx="140" cy="48" r="3.5" fill="#2a1a10"/><circle cx="160" cy="48" r="3.5" fill="#2a1a10"/></g>`, 0, 1180);
+  reel.on(t => { const x = k(t, [[2.1, 60], [7.3, 700, "linear"]]); basket.style.transform = `translate(${x}px, ${Math.sin(t * 2.4) * 12}px) rotate(${Math.sin(t * 1.8) * 5}deg)`; });
+  dust(L, 20, "#ffe0b0", 2);
+  line(2.1, 7, "تقول الأسطورة: لگوه طفل بسلة بالفرات… ماكو أحد يعرف أصله", { emph: ["بالفرات", "أصله"] });
+}
+
+/* ======== 3. 7-12 s  cupbearer of Ur-Zababa, king of Kish ======== */
+{
+  const L = scene(7, 12, "linear-gradient(#2a170c, #5e3519 70%, #3a2210)", [1, 1.08]);
+  let bricks = ""; for (let r = 0; r < 26; r++) for (let c = 0; c < 9; c++) bricks += `<rect x="${c * 130 - (r % 2) * 65}" y="${r * 52}" width="124" height="46" rx="4" fill="${(r + c) % 5 ? "#6e4123" : "#7c4a28"}"/>`;
+  sv(L, 1080, 1360, bricks, 0, 250);
+  sv(L, 1080, 400, `<rect width="1080" height="400" fill="#2e1a0c"/><rect width="1080" height="16" fill="#a8743c"/>`, 0, 1600);
+  sv(L, 220, 360, `<path d="M0 0 h220 v300 l-110 60 l-110 -60z" fill="#7a1f1f"/><path d="M110 70 l25 50 h-50z M60 170 h100" stroke="#f2c14e" stroke-width="8" fill="#f2c14e"/>`, 700, 560);
+  const throne = sv(L, 360, 560, `<g filter="url(#soft)"><rect x="40" y="0" width="280" height="420" rx="30" fill="${R.clay("#9c6a2a")}"/><rect x="70" y="30" width="220" height="360" rx="20" fill="#7a1f1f"/><rect x="0" y="380" width="360" height="120" rx="20" fill="${R.clay("#b8862a")}"/><rect x="30" y="490" width="40" height="70" fill="#7a5226"/><rect x="290" y="490" width="40" height="70" fill="#7a5226"/></g>`, 600, 1060);
+  const king = sumer(L, 780, 1640, 1.75, { shirt: "#5b2a6e", robe: "#5b2a6e", beard: true, crown: true, skin: R.SKIN[1], hair: "#3a2414" });
+  king.face(-1);
+  const sar = sumer(L, 160, 1660, 1.7, { shirt: "#e2d3b0", band: "#8b2d1f" });
+  sar.move(7.2, 9, 230);
+  const cup = sv(sar.root, 120, 300, `<g filter="url(#soft)"><path d="M84 160 h40 q-4 30 -20 32 q-16 -2 -20 -32z" fill="${R.clay("#f2c14e")}"/><rect x="100" y="190" width="8" height="18" fill="#b8862a"/><ellipse cx="104" cy="210" rx="14" ry="4" fill="#b8862a"/></g>`);
+  R.popIn(reel, cup, 7.4, { origin: "80% 60%" });
+  reel.on(t => { sar.arm.style.transform = t > 9 ? `rotate(${-55 + Math.sin(t * 2) * 3}deg)` : sar.arm.style.transform; cup.style.transform = t > 9 ? `translate(10px,-40px)` : cup.style.transform; });
+  king.waveAt(10.2, .8);
+  dust(L, 18, "#ffcf7a", 3);
+  line(7, 12, "كبر وصار ساقي عند أور-زبابا، ملك كيش", { emph: ["ساقي", "كيش"] });
+}
+
+/* ======== 4. 12-17 s  he looks at the throne ======== */
+{
+  const L = scene(12, 17, "radial-gradient(circle at 75% 55%, #6b4514, #1b1008 60%)", [1, 1.16], "70% 55%");
+  const rays = sv(L, 1400, 1400, Array.from({ length: 18 }, (_, i) => `<path d="M700 700 L${700 + 900 * Math.cos(i / 18 * 6.283)} ${700 + 900 * Math.sin(i / 18 * 6.283)} L${700 + 900 * Math.cos((i + .4) / 18 * 6.283)} ${700 + 900 * Math.sin((i + .4) / 18 * 6.283)}Z" fill="#f2c14e" opacity=".14"/>`).join(""), 200, 300);
+  reel.on(t => { rays.style.transform = `rotate(${t * 6}deg)`; });
+  glow(L, 900, 1000, 360, "rgba(255,200,80,.7)", 12.3, 18, .2);
+  sv(L, 360, 560, `<g filter="url(#soft)"><rect x="40" y="0" width="280" height="420" rx="30" fill="${R.clay("#f2c14e")}"/><rect x="70" y="30" width="220" height="360" rx="20" fill="#7a1f1f"/><circle cx="180" cy="60" r="26" fill="#c0392b" stroke="#fff3c0" stroke-width="6"/><rect x="0" y="380" width="360" height="120" rx="20" fill="${R.clay("#e0a92a")}"/></g>`, 720, 760);
+  const p = sumer(L, 300, 2300, 3.8, { shirt: "#e2d3b0", band: "#8b2d1f" });
+  const glint = sv(p.root, 120, 300, `<circle cx="47" cy="70" r="3" fill="#ffe9a8"/><circle cx="77" cy="70" r="3" fill="#ffe9a8"/>`);
+  reel.on(t => { glint.style.opacity = .4 + .6 * Math.abs(Math.sin(t * 4)); p.body.style.transform = `translateX(${k(t, [[12, -4], [14, 6]])}px)`; });
+  R.popIn(reel, glint, 13.4, { origin: "50% 25%" });
+  dust(L, 30, "#ffd98a", 4);
+  line(12, 17, "بس هذا الساقي… جان عنده حلم أكبر من القصر", { emph: ["حلم", "أكبر"] });
+}
+
+/* ======== 5. 17-23 s  the army: 5400 men who ate with him ======== */
+{
+  const L = scene(17, 23, "linear-gradient(#3a2a4a 0%, #c06b3a 45%, #e6a35a 58%)", [1.02, 1.1]);
+  glow(L, 820, 1060, 200, "rgba(255,190,110,.9)", 17, 24, .05);
+  sv(L, 1080, 900, `<rect width="1080" height="900" fill="#b9874e"/><path d="M0 40 Q300 0 600 40 T1080 30 V0 H0Z" fill="#a97a44"/>`, 0, 1080);
+  const army = R.box(L, 0, 0, 1080, 1920);
+  const shirts = ["#8b2d1f", "#6e4a2a", "#7c3a1a", "#5b3a20"];
+  for (let r = 0; r < 4; r++) for (let i = 0; i < 9; i++) {
+    const x = -260 + i * 130 + (r % 2) * 60, y = 1240 + r * 110, s = .75 + r * .18;
+    const p = sumer(army, x, y, s, { shirt: shirts[(i + r) % 4], band: "#2b1d14", skin: R.SKIN[(i + r) % 4] });
+    sv(p.root, 120, 300, `<rect x="104" y="-60" width="6" height="250" fill="#5a3a1c"/><path d="M107 -90 l10 32 h-20z" fill="#c9c9c9"/>`);
+    sv(p.root, 120, 300, `<ellipse cx="22" cy="170" rx="22" ry="34" fill="${R.clay("#9c6a2a")}" stroke="#5a3a1c" stroke-width="3"/>`);
+    p.move(17, 23.4, 260);
+  }
+  const hero = sumer(L, 560, 1780, 1.6, { shirt: "#e2d3b0", band: "#c0392b" });
+  sv(hero.root, 120, 300, `<path d="M100 196 L120 40" stroke="#dcdcdc" stroke-width="9" stroke-linecap="round"/><rect x="92" y="186" width="22" height="10" fill="#b8862a"/>`);
+  hero.move(17, 23.4, 220);
+  hero.wave.push([19.5, 3.5]);
+  const flag = sv(L, 200, 200, `<path d="M10 0 v200" stroke="#5a3a1c" stroke-width="8"/><path d="M14 6 q60 -14 120 10 q-40 30 -120 40z" fill="#c0392b"/>`, 420, 1300);
+  reel.on(t => { flag.style.transform = `translateX(${k(t, [[17, 0], [23.4, 220, "linear"]])}px) skewY(${Math.sin(t * 4) * 3}deg)`; });
+  const dustCloud = sv(L, 1080, 300, `<ellipse cx="300" cy="200" rx="400" ry="90" fill="#e8c08a" opacity=".35"/><ellipse cx="700" cy="230" rx="380" ry="70" fill="#e8c08a" opacity=".3"/>`, 0, 1600);
+  reel.on(t => { dustCloud.style.transform = `translateX(${Math.sin(t) * 30}px)`; });
+  const num = R.box(S, 0, 760, 1080, 200, { zIndex: 61, textAlign: "center", font: `190px ${FONT}`, color: GOLD, textShadow: "0 8px 0 rgba(0,0,0,.35), 0 0 50px rgba(255,190,60,.6)" });
+  R.count(reel, num, [[19.2, 0], [21.2, 5400, "out"]]);
+  reel.on(t => { num.style.visibility = t >= 19.2 && t < 23 ? "inherit" : "hidden"; num.style.transform = `scale(${t > 21.2 ? 1 + .12 * Math.max(0, 1 - (t - 21.2) * 4) : 1})`; });
+  reel.cue(21.2, "hit");
+  line(17, 23, "صار قائد… وجمع جيشًا ما شافت مثله الدنيا: 5400 مقاتل يأكلون ويّاه كل يوم", { emph: ["قائد", "5400"], size: 70, y: 230 });
+}
+
+/* ======== 6. 23-29 s  Lugal-zagesi in a neck-stock at Enlil's gate ======== */
+{
+  const L = scene(23, 29, "linear-gradient(#0f1424, #26304e 55%, #3a2a2a)", [1.08, 1]);
+  sv(L, 1080, 900, `<path d="M140 900 V560 H260 V380 H380 V220 H700 V380 H820 V560 H940 V900Z" fill="${R.clay("#7a5a3a")}"/><path d="M420 900 V520 Q540 400 660 520 V900Z" fill="#1a1008"/><rect x="360" y="190" width="360" height="40" fill="#a8743c"/>`, 0, 820);
+  for (const x of [330, 750]) { sv(L, 40, 120, `<rect x="14" y="30" width="12" height="90" fill="#5a3a1c"/>`, x, 1120); const f = glow(L, x + 20, 1130, 90, "rgba(255,150,60,.95)", 23, 30, .35); }
+  sv(L, 1080, 300, `<rect width="1080" height="300" fill="#2a1e18"/>`, 0, 1680);
+  const lz = sumer(L, 540, 1700, 1.9, { shirt: "#3c4f86", robe: "#2f3b6a", beard: true, face: "sad", skin: R.SKIN[1], hair: "#2b1d14" });
+  sv(lz.root, 120, 300, `<g filter="url(#soft)"><rect x="-20" y="108" width="160" height="26" rx="8" fill="${R.clay("#6b4a2a")}"/><circle cx="-8" cy="121" r="6" fill="#333"/><circle cx="128" cy="121" r="6" fill="#333"/></g><path d="M20 196 q40 30 80 0" stroke="#8a8a8a" stroke-width="6" fill="none" stroke-dasharray="10 6"/>`);
+  R.drop(reel, lz.root.lastElementChild, 23.9, { height: 200, note: "chain" });
+  reel.on(t => { lz.root.style.marginTop = `${k(t, [[23, 0], [24.4, 30]])}px`; });
+  const sar = sumer(L, 860, 1730, 1.6, { shirt: "#e2d3b0", band: "#c0392b" });
+  sar.face(-1);
+  sv(sar.root, 120, 300, `<rect x="104" y="-60" width="7" height="260" fill="#5a3a1c"/><path d="M107 -94 l12 36 h-24z" fill="#ddd"/>`);
+  sar.show(24.6); reel.cue(24.6, "pop", "sargon");
+  dust(L, 22, "#c9d6ff", 5);
+  line(23, 29, "هزم أقوى ملك بسومر، لوگال زاگيزي… وجابه مقيّد لبوابة معبد إنليل", { emph: ["لوگال", "زاگيزي", "مقيّد"], size: 72 });
+}
+
+/* ======== 7. 29-34 s  washing his weapons in the sea ======== */
+{
+  const L = scene(29, 34, "linear-gradient(#1f3a66 0%, #e48a5a 52%, #f6c48a 60%)", [1.1, 1.02]);
+  glow(L, 540, 1100, 220, "rgba(255,220,150,.95)", 29, 35, .05);
+  sv(L, 1080, 900, `<rect width="1080" height="900" fill="#1f6f86"/>`, 0, 1100);
+  const waves = [];
+  for (let r = 0; r < 8; r++) {
+    let d = ""; for (let x = -200; x < 1400; x += 120) d += `M${x} 14 q30 -16 60 0 q30 16 60 0 `;
+    const w = sv(L, 1400, 30, `<path d="${d}" stroke="#bfe8ee" stroke-width="${3 + r}" fill="none" opacity="${.3 + r * .06}"/>`, 0, 1130 + r * 70);
+    waves.push([w, r]);
+  }
+  reel.on(t => { for (const [w, r] of waves) w.style.transform = `translateX(${-((t * (30 + r * 12)) % 120)}px)`; });
+  sv(L, 1080, 300, `<path d="M0 120 Q540 40 1080 120 V300 H0Z" fill="#d9b98a"/>`, 0, 1660);
+  const sar = sumer(L, 540, 1820, 2.1, { shirt: "#e2d3b0", band: "#c0392b" });
+  sv(sar.root, 120, 300, `<path d="M98 196 L60 300" stroke="#e6e6e6" stroke-width="10" stroke-linecap="round"/><rect x="88" y="186" width="24" height="12" fill="#b8862a"/>`);
+  const surge = sv(L, 1080, 260, `<path d="M0 120 Q200 40 400 100 T800 90 T1080 110 V260 H0Z" fill="#7fd0de" opacity=".8"/><path d="M0 120 Q200 40 400 100 T800 90 T1080 110" stroke="#fff" stroke-width="10" fill="none" opacity=".9"/>`, 0, 1640);
+  reel.on(t => { const ph = ((t - 29) % 1.7) / 1.7; surge.style.transform = `translateY(${120 - Math.sin(ph * Math.PI) * 150}px)`; surge.style.opacity = Math.sin(ph * Math.PI); });
+  for (let i = 0; i < 7; i++) { const sp = sv(L, 40, 40, `<circle cx="20" cy="20" r="${8 + i % 3 * 4}" fill="#fff" opacity=".85"/>`, 380 + i * 50, 1640 - (i % 3) * 40); R.popIn(reel, sp, 30.6 + i * .04, { origin: "50% 50%", out: 31.3, sound: i === 0, note: "splash" }); }
+  line(29, 34, "ووصل للخليج… وغسل سلاحه بالبحر ⚔️🌊", { emph: ["للخليج", "بالبحر"], size: 80 });
+}
+
+/* ======== 8. 34-39 s  the map fills from the Gulf to Syria ======== */
+{
+  const L = scene(34, 39, "radial-gradient(circle, #ecd6a4, #b88f58)", [1, 1.06]);
+  const tw = 1080, mapY = 640;
+  const m = sv(L, tw, 1100, `
+    <defs><clipPath id="reveal"><rect id="revRect" x="0" y="1100" width="1080" height="1100"/></clipPath></defs>
+    <rect width="1080" height="1100" fill="none"/>
+    <path d="M0 0 H170 Q150 160 120 300 Q90 380 0 420Z" fill="#4f8fa3"/>
+    <path d="M700 900 Q820 840 1080 800 V1100 H860 Q760 1020 700 900Z" fill="#4f8fa3"/>
+    <g clip-path="url(#reveal)"><path d="M150 140 Q380 40 600 80 Q760 300 880 760 Q880 880 820 960 Q720 960 620 860 Q420 600 210 420 Q140 300 150 140Z" fill="#d9a12a" opacity=".55" stroke="#8b5a12" stroke-width="6" stroke-dasharray="18 10"/></g>
+    <path d="M330 40 Q260 260 440 480 Q620 700 720 920" stroke="#2f6f8a" stroke-width="12" fill="none"/>
+    <path d="M560 40 Q560 300 690 560 Q760 760 760 930" stroke="#2f6f8a" stroke-width="10" fill="none"/>
+    <g font-family="Lalezar" font-size="50" fill="#4a2c10" text-anchor="middle">
+      <text x="930" y="1000">الخليج</text><text x="270" y="200">سوريا</text><text x="380" y="420" font-size="40">الفرات</text><text x="740" y="420" font-size="40">دجلة</text></g>
+    <g id="akkad" font-family="Lalezar" font-size="46" fill="#8b1f1f" text-anchor="middle"><circle cx="600" cy="610" r="16" fill="#8b1f1f"/><text x="600" y="580">أكد ؟</text></g>`, 0, mapY);
+  const rect = m.querySelector("#revRect");
+  reel.on(t => { rect.setAttribute("y", k(t, [[34.4, 1100], [37, 0, "inOut"]])); });
+  const yrs = R.box(S, 0, 1640, 1080, 200, { zIndex: 61, textAlign: "center", font: `150px ${FONT}`, color: "#fff3dc", direction: "rtl", textShadow: "0 8px 0 rgba(0,0,0,.4), 0 0 40px rgba(0,0,0,.5)" });
+  const yn = R.el("span", { style: { color: GOLD } }, yrs); R.el("span", { text: " سنة" }, yrs);
+  R.count(reel, yn, [[36.4, 0], [38, 56, "out"]]);
+  reel.on(t => { yrs.style.visibility = t >= 36.4 && t < 39 ? "inherit" : "hidden"; });
+  reel.cue(38, "hit");
+  line(34, 39, "حكم من الخليج لحد سوريا… 56 سنة", { emph: ["الخليج", "سوريا", "56"], size: 82 });
+}
+
+/* ======== 9. 39-45 s  golden throne + ending ======== */
+{
+  const L = scene(39, 45.5, "radial-gradient(circle at 50% 60%, #7a4d12, #1a0f06 65%)", [1.14, 1]);
+  const rays = sv(L, 1600, 1600, Array.from({ length: 24 }, (_, i) => `<path d="M800 800 L${800 + 1000 * Math.cos(i / 24 * 6.283)} ${800 + 1000 * Math.sin(i / 24 * 6.283)} L${800 + 1000 * Math.cos((i + .45) / 24 * 6.283)} ${800 + 1000 * Math.sin((i + .45) / 24 * 6.283)}Z" fill="#f2c14e" opacity=".16"/>`).join(""), -260, 500);
+  reel.on(t => { rays.style.transform = `rotate(${-t * 5}deg)`; });
+  glow(L, 540, 1300, 420, "rgba(255,200,80,.6)", 39, 46, .2);
+  sv(L, 1080, 300, `<rect y="0" width="1080" height="20" fill="#b8862a"/><rect y="20" width="1080" height="280" fill="#2b1a0d"/>`, 0, 1720);
+  sv(L, 520, 820, `<g filter="url(#soft)"><path d="M60 0 Q260 -60 460 0 V600 H60Z" fill="${R.clay("#f2c14e")}"/><path d="M100 40 Q260 -10 420 40 V560 H100Z" fill="#7a1f1f"/><circle cx="260" cy="90" r="38" fill="#c0392b" stroke="#fff3c0" stroke-width="8"/><rect x="0" y="560" width="520" height="150" rx="24" fill="${R.clay("#e0a92a")}"/><rect x="30" y="700" width="60" height="110" fill="#b8862a"/><rect x="430" y="700" width="60" height="110" fill="#b8862a"/><circle cx="40" cy="590" r="30" fill="#f6dc8c"/><circle cx="480" cy="590" r="30" fill="#f6dc8c"/></g>`, 280, 910);
+  const king = sumer(L, 540, 1640, 2.2, { shirt: "#e9dcbf", robe: "#7a1f1f", beard: true, crown: true, band: null });
+  king.show(39.3); reel.cue(39.3, "pop", "king");
+  dust(L, 40, "#ffd98a", 9);
+  line(39, 42.6, "من ساقي ماي… لمؤسس أول إمبراطورية بالتاريخ 🇮🇶", { emph: ["ساقي", "إمبراطورية"], size: 80 });
+  line(42.6, 45.2, "وعاصمته «أكد»… لليوم ضايعة 👇", { emph: ["أكد", "ضايعة"], size: 90, within: 1.0 });
+  reel.cue(42.6, "hit");
+}
+
+/* ---------- series badge (top, under the Instagram header zone) ---------- */
+{
+  const b = R.box(S, 0, 150, 1080, 70, { zIndex: 62, textAlign: "center", font: `600 36px 'IBM Plex Sans Arabic'`, color: "#f6dc8c", direction: "rtl", letterSpacing: "0" });
+  b.innerHTML = `<span style="background:rgba(20,12,6,.6);border:2px solid rgba(242,193,78,.6);border-radius:40px;padding:8px 28px">حكايات من أرض الرافدين | الجزء 2</span>`;
+  reel.on(t => { b.style.opacity = R.fade(t, .1, .4); });
+}
+</script>
+</body>
+</html>
