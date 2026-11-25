@@ -4,13 +4,14 @@ import json, subprocess
 
 SRC, START, END, PAD = "raw.mp4", 1.10, 101.55, 0.09
 sil = [tuple(map(float, l.split())) for l in open("silences.txt") if l.strip()]
-REMOVE = [(11.95, 15.05)]          # stutter "هسا بش قد اقدر" -> straight to "اقدر ارجع فلوس"
+REMOVE = [(12.05, 14.93)]          # stutter "هسا بش قد اقدر" -> straight to "اقدر ارجع فلوس"
 
+MIN_SIL, KEEP = 0.6, 0.2          # only shorten real pauses; leave a natural breath on both sides
 segs, cur = [], START
 for a, b in sil:
-    if b <= cur: continue
-    if a > cur: segs.append([cur, a + PAD])
-    cur = max(cur, b - PAD)
+    if b <= cur or b - a < MIN_SIL: continue
+    if a > cur: segs.append([cur, a + KEEP])
+    cur = max(cur, b - KEEP)
 segs.append([cur, END])
 for ra, rb in REMOVE:
     nxt = []
@@ -44,12 +45,13 @@ S = 3                                                                # upscale b
 parts, labels, shots, t_out = [], [], [], 0.0
 for i, (a, b) in enumerate(segs):
     f = FRAMES[i % 2]; d = b - a; nfr = max(1, round(d * 30))
-    z = f"{f['z']}+{PUSH*d:.5f}*on/{nfr}"
+    dz = min(PUSH * d, 0.05)
+    z = f"{f['z']}+{dz:.5f}*on/{nfr}"
     parts.append(f"[0:v]trim={a:.3f}:{b:.3f},setpts=PTS-STARTPTS,{GRADE},scale={720*S}:{1280*S}:flags=bicubic,"
                  f"zoompan=z='{z}':x='{f['cx']*S}-iw/zoom/2':y='{f['cy']*S}-ih/zoom/2':d=1:s=1080x1920:fps=30,{VIGNETTE},setsar=1[v{i}];")
     parts.append(f"[0:a]atrim={a:.3f}:{b:.3f},asetpts=PTS-STARTPTS,afade=t=in:d=0.015,afade=t=out:st={d-0.02:.3f}:d=0.02[a{i}];")
     labels.append(f"[v{i}][a{i}]")
-    shots.append(dict(t=round(t_out, 3), d=round(d, 3), z0=f["z"], dz=round(PUSH * d, 5), cx=f["cx"], cy=f["cy"]))
+    shots.append(dict(t=round(t_out, 3), d=round(d, 3), z0=f["z"], dz=round(dz, 5), cx=f["cx"], cy=f["cy"]))
     t_out += d
 open("cut_filter.txt", "w").write("".join(parts) + "".join(labels) + f"concat=n={len(segs)}:v=1:a=1[v][a]")
 

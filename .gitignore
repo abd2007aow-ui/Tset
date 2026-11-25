@@ -10,3 +10,7 @@ raw1/*.jpg
 raw1/cut_filter.txt
 raw1/*.png
 raw1/music_raw.wav
+raw1/music.wav
+raw1/*.wav
+!raw1/whoosh.wav
+raw1/final_words.json
